@@ -1,0 +1,17 @@
+name: Serverplugin
+version: '${project.version}'
+main: codes.qdbp.serverplugin.Serverplugin
+api-version: 1.19
+authors: [ qdbp ]
+description: Just my plugin for our server
+website: https://qdbp.codes
+commands:
+  tode:
+    description: Zeigt tode aller spieler
+    usage: /tode <nameVonAnderenSpieler>
+  features:
+    description: Zeigt Infomessage an
+    usage: /features
+  toggleInfo:
+    description: Toggles infotext
+    usage: /toggleInfo
