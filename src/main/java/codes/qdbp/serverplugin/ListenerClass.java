@@ -21,14 +21,14 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.List;
 
 public class ListenerClass implements Listener {
     File configFile = new File("plugins/Serverplugin", "config.yml");
     FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-    HashMap<Material, ArrayList<Float>> foodMap = Serverplugin.getFoodMap();
+    HashMap<Material, List<Float>> foodMap = Serverplugin.getFoodMap();
 
 
     @EventHandler
