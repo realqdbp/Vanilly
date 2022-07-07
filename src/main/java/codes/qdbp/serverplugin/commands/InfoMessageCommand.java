@@ -14,7 +14,20 @@ public class InfoMessageCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
 
-        player.sendMessage(Serverplugin.getInfoMessage());
+        player.sendMessage(
+                "Diese Nachricht jederzeit mit /features abrufen\n" +
+                "====================================\n" +
+                "/tode optional:spielername, für ausgabe der Spielertode\n" +
+                "Mülleimer erstellen mit Einzelkiste und Schild auf dem 'trash' steht\n" +
+                "Schlafen mit animation und nur einem Spieler\n" +
+                "Essen wird automatisch bis max aufgefüllt, bei 'normalen' essensitems\n" +
+                "Hinsetzen mit rechtsclick auf: Treppen, Teppich, Schnee usw.\n" +
+                "Fast Leaf Decay bei Baum abbauen (nur Overworld)\n" +
+                "To come: Handel\n" +
+                "Backpack, öffne deinen mit /pv /bp oder /backpack\n" +
+                "To come: Automatisches Zaun öffnen/schließen\n" +
+                "To come: Backups\n"
+        );
 
         return true;
     }

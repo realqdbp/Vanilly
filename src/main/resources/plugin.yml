@@ -15,3 +15,9 @@ commands:
   toggleInfo:
     description: Toggles infotext
     usage: /toggleInfo
+  backpack:
+    description: opens a backpack
+    usage: </backpack, /bp, /pv> <numberOfBackpack>
+    aliases:
+      - pv
+      - bp

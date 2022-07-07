@@ -1,5 +1,7 @@
 package codes.qdbp.serverplugin;
 
+import net.kyori.adventure.text.Component;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -19,6 +21,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,10 +36,14 @@ public class ListenerClass implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
         Player player = event.getPlayer();
-        if (c.getBoolean("Player." + player.getName() + ".dontShowInfoMessage")) return;
-        player.sendMessage(Serverplugin.getInfoMessage());
+
+        player.sendMessage(
+                ChatColor.AQUA +    "Backpacks sind nun benutzbar!\n" +
+                                    "Öffne deinen mit /bp, /pv oder /backpack\n" +
+                ChatColor.WHITE +   "====================================\n" +
+                ChatColor.RED +     "/features zum Nachschauen, welche Features es gibt."
+        );
     }
 
     @EventHandler
@@ -84,8 +91,22 @@ public class ListenerClass implements Listener {
 
 
     @EventHandler
-    public void inventoryCloseEvent(InventoryCloseEvent event) {
+    public void inventoryCloseEvent(InventoryCloseEvent event) throws IOException {
+        if (event.getPlayer() instanceof Player) {
+            Player player = (Player) event.getPlayer();
+
+            if (event.getView().title().equals(Component.text(player.getName() + "'s Backpack"))) {
+                config.set("Player." + player.getName() + ".backpackInventory", player.getOpenInventory().getTopInventory().getContents());
+                config.save(configFile);
+            }
+        }
+
+
+
+
+
         if (event.getInventory().getType().equals(InventoryType.CHEST)) {
+            if (event.getView().title().equals(Component.text(event.getPlayer().getName() + "'s Backpack"))) return;
             Block block = Objects.requireNonNull(event.getInventory().getLocation()).getBlock();
 
             Chest chest = (Chest) block.getState();
@@ -166,6 +187,26 @@ public class ListenerClass implements Listener {
                 config.set("TrashChests.trash" + trashChest.getX() + trashChest.getY() + trashChest.getZ() + ".z", trashChest.getZ());
                 config.save(configFile);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerCloseToDoor(PlayerMoveEvent event) {
+        Block block = event.getFrom().getBlock();
+        if (block.getRelative(BlockFace.NORTH).getType().name().toLowerCase().contains("door") || block.getRelative(BlockFace.NORTH).getType().name().toLowerCase().contains("gate")) {
+            event.getPlayer().sendMessage("yepyep");
+        }
+        if (block.getRelative(BlockFace.EAST).getType().name().toLowerCase().contains("door") || block.getRelative(BlockFace.EAST).getType().name().toLowerCase().contains("gate")) {
+            event.getPlayer().sendMessage("yepyep");
+
+        }
+        if (block.getRelative(BlockFace.SOUTH).getType().name().toLowerCase().contains("door") || block.getRelative(BlockFace.SOUTH).getType().name().toLowerCase().contains("gate")) {
+            event.getPlayer().sendMessage("yepyep");
+
+        }
+        if (block.getRelative(BlockFace.WEST).getType().name().toLowerCase().contains("door") || block.getRelative(BlockFace.WEST).getType().name().toLowerCase().contains("gate")) {
+            event.getPlayer().sendMessage("yepyep");
+
         }
     }
 }
