@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -39,8 +40,8 @@ public class ListenerClass implements Listener {
         Player player = event.getPlayer();
 
         player.sendMessage(
-                ChatColor.AQUA +    "Backpacks sind nun benutzbar!\n" +
-                                    "Öffne deinen mit /bp, /pv oder /backpack\n" +
+                ChatColor.DARK_PURPLE +    "Schnelltausch von Elytra und Rüstung!\n" +
+                                    "Rechtsclick einfach die Rüstung/Elytra und es swapped mit deiner Elytra/Rüstung.\n" +
                 ChatColor.WHITE +   "====================================\n" +
                 ChatColor.RED +     "/features zum Nachschauen, welche Features es gibt."
         );
@@ -51,6 +52,31 @@ public class ListenerClass implements Listener {
         Player player = event.getPlayer();
         config.set("Player." + player.getName() + ".tode", config.getInt("Player." + player.getName() + ".tode") + 1);
         config.save(configFile);
+    }
+
+
+    @EventHandler
+    public void onPlayerRightClick(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
+        Player player = event.getPlayer();
+        if (event.getItem() == null) return;
+        if (!(event.getItem().getType().equals(Material.ELYTRA) || event.getItem().getType().toString().toLowerCase().contains("chestplate"))) return;
+
+        ItemStack eventItem = event.getItem();
+        ItemStack chestPlateSlotItem = player.getInventory().getChestplate();
+        if (eventItem.getType().equals(Material.ELYTRA)) {
+            if (chestPlateSlotItem != null && !chestPlateSlotItem.getType().equals(Material.ELYTRA)) {
+                player.getInventory().setChestplate(eventItem);
+                player.getInventory().setItemInMainHand(chestPlateSlotItem);
+            }
+        } else {
+            if (chestPlateSlotItem != null && chestPlateSlotItem.getType().equals(Material.ELYTRA)) {
+                player.getInventory().setChestplate(eventItem);
+                player.getInventory().setItemInMainHand(chestPlateSlotItem);
+            }
+        }
+
+
     }
 
     @EventHandler
@@ -187,26 +213,6 @@ public class ListenerClass implements Listener {
                 config.set("TrashChests.trash" + trashChest.getX() + trashChest.getY() + trashChest.getZ() + ".z", trashChest.getZ());
                 config.save(configFile);
             }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerCloseToDoor(PlayerMoveEvent event) {
-        Block block = event.getFrom().getBlock();
-        if (block.getRelative(BlockFace.NORTH).getType().name().toLowerCase().contains("door") || block.getRelative(BlockFace.NORTH).getType().name().toLowerCase().contains("gate")) {
-            event.getPlayer().sendMessage("yepyep");
-        }
-        if (block.getRelative(BlockFace.EAST).getType().name().toLowerCase().contains("door") || block.getRelative(BlockFace.EAST).getType().name().toLowerCase().contains("gate")) {
-            event.getPlayer().sendMessage("yepyep");
-
-        }
-        if (block.getRelative(BlockFace.SOUTH).getType().name().toLowerCase().contains("door") || block.getRelative(BlockFace.SOUTH).getType().name().toLowerCase().contains("gate")) {
-            event.getPlayer().sendMessage("yepyep");
-
-        }
-        if (block.getRelative(BlockFace.WEST).getType().name().toLowerCase().contains("door") || block.getRelative(BlockFace.WEST).getType().name().toLowerCase().contains("gate")) {
-            event.getPlayer().sendMessage("yepyep");
-
         }
     }
 }

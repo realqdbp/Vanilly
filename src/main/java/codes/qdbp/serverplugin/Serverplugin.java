@@ -60,6 +60,7 @@ public class Serverplugin extends JavaPlugin {
         foodMap.put(Material.RABBIT_STEW, Arrays.asList(10f, 12f));
         foodMap.put(Material.COOKED_BEEF, Arrays.asList(8f, 12.8f));
         foodMap.put(Material.SWEET_BERRIES, Arrays.asList(2f, 0.4f));
+        foodMap.put(Material.GOLDEN_CARROT, Arrays.asList(6f, 14.4f));
     }
 
     @Override
