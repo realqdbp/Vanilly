@@ -1,5 +1,6 @@
 package codes.qdbp.serverplugin;
 
+import codes.qdbp.serverplugin.commands.AFKCommand;
 import codes.qdbp.serverplugin.commands.BackpackCommand;
 import codes.qdbp.serverplugin.commands.InfoMessageCommand;
 import codes.qdbp.serverplugin.commands.TodeCommand;
@@ -38,6 +39,7 @@ public class Serverplugin extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("tode")).setExecutor(new TodeCommand());
         Objects.requireNonNull(this.getCommand("features")).setExecutor(new InfoMessageCommand());
         Objects.requireNonNull(this.getCommand("backpack")).setExecutor(new BackpackCommand());
+        Objects.requireNonNull(this.getCommand("afk")).setExecutor(new AFKCommand());
 
         foodMap.put(Material.APPLE, Arrays.asList(4f, 2.4f));
         foodMap.put(Material.BAKED_POTATO, Arrays.asList(5f, 6f));

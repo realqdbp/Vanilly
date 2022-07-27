@@ -1,6 +1,5 @@
 package codes.qdbp.serverplugin.commands;
 
-import codes.qdbp.serverplugin.Serverplugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,8 +24,10 @@ public class InfoMessageCommand implements CommandExecutor {
                 "Fast Leaf Decay bei Baum abbauen (nur Overworld)\n" +
                 "To come: Handel\n" +
                 "Backpack, öffne deinen mit /pv /bp oder /backpack\n" +
-                "To come: Automatisches Zaun öffnen/schließen\n" +
-                "To come: Backups\n"
+                "To come: Backups\n" +
+                "Elytra/Rüstung Swap. Einfach auszutauschendes Item rechtsclicken\n" +
+                "AFK. mit /afk oder nach bestimmter Zeit\n" +
+                "3D Map vom Server hier: https://qdbp.codes/map\n"
         );
 
         return true;

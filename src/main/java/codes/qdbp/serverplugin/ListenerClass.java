@@ -1,6 +1,7 @@
 package codes.qdbp.serverplugin;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -10,6 +11,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,9 +27,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.List;
+import java.time.Duration;
+import java.util.*;
 
 public class ListenerClass implements Listener {
     File configFile = new File("plugins/Serverplugin", "config.yml");
@@ -38,12 +39,14 @@ public class ListenerClass implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
+        player.showTitle(Title.title(Component.text(ChatColor.LIGHT_PURPLE + "Viel Spaß"),Component.text(ChatColor.GREEN + "News stehen im Chat!"),Title.Times.times(Duration.ofSeconds(2),Duration.ofSeconds(8),Duration.ofSeconds(2))));
         player.sendMessage(
-                ChatColor.DARK_PURPLE +    "Schnelltausch von Elytra und Rüstung!\n" +
-                                    "Rechtsclick einfach die Rüstung/Elytra und es swapped mit deiner Elytra/Rüstung.\n" +
                 ChatColor.WHITE +   "====================================\n" +
-                ChatColor.RED +     "/features zum Nachschauen, welche Features es gibt."
+                ChatColor.DARK_PURPLE +    "Added: Backups\n" +
+                                    "Added: 3D Map vom Server. Aufrufbar unter https://qdbp.codes/map\n" +
+                ChatColor.WHITE +   "====================================\n" +
+                ChatColor.RED +     "/features, für eine Liste aller Featuers.\n" +
+                ChatColor.WHITE +   "====================================\n" + " \n"
         );
     }
 
@@ -54,15 +57,44 @@ public class ListenerClass implements Listener {
         config.save(configFile);
     }
 
+    @EventHandler
+    public void onPlayerAFK(PlayerKickEvent event) throws IOException {
+        event.setCancelled(true);
+        FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
+
+        if (event.reason().toString().contains("multiplayer.disconnect.idling")) {
+            Player player = event.getPlayer();
+            if (c.getBoolean("Player." + player.getName() + ".afk")) return;
+            c.set("Player." + player.getName() + ".afk", true);
+            c.save(configFile);
+            player.setInvulnerable(true);
+            player.playerListName(Component.text(player.getName() + " [" + ChatColor.RED + "AFK" + ChatColor.WHITE + " - " + ChatColor.GREEN + Calendar.getInstance().getTime() + ChatColor.WHITE + "]"));
+            player.sendMessage("Du bist jetzt AFK");
+        }else event.getPlayer().sendMessage(event.reason().toString());
+    }
+
+    @EventHandler
+    public void onPlayerDeAFK(PlayerMoveEvent event) throws IOException {
+        FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
+        if (!c.getBoolean("Player." + event.getPlayer().getName() + ".afk")) return;
+        Player player = event.getPlayer();
+        c.set("Player." + player.getName() + ".afk", false);
+        c.save(configFile);
+        player.setInvulnerable(false);
+        player.playerListName(Component.text(player.getName()));
+        player.sendMessage("Du bist nicht mehr AFK");
+    }
 
     @EventHandler
     public void onPlayerRightClick(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
         Player player = event.getPlayer();
-        if (event.getItem() == null) return;
-        if (!(event.getItem().getType().equals(Material.ELYTRA) || event.getItem().getType().toString().toLowerCase().contains("chestplate"))) return;
 
         ItemStack eventItem = event.getItem();
+        if (eventItem == null) return;
+        if (eventItem.equals(player.getInventory().getItemInOffHand())) return;
+        if (!(eventItem.getType().equals(Material.ELYTRA) || eventItem.getType().toString().toLowerCase().contains("chestplate"))) return;
+
         ItemStack chestPlateSlotItem = player.getInventory().getChestplate();
         if (eventItem.getType().equals(Material.ELYTRA)) {
             if (chestPlateSlotItem != null && !chestPlateSlotItem.getType().equals(Material.ELYTRA)) {
@@ -70,6 +102,7 @@ public class ListenerClass implements Listener {
                 player.getInventory().setItemInMainHand(chestPlateSlotItem);
             }
         } else {
+            if (eventItem.getEnchantments().containsKey(Enchantment.BINDING_CURSE)) return;
             if (chestPlateSlotItem != null && chestPlateSlotItem.getType().equals(Material.ELYTRA)) {
                 player.getInventory().setChestplate(eventItem);
                 player.getInventory().setItemInMainHand(chestPlateSlotItem);

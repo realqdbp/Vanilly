@@ -21,3 +21,6 @@ commands:
     aliases:
       - pv
       - bp
+  afk:
+    description: Let's you go afk
+    usage: /afk <ort,grund,...>
