@@ -34,3 +34,8 @@ commands:
     usage: </sw, /switchworld> <[overworld, ov, o], [nether, n], [end, e]>
     aliases:
       - sw
+  craft:
+    description: Use to open craft menu
+    usage: /craft
+    aliases:
+      - c

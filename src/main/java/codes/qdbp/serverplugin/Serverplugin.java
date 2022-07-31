@@ -2,12 +2,8 @@ package codes.qdbp.serverplugin;
 
 import codes.qdbp.serverplugin.commands.*;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -29,6 +25,7 @@ public class Serverplugin extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("afk")).setExecutor(new AFKCommand());
         Objects.requireNonNull(this.getCommand("freecam")).setExecutor(new FreecamCommand());
         Objects.requireNonNull(this.getCommand("switchworld")).setExecutor(new SwitchWorldCommand());
+        Objects.requireNonNull(this.getCommand("craft")).setExecutor(new CraftCommand());
 
         foodMap.put(Material.APPLE, Arrays.asList(4f, 2.4f));
         foodMap.put(Material.BAKED_POTATO, Arrays.asList(5f, 6f));

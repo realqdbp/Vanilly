@@ -23,7 +23,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -163,19 +162,6 @@ public class ListenerClass implements Listener {
     }
 
     @EventHandler
-    public void inventoryUpdate(InventoryMoveItemEvent event) {
-        Block block = Objects.requireNonNull(event.getDestination().getLocation()).getBlock();
-
-        if (block.getType().toString().toLowerCase().contains("chest")) {
-
-            if (config.contains("TrashChests.trash" + block.getX() + block.getY() + block.getZ())) {
-                event.getItem().subtract(event.getItem().getAmount());
-            }
-        }
-    }
-
-
-    @EventHandler
     public void inventoryCloseEvent(InventoryCloseEvent event) throws IOException {
         if (event.getPlayer() instanceof Player) {
             Player player = (Player) event.getPlayer();
@@ -246,7 +232,7 @@ public class ListenerClass implements Listener {
     public void onPlayerGetIntoBed(PlayerBedEnterEvent event) {
         if (event.isCancelled()) return;
         Player player = event.getPlayer();
-        new SleepForward(player).runTaskTimer(Serverplugin.getPlugin(), 0, 1);
+        new SleepForward(player).runTaskTimer(Serverplugin.getPlugin(), 0, 2);
     }
 
 

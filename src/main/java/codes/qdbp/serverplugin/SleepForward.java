@@ -33,7 +33,7 @@ public class SleepForward extends BukkitRunnable{
             cancel();
             return;
         }
-        player.getWorld().setTime(player.getWorld().getTime() + 200);
+        player.getWorld().setTime(player.getWorld().getTime() + 150);
     }
 }
 
