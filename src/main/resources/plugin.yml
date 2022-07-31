@@ -24,3 +24,13 @@ commands:
   afk:
     description: Let's you go afk
     usage: /afk <ort,grund,...>
+  freecam:
+    description: lets you use spectator mode
+    usage: </freecam, /fc>
+    aliases:
+      - fc
+  switchworld:
+    description: switch worlds in freecam mode
+    usage: </sw, /switchworld> <[overworld, ov, o], [nether, n], [end, e]>
+    aliases:
+      - sw

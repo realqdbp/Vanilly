@@ -27,7 +27,8 @@ public class InfoMessageCommand implements CommandExecutor {
                 "To come: Backups\n" +
                 "Elytra/Rüstung Swap. Einfach auszutauschendes Item rechtsclicken\n" +
                 "AFK. mit /afk oder nach bestimmter Zeit\n" +
-                "3D Map vom Server hier: https://qdbp.codes/map\n"
+                "3D Map vom Server hier: https://qdbp.codes/map\n" +
+                "Freecam mit /fc oder /freecam, switche welten mit /sw oder /switchworld\n"
         );
 
         return true;

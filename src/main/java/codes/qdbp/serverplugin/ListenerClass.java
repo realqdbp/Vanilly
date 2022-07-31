@@ -1,7 +1,9 @@
 package codes.qdbp.serverplugin;
 
+import codes.qdbp.serverplugin.commands.FreecamCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,6 +14,7 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,6 +27,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,16 +43,17 @@ public class ListenerClass implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        player.showTitle(Title.title(Component.text(ChatColor.LIGHT_PURPLE + "Viel Spaß"),Component.text(ChatColor.GREEN + "News stehen im Chat!"),Title.Times.times(Duration.ofSeconds(2),Duration.ofSeconds(8),Duration.ofSeconds(2))));
+        player.showTitle(Title.title(Component.text(ChatColor.DARK_PURPLE + "Viel Spaß"),Component.text(ChatColor.GREEN + "News stehen im Chat!"),Title.Times.times(Duration.ofSeconds(2),Duration.ofSeconds(8),Duration.ofSeconds(2))));
         player.sendMessage(
                 ChatColor.WHITE +   "====================================\n" +
-                ChatColor.DARK_PURPLE +    "Added: Backups\n" +
-                                    "Added: 3D Map vom Server. Aufrufbar unter https://qdbp.codes/map\n" +
+                ChatColor.DARK_PURPLE +    "Added: Freecam\n" +
                 ChatColor.WHITE +   "====================================\n" +
                 ChatColor.RED +     "/features, für eine Liste aller Featuers.\n" +
                 ChatColor.WHITE +   "====================================\n" + " \n"
         );
     }
+
+
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) throws IOException {
@@ -57,20 +62,41 @@ public class ListenerClass implements Listener {
         config.save(configFile);
     }
 
+
+    @EventHandler
+    public void onPlayerLeave(PlayerQuitEvent event) throws IOException {
+        FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
+        Player player = event.getPlayer();
+
+        if (!(c.getBoolean("Player." + player.getName() + ".Freecam.state"))) return;
+
+        ArmorStand as = (ArmorStand) Bukkit.getEntity(UUID.fromString(Objects.requireNonNull(c.getString("Player." + player.getName() + ".Freecam.Placeholder"))));
+        assert as != null;
+        FreecamCommand.backportPlayer(c, player, configFile, as);
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
+    }
+
     @EventHandler
     public void onPlayerAFK(PlayerKickEvent event) throws IOException {
         event.setCancelled(true);
         FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
-
+        Player player = event.getPlayer();
+        if (c.getBoolean("Player." + player.getName() + ".Freecam.state")) {
+            ArmorStand as = (ArmorStand) Bukkit.getEntity(UUID.fromString(Objects.requireNonNull(c.getString("Player." + player.getName() + ".Freecam.Placeholder"))));
+            assert as != null;
+            FreecamCommand.backportPlayer(c, player, configFile, as);
+            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        }
         if (event.reason().toString().contains("multiplayer.disconnect.idling")) {
-            Player player = event.getPlayer();
             if (c.getBoolean("Player." + player.getName() + ".afk")) return;
             c.set("Player." + player.getName() + ".afk", true);
             c.save(configFile);
             player.setInvulnerable(true);
             player.playerListName(Component.text(player.getName() + " [" + ChatColor.RED + "AFK" + ChatColor.WHITE + " - " + ChatColor.GREEN + Calendar.getInstance().getTime() + ChatColor.WHITE + "]"));
             player.sendMessage("Du bist jetzt AFK");
-        }else event.getPlayer().sendMessage(event.reason().toString());
+        } else {
+            event.setCancelled(false);
+        }
     }
 
     @EventHandler
