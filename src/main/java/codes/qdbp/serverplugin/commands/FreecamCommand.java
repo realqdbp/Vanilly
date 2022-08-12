@@ -65,6 +65,7 @@ public class FreecamCommand implements CommandExecutor {
                     e.printStackTrace();
                 }
                 player.setGameMode(GameMode.SPECTATOR);
+                player.sendMessage("Mit /sw zwischen den Welten wechseln");
             }
         }
         return true;

@@ -6,7 +6,6 @@ import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
@@ -193,7 +192,6 @@ public class ListenerClass implements Listener {
         Block block = event.getBlock();
 
 
-        //check if it was TRASHCHEST or the SIGN
         if (block.getType().toString().toLowerCase().contains("chest")) {
             if (config.contains("TrashChests.trash" + block.getX() + block.getY() + block.getZ())) {
                 config.set("TrashChests.trash" + block.getX() + block.getY() + block.getZ(), null);
@@ -212,17 +210,6 @@ public class ListenerClass implements Listener {
                         config.save(configFile);
                     }
                 }
-            }
-        }
-
-
-        //WOODCHUCK
-        if (block.getWorld().getEnvironment() == World.Environment.THE_END) return;
-
-        if (block.getType().toString().toLowerCase().contains("log")) {
-
-            if (DestroyLeaves.noLogsInWay(block, 15)) {
-                DestroyLeaves.destroyLeaves(block);
             }
         }
     }
