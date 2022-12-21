@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Pose;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -24,7 +25,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
@@ -49,6 +52,13 @@ public class ListenerClass implements Listener {
                 ChatColor.RED +     "/features, für eine Liste aller Featuers.\n" +
                 ChatColor.WHITE +   "====================================\n" + " \n"
         );
+        if (config.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") == 0) return;
+        config.set("Player." + player.getName() + ".hasteEnchantmentLevel", 1);
+        try {
+            config.save(configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -109,8 +119,49 @@ public class ListenerClass implements Listener {
         player.sendMessage("Du bist nicht mehr AFK");
     }
 
+
     @EventHandler
     public void onPlayerRightClick(PlayerInteractEvent event) {
+        changeElytra(event);
+
+        enchantHasteThing(event);
+
+
+    }
+
+    public void enchantHasteThing(PlayerInteractEvent event) {
+        FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
+        Player player = event.getPlayer();
+
+        if (player.getEquipment().getChestplate() == null) return;
+        if (!(player.getEquipment().getChestplate().getEnchantments().containsKey(Enchantment.getByKey(Serverplugin.hasteEnchantment.getKey())))) {
+
+            return;
+        }
+        if (!(player.getPose().equals(Pose.SNEAKING))) return;
+
+        if (event.getHand() == EquipmentSlot.OFF_HAND) return;
+
+        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") == 10) {
+                c.set("Player." + player.getName() + ".hasteEnchantmentLevel", 0);
+            }else{
+                c.set("Player." + player.getName() + ".hasteEnchantmentLevel", c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") + 1);
+            }
+            try {
+                c.save(configFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            player.sendMessage("Haste Level is now: " + c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel"));
+            player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+            if (c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") == 0) return;
+            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 144000, (c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") - 1), true, true, true));
+        }
+    }
+
+    public void changeElytra(PlayerInteractEvent event) {
+
         if (event.getAction() != Action.RIGHT_CLICK_AIR) return;
         Player player = event.getPlayer();
 
@@ -132,8 +183,6 @@ public class ListenerClass implements Listener {
                 player.getInventory().setItemInMainHand(chestPlateSlotItem);
             }
         }
-
-
     }
 
     @EventHandler

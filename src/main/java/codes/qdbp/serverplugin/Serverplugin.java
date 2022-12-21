@@ -1,10 +1,15 @@
 package codes.qdbp.serverplugin;
 
 import codes.qdbp.serverplugin.commands.*;
+import codes.qdbp.serverplugin.enchantments.HasteEnchantment;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 
@@ -12,6 +17,9 @@ public class Serverplugin extends JavaPlugin {
 
     private static final HashMap<Material, List<Float>> foodMap = new HashMap<>(); //food, sat
     private static Plugin plugin;
+    public static ItemStack item;
+
+    public static HasteEnchantment hasteEnchantment;
 
 
     @Override
@@ -26,6 +34,10 @@ public class Serverplugin extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("freecam")).setExecutor(new FreecamCommand());
         Objects.requireNonNull(this.getCommand("switchworld")).setExecutor(new SwitchWorldCommand());
         Objects.requireNonNull(this.getCommand("craft")).setExecutor(new CraftCommand());
+        Objects.requireNonNull(this.getCommand("enchantcrazy")).setExecutor(new ChestplateCommand());
+        Objects.requireNonNull(this.getCommand("enderchest")).setExecutor(new EnderChestCommand());
+        Objects.requireNonNull(this.getCommand("enchantUnbreakable")).setExecutor(new EnchantUnbreakableCommand());
+
 
         foodMap.put(Material.APPLE, Arrays.asList(4f, 2.4f));
         foodMap.put(Material.BAKED_POTATO, Arrays.asList(5f, 6f));
@@ -49,11 +61,54 @@ public class Serverplugin extends JavaPlugin {
         foodMap.put(Material.COOKED_BEEF, Arrays.asList(8f, 12.8f));
         foodMap.put(Material.SWEET_BERRIES, Arrays.asList(2f, 0.4f));
         foodMap.put(Material.GOLDEN_CARROT, Arrays.asList(6f, 14.4f));
+
+
+        hasteEnchantment = new HasteEnchantment("Sheesh");
+        registerEnchantment(hasteEnchantment);
+
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+
+        //unregister enchantment
+        try {
+            Field keyField = Enchantment.class.getDeclaredField("byKey");
+
+            keyField.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            HashMap<NamespacedKey, Enchantment> byKey = (HashMap<NamespacedKey, Enchantment>) keyField.get(null);
+
+            if (byKey.containsKey(hasteEnchantment.getKey())) {
+                byKey.remove(hasteEnchantment.getKey());
+            }
+
+            Field nameField = Enchantment.class.getDeclaredField("byName");
+
+            nameField.setAccessible(true);
+            @SuppressWarnings("unchecked")
+            HashMap<String, Enchantment> byName = (HashMap<String, Enchantment>) nameField.get(null);
+
+            if (byName.containsKey(hasteEnchantment.getName())) {
+                byName.remove(hasteEnchantment.getName());
+            }
+        } catch (Exception ignored) {
+
+        }
+    }
+
+    public static void registerEnchantment(Enchantment enchantment) {
+        boolean registered = true;
+        try {
+            Field f = Enchantment.class.getDeclaredField("acceptingNew");
+            f.setAccessible(true);
+            f.set(null, true);
+            Enchantment.registerEnchantment(enchantment);
+        } catch (Exception e) {
+            registered = false;
+            e.printStackTrace();
+        }
+
     }
 
     public static HashMap<Material, List<Float>> getFoodMap() {
@@ -63,6 +118,7 @@ public class Serverplugin extends JavaPlugin {
     public static Plugin getPlugin() {
         return plugin;
     }
+
 
 
 }

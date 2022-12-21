@@ -39,3 +39,19 @@ commands:
     usage: /craft
     aliases:
       - c
+  enchantcrazy:
+    description: Use to enchant chestplate. Needs Netherite Chestplate and 1 Netherite Ingot
+    usage: </enchantcrazy, /enchcrazy>
+    aliases:
+      - enchcrazy
+  enderchest:
+    description: Opens the players enderchest
+    usage: </enderchest, /ec>
+    aliases:
+      - ec
+  enchantUnbreakable:
+    description: Enchants the fucking item with unbreakable
+    usage: </enchantUnbreakable, /enchUnbreak, /eu>
+    aliases:
+      - enchUnbreak
+      - eu
