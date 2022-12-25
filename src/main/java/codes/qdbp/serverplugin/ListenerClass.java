@@ -1,6 +1,7 @@
 package codes.qdbp.serverplugin;
 
 import codes.qdbp.serverplugin.commands.FreecamCommand;
+import codes.qdbp.serverplugin.inventories.ConfirmInventory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -22,11 +23,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -62,6 +64,95 @@ public class ListenerClass implements Listener {
     }
 
 
+    @EventHandler
+    public void playerInventory(InventoryClickEvent event) {
+        if (event.getCurrentItem() == null) return;
+
+        Player player = (Player) event.getWhoClicked();
+        Material clickedItemMaterial = Objects.requireNonNull(event.getCurrentItem()).getType();
+        Component inventoryTitle = event.getView().title().compact();
+
+        if (inventoryTitle.equals(Component.text("Upgrade Menu"))) {
+            event.setCancelled(true);
+            handleMainUpgradeMenu(player, clickedItemMaterial);
+        } else if (inventoryTitle.equals(Component.text("Unbreakable Upgrades"))) {
+            event.setCancelled(true);
+            handleUnbreakableUpgradeMenu(player, clickedItemMaterial);
+        } else if (inventoryTitle.equals(Component.text("Efficiency Upgrades"))) {
+            handleEfficiencyUpgradeMenu(player, clickedItemMaterial);
+        } else if (inventoryTitle.equals(Component.text("Confirm"))) {
+            event.setCancelled(true);
+            handleConfirmInventory(player, clickedItemMaterial);
+        }
+    }
+
+    private void handleMainUpgradeMenu(Player player, Material clickedItemMaterial) {
+        switch (clickedItemMaterial) {
+            case ANVIL:
+                player.closeInventory();
+                player.openInventory(Serverplugin.getUnbreakableUpgradeMenuInventory());
+                break;
+            case FEATHER:
+                player.closeInventory();
+                break;
+            case NETHERITE_PICKAXE:
+                player.closeInventory();
+                break;
+        }
+    }
+
+    private void handleUnbreakableUpgradeMenu(Player player, Material clickedItemMaterial) {
+        Inventory playersInventory = player.getInventory();
+
+        //Check validity
+        if (Objects.requireNonNull(playersInventory.getItem(playersInventory.first(Material.NETHERITE_INGOT))).getAmount() < 10) return;
+        if (playersInventory.firstEmpty() == -1) return;
+        if (!(playersInventory.contains(clickedItemMaterial))) return;
+        if (Objects.requireNonNull(playersInventory.getItem(player.getInventory().first(clickedItemMaterial))).getItemMeta().isUnbreakable()) return;
+
+        player.closeInventory();
+        player.openInventory(new ConfirmInventory(Component.text("Confirm Unbreakable Upgrade"), clickedItemMaterial).getConfirmInventory());
+    }
+
+    private void handleEfficiencyUpgradeMenu(Player player, Material clickedItemMaterial) {
+    }
+
+    private void handleConfirmInventory(Player player, Material clickedItemMaterial) {
+        if (clickedItemMaterial != Material.GREEN_WOOL) {
+            player.closeInventory();
+            player.openInventory(Serverplugin.getUpgradeMenuInventory());
+            return;
+        }
+
+        Inventory topInventory = player.getOpenInventory().getTopInventory();
+        String wurst = Objects.requireNonNull(topInventory.getItem(4)).displayName().toString();
+
+        if (wurst.contains("Confirm Unbreakable Upgrade")) {
+
+            Material itemToUpgradeMaterial = Objects.requireNonNull(topInventory.getItem(4)).getType();
+            Inventory playerInventory = player.getInventory();
+
+            //Renew item with unbreakable
+            ItemStack item = playerInventory.getItem(player.getInventory().first(itemToUpgradeMaterial));
+            assert item != null;
+            ItemMeta itemMeta = item.getItemMeta();
+            itemMeta.setUnbreakable(true);
+            item.setItemMeta(itemMeta);
+            playerInventory.setItem(playerInventory.first(itemToUpgradeMaterial), item);
+
+            //Remove other Ingredients
+            ItemStack netheriteIngots = playerInventory.getItem(playerInventory.first(Material.NETHERITE_INGOT));
+            assert netheriteIngots != null;
+            int netheriteIngotsAmount = netheriteIngots.getAmount() - 10;
+            playerInventory.setItem(playerInventory.first(Material.NETHERITE_INGOT), null);
+            if (netheriteIngotsAmount > 0) {
+                playerInventory.addItem(new ItemStack(Material.NETHERITE_INGOT, netheriteIngotsAmount));
+            }
+        }
+
+
+        player.closeInventory();
+    }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) throws IOException {
@@ -125,8 +216,6 @@ public class ListenerClass implements Listener {
         changeElytra(event);
 
         enchantHasteThing(event);
-
-
     }
 
     public void enchantHasteThing(PlayerInteractEvent event) {
@@ -134,10 +223,7 @@ public class ListenerClass implements Listener {
         Player player = event.getPlayer();
 
         if (player.getEquipment().getChestplate() == null) return;
-        if (!(player.getEquipment().getChestplate().getEnchantments().containsKey(Enchantment.getByKey(Serverplugin.hasteEnchantment.getKey())))) {
 
-            return;
-        }
         if (!(player.getPose().equals(Pose.SNEAKING))) return;
 
         if (event.getHand() == EquipmentSlot.OFF_HAND) return;
