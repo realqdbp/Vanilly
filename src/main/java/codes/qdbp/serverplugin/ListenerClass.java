@@ -2,34 +2,26 @@ package codes.qdbp.serverplugin;
 
 import codes.qdbp.serverplugin.commands.FreecamCommand;
 import codes.qdbp.serverplugin.inventories.ConfirmInventory;
+import codes.qdbp.serverplugin.inventories.ItemTierUpgradeChoiceMenuInventory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Chest;
-import org.bukkit.block.data.type.WallSign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Pose;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
@@ -46,21 +38,15 @@ public class ListenerClass implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        player.showTitle(Title.title(Component.text(ChatColor.DARK_PURPLE + "Viel Spaß"),Component.text(ChatColor.GREEN + "News stehen im Chat!"),Title.Times.times(Duration.ofSeconds(2),Duration.ofSeconds(8),Duration.ofSeconds(2))));
+        player.showTitle(Title.title(Component.text(ChatColor.DARK_PURPLE + "Viel ßaaß"),Component.text(ChatColor.GREEN + "News sind Outdated!"),Title.Times.times(Duration.ofSeconds(2),Duration.ofSeconds(8),Duration.ofSeconds(2))));
         player.sendMessage(
                 ChatColor.WHITE +   "====================================\n" +
-                ChatColor.DARK_PURPLE +    "Added: Freecam\n" +
+                ChatColor.DARK_PURPLE +    "Currently: Rewrite of Plugin\n" +
+                ChatColor.DARK_RED +    "FIXED FREECAM ISSUE!!\n" +
                 ChatColor.WHITE +   "====================================\n" +
-                ChatColor.RED +     "/features, für eine Liste aller Featuers.\n" +
+                ChatColor.RED +     "/features, für eine outdated Liste aller Featuers.\n" +
                 ChatColor.WHITE +   "====================================\n" + " \n"
         );
-        if (config.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") == 0) return;
-        config.set("Player." + player.getName() + ".hasteEnchantmentLevel", 1);
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -79,10 +65,14 @@ public class ListenerClass implements Listener {
             event.setCancelled(true);
             handleUnbreakableUpgradeMenu(player, clickedItemMaterial);
         } else if (inventoryTitle.equals(Component.text("Efficiency Upgrades"))) {
-            handleEfficiencyUpgradeMenu(player, clickedItemMaterial);
+            event.setCancelled(true);
+            handleEfficiencyUpgradeMenu(player);
         } else if (inventoryTitle.equals(Component.text("Confirm"))) {
             event.setCancelled(true);
             handleConfirmInventory(player, clickedItemMaterial);
+        } else if (inventoryTitle.equals(Component.text("Choice Upgrade Tier"))) {
+            event.setCancelled(true);
+            handleChoiceUpgradeTierMenu(player, clickedItemMaterial);
         }
     }
 
@@ -97,6 +87,7 @@ public class ListenerClass implements Listener {
                 break;
             case NETHERITE_PICKAXE:
                 player.closeInventory();
+                player.openInventory(Serverplugin.getEfficiencyUpgradeMenuInventory());
                 break;
         }
     }
@@ -105,48 +96,78 @@ public class ListenerClass implements Listener {
         Inventory playersInventory = player.getInventory();
 
         //Check validity
-        if (Objects.requireNonNull(playersInventory.getItem(playersInventory.first(Material.NETHERITE_INGOT))).getAmount() < 10) return;
-        if (playersInventory.firstEmpty() == -1) return;
         if (!(playersInventory.contains(clickedItemMaterial))) return;
         if (Objects.requireNonNull(playersInventory.getItem(player.getInventory().first(clickedItemMaterial))).getItemMeta().isUnbreakable()) return;
+        if (Objects.requireNonNull(playersInventory.getItem(playersInventory.first(Material.NETHERITE_INGOT))).getAmount() < 10) return;
+        if (!(playersInventory.contains(Material.NETHER_STAR))) return;
+        if (Objects.requireNonNull(playersInventory.getItem(playersInventory.first(Material.OBSIDIAN))).getAmount() < 32) return;
+        if (playersInventory.firstEmpty() == -1) return;
 
         player.closeInventory();
         player.openInventory(new ConfirmInventory(Component.text("Confirm Unbreakable Upgrade"), clickedItemMaterial).getConfirmInventory());
     }
 
-    private void handleEfficiencyUpgradeMenu(Player player, Material clickedItemMaterial) {
+    private void handleEfficiencyUpgradeMenu(Player player) {
+        player.closeInventory();
+        player.openInventory(new ItemTierUpgradeChoiceMenuInventory().getItemTierUpgradeChoiceMenuInventory());
+    }
+
+    private void handleChoiceUpgradeTierMenu(Player player, Material clickedItemMaterial) {
+        player.closeInventory();
+        player.openInventory(new ConfirmInventory(Component.text("Confirm Efficiency Upgrade"), clickedItemMaterial).getConfirmInventory());
     }
 
     private void handleConfirmInventory(Player player, Material clickedItemMaterial) {
-        if (clickedItemMaterial != Material.GREEN_WOOL) {
+        if (clickedItemMaterial == Material.RED_WOOL) {
             player.closeInventory();
             player.openInventory(Serverplugin.getUpgradeMenuInventory());
             return;
         }
+        if (clickedItemMaterial != Material.GREEN_WOOL) return;
 
         Inventory topInventory = player.getOpenInventory().getTopInventory();
-        String wurst = Objects.requireNonNull(topInventory.getItem(4)).displayName().toString();
+        String upgradeName = Objects.requireNonNull(topInventory.getItem(4)).displayName().toString();
 
-        if (wurst.contains("Confirm Unbreakable Upgrade")) {
+        if (upgradeName.contains("Confirm Unbreakable Upgrade")) {
 
             Material itemToUpgradeMaterial = Objects.requireNonNull(topInventory.getItem(4)).getType();
             Inventory playerInventory = player.getInventory();
 
-            //Renew item with unbreakable
-            ItemStack item = playerInventory.getItem(player.getInventory().first(itemToUpgradeMaterial));
-            assert item != null;
-            ItemMeta itemMeta = item.getItemMeta();
-            itemMeta.setUnbreakable(true);
-            item.setItemMeta(itemMeta);
-            playerInventory.setItem(playerInventory.first(itemToUpgradeMaterial), item);
 
-            //Remove other Ingredients
+            //Upgrade Core Item
+            ItemStack itemToUpgrade = playerInventory.getItem(playerInventory.first(itemToUpgradeMaterial));
+            assert itemToUpgrade != null;
+            ItemMeta itemToUpgradeMeta = itemToUpgrade.getItemMeta();
+            itemToUpgradeMeta.setUnbreakable(true);
+            itemToUpgrade.setItemMeta(itemToUpgradeMeta);
+            playerInventory.setItem(playerInventory.first(itemToUpgradeMaterial), itemToUpgrade);
+
+            //Remove Ingredients
+            //Netherite Ingots
             ItemStack netheriteIngots = playerInventory.getItem(playerInventory.first(Material.NETHERITE_INGOT));
             assert netheriteIngots != null;
             int netheriteIngotsAmount = netheriteIngots.getAmount() - 10;
             playerInventory.setItem(playerInventory.first(Material.NETHERITE_INGOT), null);
             if (netheriteIngotsAmount > 0) {
                 playerInventory.addItem(new ItemStack(Material.NETHERITE_INGOT, netheriteIngotsAmount));
+            }
+
+            //Nether Star
+            ItemStack netherStar = playerInventory.getItem(playerInventory.first(Material.NETHER_STAR));
+            assert netherStar != null;
+            int netherStarAmount = netherStar.getAmount() - 1;
+            playerInventory.setItem(playerInventory.first(Material.NETHER_STAR), null);
+            if (netherStarAmount > 0) {
+                playerInventory.addItem(new ItemStack(Material.NETHER_STAR, netherStarAmount));
+            }
+
+            //Obsidian
+            ItemStack obsidian = playerInventory.getItem(playerInventory.first(Material.OBSIDIAN));
+            assert obsidian != null;
+            int obsidianAmount = obsidian.getAmount() - 32;
+            playerInventory.setItem(playerInventory.first(Material.OBSIDIAN), null);
+            if (obsidianAmount > 0) {
+                playerInventory.addItem(new ItemStack(Material.OBSIDIAN, obsidianAmount));
             }
         }
 
@@ -214,36 +235,6 @@ public class ListenerClass implements Listener {
     @EventHandler
     public void onPlayerRightClick(PlayerInteractEvent event) {
         changeElytra(event);
-
-        enchantHasteThing(event);
-    }
-
-    public void enchantHasteThing(PlayerInteractEvent event) {
-        FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
-        Player player = event.getPlayer();
-
-        if (player.getEquipment().getChestplate() == null) return;
-
-        if (!(player.getPose().equals(Pose.SNEAKING))) return;
-
-        if (event.getHand() == EquipmentSlot.OFF_HAND) return;
-
-        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") == 10) {
-                c.set("Player." + player.getName() + ".hasteEnchantmentLevel", 0);
-            }else{
-                c.set("Player." + player.getName() + ".hasteEnchantmentLevel", c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") + 1);
-            }
-            try {
-                c.save(configFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            player.sendMessage("Haste Level is now: " + c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel"));
-            player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-            if (c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") == 0) return;
-            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 144000, (c.getInt("Player." + player.getName() + ".hasteEnchantmentLevel") - 1), true, true, true));
-        }
     }
 
     public void changeElytra(PlayerInteractEvent event) {
@@ -297,54 +288,18 @@ public class ListenerClass implements Listener {
 
     @EventHandler
     public void inventoryCloseEvent(InventoryCloseEvent event) throws IOException {
+        FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
+
+        //TODO REWRITE GOOOSH IS THIS SHIT
+
         if (event.getPlayer() instanceof Player) {
             Player player = (Player) event.getPlayer();
+
+            if (c.getBoolean("Player." + player.getName() + ".Freecam.state")) return;
 
             if (event.getView().title().equals(Component.text(player.getName() + "'s Backpack"))) {
                 config.set("Player." + player.getName() + ".backpackInventory", player.getOpenInventory().getTopInventory().getContents());
                 config.save(configFile);
-            }
-        }
-
-
-
-
-
-        if (event.getInventory().getType().equals(InventoryType.CHEST)) {
-            if (event.getView().title().equals(Component.text(event.getPlayer().getName() + "'s Backpack"))) return;
-            Block block = Objects.requireNonNull(event.getInventory().getLocation()).getBlock();
-
-            Chest chest = (Chest) block.getState();
-            if (config.contains("TrashChests.trash" + block.getX() + block.getY() + block.getZ())) {
-                chest.getInventory().clear();
-            }
-        }
-    }
-
-
-    @EventHandler
-    public void onPlayerDestroyLogs(BlockBreakEvent event) throws IOException {
-        Block block = event.getBlock();
-
-
-        if (block.getType().toString().toLowerCase().contains("chest")) {
-            if (config.contains("TrashChests.trash" + block.getX() + block.getY() + block.getZ())) {
-                config.set("TrashChests.trash" + block.getX() + block.getY() + block.getZ(), null);
-                config.save(configFile);
-            }
-        }
-        if ((block.getType().name().contains("WALL_SIGN"))) {
-            if (block.getType().toString().toLowerCase().contains("sign")) {
-                WallSign signData = (WallSign) block.getState().getBlockData();
-                BlockFace attached = signData.getFacing().getOppositeFace();
-                Block blockAttached = block.getRelative(attached);
-
-                if (blockAttached.getType().toString().toLowerCase().contains("chest")) {
-                    if (config.contains("TrashChests.trash" + blockAttached.getX() + blockAttached.getY() + blockAttached.getZ())) {
-                        config.set("TrashChests.trash" + blockAttached.getX() + blockAttached.getY() + blockAttached.getZ(), null);
-                        config.save(configFile);
-                    }
-                }
             }
         }
     }
@@ -354,32 +309,6 @@ public class ListenerClass implements Listener {
     public void onPlayerGetIntoBed(PlayerBedEnterEvent event) {
         if (event.isCancelled()) return;
         Player player = event.getPlayer();
-        new SleepForward(player).runTaskTimer(Serverplugin.getPlugin(), 0, 2);
-    }
-
-
-    @EventHandler
-    public void onSignCreate(SignChangeEvent event) throws IOException {
-        Block sign = event.getBlock();
-        if (!(sign.getType().name().contains("WALL_SIGN"))) return;
-
-        WallSign signData = (WallSign) sign.getState().getBlockData();
-        BlockFace attached = signData.getFacing().getOppositeFace();
-
-        Block blockAttached = sign.getRelative(attached);
-
-
-        if (blockAttached.getType().toString().toLowerCase().contains("chest")) {
-            Chest trashChest = (Chest) blockAttached.getState();
-            //if doublechest quit
-            if (trashChest.getInventory().getSize() == 54) return;
-
-            if (event.lines().toString().toLowerCase().contains("trash")) {
-                config.set("TrashChests.trash" + trashChest.getX() + trashChest.getY() + trashChest.getZ() + ".x", trashChest.getX());
-                config.set("TrashChests.trash" + trashChest.getX() + trashChest.getY() + trashChest.getZ() + ".y", trashChest.getY());
-                config.set("TrashChests.trash" + trashChest.getX() + trashChest.getY() + trashChest.getZ() + ".z", trashChest.getZ());
-                config.save(configFile);
-            }
-        }
+        new SleepForward(player, false).runTaskTimer(Serverplugin.getPlugin(), 0, 2);
     }
 }

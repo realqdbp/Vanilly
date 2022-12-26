@@ -34,92 +34,52 @@ public class UnbreakableUpgradeMenuInventory {
         //Create Descriptions on Items with ItemMeta
         ItemMeta netheriteHelmetMeta = netheriteHelmet.getItemMeta();
         netheriteHelmetMeta.displayName(Component.text("Upgrade Helmet"));
-        netheriteHelmetMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Netherite Helmet"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        netheriteHelmetMeta.lore(setItemDescription("Netherite Helmet"));
         netheriteHelmet.setItemMeta(netheriteHelmetMeta);
 
         ItemMeta netheriteChestplateMeta = netheriteChestplate.getItemMeta();
         netheriteChestplateMeta.displayName(Component.text("Upgrade Chestplate"));
-        netheriteChestplateMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Netherite Chestplate"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        netheriteChestplateMeta.lore(setItemDescription("Netherite Chestplate"));
         netheriteChestplate.setItemMeta(netheriteChestplateMeta);
 
         ItemMeta netheriteLeggingsMeta = netheriteLeggings.getItemMeta();
         netheriteLeggingsMeta.displayName(Component.text("Upgrade Leggings"));
-        netheriteLeggingsMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Netherite Leggings"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        netheriteLeggingsMeta.lore(setItemDescription("Netherite Leggings"));
         netheriteLeggings.setItemMeta(netheriteLeggingsMeta);
 
         ItemMeta netheriteBootsMeta = netheriteBoots.getItemMeta();
         netheriteBootsMeta.displayName(Component.text("Upgrade Boots"));
-        netheriteBootsMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Netherite Boots"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        netheriteBootsMeta.lore(setItemDescription("Netherite Boots"));
         netheriteBoots.setItemMeta(netheriteBootsMeta);
 
         ItemMeta netheriteSwordMeta = netheriteSword.getItemMeta();
         netheriteSwordMeta.displayName(Component.text("Upgrade Sword"));
-        netheriteSwordMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Netherite Sword"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        netheriteSwordMeta.lore(setItemDescription("Netherite Sword"));
         netheriteSword.setItemMeta(netheriteSwordMeta);
 
         ItemMeta netheriteShovelMeta = netheriteShovel.getItemMeta();
         netheriteShovelMeta.displayName(Component.text("Upgrade Shovel"));
-        netheriteShovelMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Netherite Shovel"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        netheriteShovelMeta.lore(setItemDescription("Netherite Shovel"));
         netheriteShovel.setItemMeta(netheriteShovelMeta);
 
         ItemMeta netheritePickaxeMeta = netheritePickaxe.getItemMeta();
         netheritePickaxeMeta.displayName(Component.text("Upgrade Pickaxe"));
-        netheritePickaxeMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Netherite Pickaxe"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        netheritePickaxeMeta.lore(setItemDescription("Netherite Pickaxe"));
         netheritePickaxe.setItemMeta(netheritePickaxeMeta);
 
         ItemMeta netheriteAxeMeta = netheriteAxe.getItemMeta();
         netheriteAxeMeta.displayName(Component.text("Upgrade Axe"));
-        netheriteAxeMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Netherite Axe"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        netheriteAxeMeta.lore(setItemDescription("Netherite Axe"));
         netheriteAxe.setItemMeta(netheriteAxeMeta);
 
         ItemMeta netheriteHoeMeta = netheriteHoe.getItemMeta();
         netheriteHoeMeta.displayName(Component.text("Upgrade Hoe"));
-        netheriteHoeMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Netherite Hoe"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        netheriteHoeMeta.lore(setItemDescription("Netherite Hoe"));
         netheriteHoe.setItemMeta(netheriteHoeMeta);
 
         ItemMeta elytraMeta = elytra.getItemMeta();
         elytraMeta.displayName(Component.text("Upgrade Elytra"));
-        elytraMeta.lore(List.of(
-                Component.text("REQUIREMENTS:"),
-                Component.text("Elytra"),
-                Component.text("Netherite Ingots x 10 (Stacked)"),
-                Component.text("At least 1 Empty Inventory Slot")));
+        elytraMeta.lore(setItemDescription("Elytra"));
         elytra.setItemMeta(elytraMeta);
 
 
@@ -136,6 +96,17 @@ public class UnbreakableUpgradeMenuInventory {
         this.unbreakableUpgradeMenuInventory.setItem(17, netheriteHoe);
 
         this.unbreakableUpgradeMenuInventory.setItem(22, elytra);
+    }
+
+    private List<Component> setItemDescription (String itemName) {
+        return List.of(
+                Component.text("REQUIREMENTS:"),
+                Component.text(itemName + " x 1"),
+                Component.text("Netherite Ingots x 10 (Stacked)"),
+                Component.text("Nether Star x 1"),
+                Component.text("Obsidian x 32 (Stacked)"),
+                Component.text("Empty Inventory Slot x 1")
+        );
     }
 
     public Inventory getUnbreakableUpgradeMenuInventory() {

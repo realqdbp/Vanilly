@@ -1,6 +1,8 @@
 package codes.qdbp.serverplugin;
 
 import codes.qdbp.serverplugin.commands.*;
+import codes.qdbp.serverplugin.inventories.EfficiencyUpgradeMenuInventory;
+import codes.qdbp.serverplugin.inventories.ItemTierUpgradeChoiceMenuInventory;
 import codes.qdbp.serverplugin.inventories.UnbreakableUpgradeMenuInventory;
 import codes.qdbp.serverplugin.inventories.UpgradeMenuInventory;
 import codes.qdbp.serverplugin.misc.FoodMap;
@@ -16,6 +18,7 @@ public class Serverplugin extends JavaPlugin {
     private static Plugin plugin;
     private static Inventory upgradeMenuInventory;
     private static Inventory unbreakableUpgradeMenuInventory;
+    private static Inventory efficiencyUpgradeMenuInventory;
     private static HashMap<Material, List<Float>> foodMap;
 
     @Override
@@ -23,6 +26,7 @@ public class Serverplugin extends JavaPlugin {
         plugin = this;
         upgradeMenuInventory = new UpgradeMenuInventory().getUpgradeMenuInventory();
         unbreakableUpgradeMenuInventory = new UnbreakableUpgradeMenuInventory().getUnbreakableUpgradeMenuInventory();
+        efficiencyUpgradeMenuInventory = new EfficiencyUpgradeMenuInventory().getEfficiencyUpgradeMenuInventory();
         foodMap = FoodMap.getFoodMap();
 
         getServer().getPluginManager().registerEvents(new ListenerClass(), this);
@@ -33,10 +37,9 @@ public class Serverplugin extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("freecam")).setExecutor(new FreecamCommand());
         Objects.requireNonNull(this.getCommand("switchworld")).setExecutor(new SwitchWorldCommand());
         Objects.requireNonNull(this.getCommand("craft")).setExecutor(new CraftCommand());
-        Objects.requireNonNull(this.getCommand("enchy")).setExecutor(new EnchantCrazy());
         Objects.requireNonNull(this.getCommand("enderchest")).setExecutor(new EnderChestCommand());
-        Objects.requireNonNull(this.getCommand("enchantUnbreakable")).setExecutor(new EnchantUnbreakableCommand());
         Objects.requireNonNull(this.getCommand("upgrade")).setExecutor(new OpenUpgradeMenuCommand());
+        Objects.requireNonNull(this.getCommand("skipNight")).setExecutor(new SkipNightCommand());
     }
 
     @Override
@@ -54,6 +57,10 @@ public class Serverplugin extends JavaPlugin {
 
     public static Inventory getUnbreakableUpgradeMenuInventory() {
         return unbreakableUpgradeMenuInventory;
+    }
+
+    public static Inventory getEfficiencyUpgradeMenuInventory() {
+        return efficiencyUpgradeMenuInventory;
     }
 
     public static Plugin getPlugin() {

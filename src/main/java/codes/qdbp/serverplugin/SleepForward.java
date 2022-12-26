@@ -12,8 +12,12 @@ import java.util.stream.Collectors;
 public class SleepForward extends BukkitRunnable{
     private final Player player;
 
-    public SleepForward(Player player) {
+    //TODO temporary
+    private final boolean wasCommand;
+
+    public SleepForward(Player player, boolean wasCommand) {
         this.player = player;
+        this.wasCommand = wasCommand;
     }
 
 
@@ -25,11 +29,11 @@ public class SleepForward extends BukkitRunnable{
 
     @Override
     public void run() {
-        if (!(player.getWorld().getTime() > 12950 || player.getWorld().getTime() < 23950)) {
+        if (!(13000 < player.getWorld().getTime())) {
             player.setStatistic(Statistic.TIME_SINCE_REST, 0);
             cancel();
             return;
-        } else if (getSleepingPlayers(player.getWorld()).size() == 0) {
+        } else if (getSleepingPlayers(player.getWorld()).size() == 0 && !wasCommand) {
             cancel();
             return;
         }

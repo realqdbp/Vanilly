@@ -72,6 +72,7 @@ public class FreecamCommand implements CommandExecutor {
     }
 
     public static void backportPlayer(FileConfiguration config, Player player, File configFile, ArmorStand as) throws IOException {
+
         player.setGameMode(GameMode.SURVIVAL);
         player.setInvulnerable(true);
 

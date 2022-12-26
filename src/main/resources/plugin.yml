@@ -47,3 +47,6 @@ commands:
   upgrade:
     description: Opens the upgrade menu
     usage: /upgrade
+  skipNight:
+    description: Skips the night
+    usage: /skipNight
