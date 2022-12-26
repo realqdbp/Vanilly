@@ -30,8 +30,7 @@ public class FreecamCommand implements CommandExecutor {
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
 
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
 
             if (config.getBoolean("Player." + player.getName() + ".Freecam.state")) {
                 try {

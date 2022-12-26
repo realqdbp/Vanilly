@@ -19,8 +19,7 @@ public class AFKCommand implements CommandExecutor {
         File configFile = new File("plugins/Serverplugin", "config.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
+        if (sender instanceof Player player) {
 
             if (args.length == 1) {
                 player.sendMessage("Du bist jetzt AFK!");

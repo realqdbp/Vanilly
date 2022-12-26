@@ -12,9 +12,6 @@ commands:
   features:
     description: Zeigt Infomessage an
     usage: /features
-  toggleInfo:
-    description: Toggles infotext
-    usage: /toggleInfo
   backpack:
     description: opens a backpack
     usage: </backpack, /bp, /pv> <numberOfBackpack>
@@ -34,11 +31,6 @@ commands:
     usage: </sw, /switchworld> <[overworld, ov, o], [nether, n], [end, e]>
     aliases:
       - sw
-  craft:
-    description: Use to open craft menu
-    usage: /craft
-    aliases:
-      - c
   enderchest:
     description: Opens the players enderchest
     usage: </enderchest, /ec>

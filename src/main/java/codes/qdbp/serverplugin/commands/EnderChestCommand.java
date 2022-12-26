@@ -10,10 +10,9 @@ public class EnderChestCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+        //TODO Check if advancements made for it to have permission to have enderchest opened
 
-        if (!(sender instanceof Player)) return false;
-
-        Player player = (Player) sender;
+        if (!(sender instanceof Player player)) return false;
 
         player.openInventory(player.getEnderChest());
 

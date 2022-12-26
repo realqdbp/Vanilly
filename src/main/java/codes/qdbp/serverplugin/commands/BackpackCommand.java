@@ -23,8 +23,7 @@ public class BackpackCommand implements CommandExecutor {
         File configFile = new File("plugins/Serverplugin", "config.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-        if (!(sender instanceof Player)) return false;
-        Player player = (Player) sender;
+        if (!(sender instanceof Player player)) return false;
 
 
         Inventory bpInv = Bukkit.createInventory(player, 54, Component.text(player.getName() + "'s Backpack"));

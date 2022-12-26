@@ -1,7 +1,7 @@
 package codes.qdbp.serverplugin.commands;
 
 import codes.qdbp.serverplugin.Serverplugin;
-import codes.qdbp.serverplugin.SleepForward;
+import codes.qdbp.serverplugin.misc.SleepForward;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,10 +12,9 @@ public class SkipNightCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(sender instanceof Player)) return false;
-        Player player = (Player) sender;
+        if (!(sender instanceof Player player)) return false;
 
-        new SleepForward(player, true).runTaskTimer(Serverplugin.getPlugin(), 0, 2);
+        new SleepForward(player, true).runTaskTimer(Serverplugin.getPlugin(), 0, 0);
 
         return true;
     }

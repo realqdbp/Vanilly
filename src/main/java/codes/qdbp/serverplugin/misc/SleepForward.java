@@ -1,4 +1,4 @@
-package codes.qdbp.serverplugin;
+package codes.qdbp.serverplugin.misc;
 
 import org.bukkit.Statistic;
 import org.bukkit.World;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class SleepForward extends BukkitRunnable{
     private final Player player;
 
-    //TODO temporary
+    //for SkipNight command
     private final boolean wasCommand;
 
     public SleepForward(Player player, boolean wasCommand) {
@@ -37,7 +37,7 @@ public class SleepForward extends BukkitRunnable{
             cancel();
             return;
         }
-        player.getWorld().setTime(player.getWorld().getTime() + 150);
+        player.getWorld().setTime(player.getWorld().getTime() + 50);
     }
 }
 

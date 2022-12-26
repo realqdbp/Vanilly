@@ -3,6 +3,8 @@ package codes.qdbp.serverplugin;
 import codes.qdbp.serverplugin.commands.FreecamCommand;
 import codes.qdbp.serverplugin.inventories.ConfirmInventory;
 import codes.qdbp.serverplugin.inventories.ItemTierUpgradeChoiceMenuInventory;
+import codes.qdbp.serverplugin.misc.FoodMap;
+import codes.qdbp.serverplugin.misc.SleepForward;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
@@ -32,7 +34,7 @@ import java.util.*;
 public class ListenerClass implements Listener {
     File configFile = new File("plugins/Serverplugin", "config.yml");
     FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
-    HashMap<Material, List<Float>> foodMap = Serverplugin.getFoodMap();
+    HashMap<Material, List<Float>> foodMap = FoodMap.getFoodMap();
 
 
     @EventHandler
@@ -78,17 +80,15 @@ public class ListenerClass implements Listener {
 
     private void handleMainUpgradeMenu(Player player, Material clickedItemMaterial) {
         switch (clickedItemMaterial) {
-            case ANVIL:
+            case ANVIL -> {
                 player.closeInventory();
                 player.openInventory(Serverplugin.getUnbreakableUpgradeMenuInventory());
-                break;
-            case FEATHER:
-                player.closeInventory();
-                break;
-            case NETHERITE_PICKAXE:
+            }
+            case FEATHER -> player.closeInventory();
+            case NETHERITE_PICKAXE -> {
                 player.closeInventory();
                 player.openInventory(Serverplugin.getEfficiencyUpgradeMenuInventory());
-                break;
+            }
         }
     }
 
@@ -264,17 +264,13 @@ public class ListenerClass implements Listener {
 
     @EventHandler
     public void onPlayerEat(PlayerItemConsumeEvent event) {
-
-        float foodlevel;
-        float saturation;
-
         Player player = event.getPlayer();
         ItemStack item = player.getActiveItem();
 
         if (foodMap.containsKey(item.getType()) && item.getAmount() > 1) {
 
-            foodlevel = foodMap.get(player.getActiveItem().getType()).get(0);
-            saturation = foodMap.get(player.getActiveItem().getType()).get(1);
+            float foodlevel = foodMap.get(player.getActiveItem().getType()).get(0);
+            float saturation = foodMap.get(player.getActiveItem().getType()).get(1);
 
             while (item.getAmount() > 0 && player.getFoodLevel() < 20) {
                 player.setFoodLevel((int) (player.getFoodLevel() + foodlevel));
@@ -290,25 +286,19 @@ public class ListenerClass implements Listener {
     public void inventoryCloseEvent(InventoryCloseEvent event) throws IOException {
         FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
 
-        //TODO REWRITE GOOOSH IS THIS SHIT
+        Player player = (Player) event.getPlayer();
+        if (c.getBoolean("Player." + player.getName() + ".Freecam.state")) return;
 
-        if (event.getPlayer() instanceof Player) {
-            Player player = (Player) event.getPlayer();
-
-            if (c.getBoolean("Player." + player.getName() + ".Freecam.state")) return;
-
-            if (event.getView().title().equals(Component.text(player.getName() + "'s Backpack"))) {
-                config.set("Player." + player.getName() + ".backpackInventory", player.getOpenInventory().getTopInventory().getContents());
-                config.save(configFile);
-            }
+        if (event.getView().title().equals(Component.text(player.getName() + "'s Backpack"))) {
+            config.set("Player." + player.getName() + ".backpackInventory", player.getOpenInventory().getTopInventory().getContents());
+            config.save(configFile);
         }
     }
 
 
     @EventHandler
     public void onPlayerGetIntoBed(PlayerBedEnterEvent event) {
-        if (event.isCancelled()) return;
         Player player = event.getPlayer();
-        new SleepForward(player, false).runTaskTimer(Serverplugin.getPlugin(), 0, 2);
+        new SleepForward(player, false).runTaskTimer(Serverplugin.getPlugin(), 0, 0);
     }
 }

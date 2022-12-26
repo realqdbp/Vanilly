@@ -14,22 +14,24 @@ public class InfoMessageCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         player.sendMessage(
-                "Diese Nachricht jederzeit mit /features abrufen\n" +
-                "====================================\n" +
-                "/tode optional:spielername, für ausgabe der Spielertode\n" +
-                "Mülleimer erstellen mit Einzelkiste und Schild auf dem 'trash' steht\n" +
-                "Schlafen mit animation und nur einem Spieler\n" +
-                "Essen wird automatisch bis max aufgefüllt, bei 'normalen' essensitems\n" +
-                "Hinsetzen mit rechtsclick auf: Treppen, Teppich, Schnee usw.\n" +
-                "Fast Leaf Decay bei Baum abbauen (nur Overworld)\n" +
-                "To come: Handel\n" +
-                "Backpack, öffne deinen mit /pv /bp oder /backpack\n" +
-                "To come: Backups\n" +
-                "Elytra/Rüstung Swap. Einfach auszutauschendes Item rechtsclicken\n" +
-                "AFK. mit /afk oder nach bestimmter Zeit\n" +
-                "3D Map vom Server hier: https://qdbp.codes/map\n" +
-                "Freecam mit /fc oder /freecam, switche welten mit /sw oder /switchworld\n" +
-                "Craft everywhere with /craft or /c\n"
+                """
+                        Diese Nachricht jederzeit mit /features abrufen
+                        ====================================
+                        /tode optional:spielername, für ausgabe der Spielertode
+                        Mülleimer erstellen mit Einzelkiste und Schild auf dem 'trash' steht
+                        Schlafen mit animation und nur einem Spieler
+                        Essen wird automatisch bis max aufgefüllt, bei 'normalen' essensitems
+                        Hinsetzen mit rechtsclick auf: Treppen, Teppich, Schnee usw.
+                        Fast Leaf Decay bei Baum abbauen (nur Overworld)
+                        To come: Handel
+                        Backpack, öffne deinen mit /pv /bp oder /backpack
+                        To come: Backups
+                        Elytra/Rüstung Swap. Einfach auszutauschendes Item rechtsclicken
+                        AFK. mit /afk oder nach bestimmter Zeit
+                        3D Map vom Server hier: https://qdbp.codes/map
+                        Freecam mit /fc oder /freecam, switche welten mit /sw oder /switchworld
+                        Craft everywhere with /craft or /c
+                        """
         );
 
         return true;

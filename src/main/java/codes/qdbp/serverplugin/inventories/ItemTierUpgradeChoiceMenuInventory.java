@@ -59,61 +59,55 @@ public class ItemTierUpgradeChoiceMenuInventory {
     }
 
     private List<Component> setItemDescription (int tier) {
-        switch (tier) {
-            case 6:
-                return List.of(
-                        Component.text("REQUIREMENTS:"),
-                        Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
-                        Component.text("Netherite Ingot x 1"),
-                        Component.text("Feather x 4 (Stacked)"),
-                        Component.text("Speed Potion MK1"),
-                        Component.text("Empty Inventory Slot x 1")
-                );
-            case 7:
-                return List.of(
-                        Component.text("REQUIREMENTS:"),
-                        Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
-                        Component.text("Netherite Ingot x 1"),
-                        Component.text("Feather x 8 (Stacked)"),
-                        Component.text("Speed Potion MK2"),
-                        Component.text("Empty Inventory Slot x 1")
-                );
-            case 8:
-                return List.of(
-                        Component.text("REQUIREMENTS:"),
-                        Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
-                        Component.text("Netherite Ingot x 1"),
-                        Component.text("Feather x 16 (Stacked)"),
-                        Component.text("Speed Potion MK2"),
-                        Component.text("Honey x 4 (Stacked)"),
-                        Component.text("Empty Inventory Slot x 1")
-                );
-            case 9:
-                return List.of(
-                        Component.text("REQUIREMENTS:"),
-                        Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
-                        Component.text("Netherite Ingot x 1"),
-                        Component.text("Feather x 32 (Stacked)"),
-                        Component.text("Speed Potion MK3"),
-                        Component.text("Honey x 8 (Stacked)"),
-                        Component.text("End Crystal x 1"),
-                        Component.text("Empty Inventory Slot x 1")
-                );
-            case 10:
-                return List.of(
-                        Component.text("REQUIREMENTS:"),
-                        Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
-                        Component.text("Netherite Ingot x 1"),
-                        Component.text("Feather x 64 (Stacked)"),
-                        Component.text("Speed Potion MK3"),
-                        Component.text("Honey x 16 (Stacked)"),
-                        Component.text("End Crystal x 3"),
-                        Component.text("Nether Star x 1"),
-                        Component.text("Empty Inventory Slot x 1")
-                );
-            default:
-                return null;
-        }
+        return switch (tier) {
+            case 6 -> List.of(
+                    Component.text("REQUIREMENTS:"),
+                    Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
+                    Component.text("Netherite Ingot x 1"),
+                    Component.text("Feather x 4 (Stacked)"),
+                    Component.text("Speed Potion MK1"),
+                    Component.text("Empty Inventory Slot x 1")
+            );
+            case 7 -> List.of(
+                    Component.text("REQUIREMENTS:"),
+                    Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
+                    Component.text("Netherite Ingot x 1"),
+                    Component.text("Feather x 8 (Stacked)"),
+                    Component.text("Speed Potion MK2"),
+                    Component.text("Empty Inventory Slot x 1")
+            );
+            case 8 -> List.of(
+                    Component.text("REQUIREMENTS:"),
+                    Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
+                    Component.text("Netherite Ingot x 1"),
+                    Component.text("Feather x 16 (Stacked)"),
+                    Component.text("Speed Potion MK2"),
+                    Component.text("Honey x 4 (Stacked)"),
+                    Component.text("Empty Inventory Slot x 1")
+            );
+            case 9 -> List.of(
+                    Component.text("REQUIREMENTS:"),
+                    Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
+                    Component.text("Netherite Ingot x 1"),
+                    Component.text("Feather x 32 (Stacked)"),
+                    Component.text("Speed Potion MK3"),
+                    Component.text("Honey x 8 (Stacked)"),
+                    Component.text("End Crystal x 1"),
+                    Component.text("Empty Inventory Slot x 1")
+            );
+            case 10 -> List.of(
+                    Component.text("REQUIREMENTS:"),
+                    Component.text("The tool x 1 with Efficiency Upgrade " + (tier - 1)),
+                    Component.text("Netherite Ingot x 1"),
+                    Component.text("Feather x 64 (Stacked)"),
+                    Component.text("Speed Potion MK3"),
+                    Component.text("Honey x 16 (Stacked)"),
+                    Component.text("End Crystal x 3"),
+                    Component.text("Nether Star x 1"),
+                    Component.text("Empty Inventory Slot x 1")
+            );
+            default -> null;
+        };
     }
 
     public Inventory getItemTierUpgradeChoiceMenuInventory() {

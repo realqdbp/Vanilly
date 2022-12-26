@@ -11,8 +11,7 @@ public class OpenUpgradeMenuCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!(sender instanceof Player)) return false;
-        Player player = (Player) sender;
+        if (!(sender instanceof Player player)) return false;
         player.openInventory(Serverplugin.getUpgradeMenuInventory());
 
 
