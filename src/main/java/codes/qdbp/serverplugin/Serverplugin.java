@@ -4,6 +4,9 @@ import codes.qdbp.serverplugin.commands.*;
 import codes.qdbp.serverplugin.inventories.EfficiencyUpgradeMenuInventory;
 import codes.qdbp.serverplugin.inventories.UnbreakableUpgradeMenuInventory;
 import codes.qdbp.serverplugin.inventories.UpgradeMenuInventory;
+import codes.qdbp.serverplugin.recipes.LightRecipe;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +20,7 @@ public class Serverplugin extends JavaPlugin {
     private static Inventory unbreakableUpgradeMenuInventory;
     private static Inventory efficiencyUpgradeMenuInventory;
 
+
     @Override
     public void onEnable() {
         plugin = this;
@@ -24,6 +28,9 @@ public class Serverplugin extends JavaPlugin {
         unbreakableUpgradeMenuInventory = new UnbreakableUpgradeMenuInventory().getUnbreakableUpgradeMenuInventory();
         efficiencyUpgradeMenuInventory = new EfficiencyUpgradeMenuInventory().getEfficiencyUpgradeMenuInventory();
 
+        /*
+        Commands
+         */
         getServer().getPluginManager().registerEvents(new ListenerClass(), this);
         Objects.requireNonNull(this.getCommand("tode")).setExecutor(new TodeCommand());
         Objects.requireNonNull(this.getCommand("features")).setExecutor(new InfoMessageCommand());
@@ -34,6 +41,12 @@ public class Serverplugin extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("enderchest")).setExecutor(new EnderChestCommand());
         Objects.requireNonNull(this.getCommand("upgrade")).setExecutor(new OpenUpgradeMenuCommand());
         Objects.requireNonNull(this.getCommand("skipNight")).setExecutor(new SkipNightCommand());
+        Objects.requireNonNull(this.getCommand("craft")).setExecutor(new CraftCommand());
+
+        /*
+        Recipes
+         */
+        Bukkit.addRecipe(new LightRecipe(new NamespacedKey(this, "light")).getLightRecipe());
     }
 
     @Override

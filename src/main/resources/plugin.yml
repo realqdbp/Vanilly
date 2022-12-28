@@ -42,3 +42,8 @@ commands:
   skipNight:
     description: Skips the night
     usage: /skipNight
+  craft:
+    description: Opens a crafting Menu
+    usage: /craft, /c
+    aliases:
+      - c

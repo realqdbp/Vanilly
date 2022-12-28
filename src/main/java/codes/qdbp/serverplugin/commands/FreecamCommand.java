@@ -34,9 +34,7 @@ public class FreecamCommand implements CommandExecutor {
 
             if (config.getBoolean("Player." + player.getName() + ".Freecam.state")) {
                 try {
-                    ArmorStand as = (ArmorStand) Bukkit.getEntity(UUID.fromString(Objects.requireNonNull(config.getString("Player." + player.getName() + ".Freecam.Placeholder"))));
-                    assert as != null;
-                    backportPlayer(config, player, configFile, as);
+                    backportPlayer(config, player, configFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -70,7 +68,7 @@ public class FreecamCommand implements CommandExecutor {
         return true;
     }
 
-    public static void backportPlayer(FileConfiguration config, Player player, File configFile, ArmorStand as) throws IOException {
+    public static void backportPlayer(FileConfiguration config, Player player, File configFile) throws IOException {
 
         player.setGameMode(GameMode.SURVIVAL);
         player.setInvulnerable(true);
@@ -79,6 +77,8 @@ public class FreecamCommand implements CommandExecutor {
 
         player.teleport(loc);
 
+        ArmorStand as = (ArmorStand) Bukkit.getEntity(UUID.fromString(Objects.requireNonNull(config.getString("Player." + player.getName() + ".Freecam.Placeholder"))));
+
         config.set("Player." + player.getName() + ".Freecam.state", false);
         config.set("Player." + player.getName() + ".Freecam.coords.world", null);
         config.set("Player." + player.getName() + ".Freecam.coords.x", null);
@@ -86,15 +86,16 @@ public class FreecamCommand implements CommandExecutor {
         config.set("Player." + player.getName() + ".Freecam.coords.z", null);
         config.set("Player." + player.getName() + ".Freecam.coords.yaw", null);
         config.set("Player." + player.getName() + ".Freecam.coords.pitch", null);
+        config.set("Player." + player.getName() + ".Freecam.Placeholder", null);
+        assert as != null;
         as.remove();
         config.save(configFile);
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 120, 1, false, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 60, 1, false, false, false));
         new BukkitRunnable() {
-            int secLeft = 5;
+            int secLeft = 3;
             public void run() {
                 if (secLeft >= 0) {
-                    player.sendMessage(ChatColor.AQUA + "Still invulnurable for " + secLeft);
                     --secLeft;
                 } else {
                     player.setInvulnerable(false);

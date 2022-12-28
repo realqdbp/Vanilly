@@ -7,13 +7,11 @@ import codes.qdbp.serverplugin.misc.FoodMap;
 import codes.qdbp.serverplugin.misc.SleepForward;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +22,6 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +41,9 @@ public class ListenerClass implements Listener {
         player.sendMessage(
                 ChatColor.WHITE +   "====================================\n" +
                 ChatColor.DARK_PURPLE +    "Currently: Rewrite of Plugin\n" +
-                ChatColor.DARK_RED +    "FIXED FREECAM ISSUE!!\n" +
+                ChatColor.DARK_RED +    "Hopefully fixed AFK and Freecam issue...\n" +
+                ChatColor.AQUA +    "ADDED CRAFT COMMAND\n" +
+                ChatColor.AQUA +    "RECIPE FOR 'LIGHT'. 8 Torches and a Diamond :)\n" +
                 ChatColor.WHITE +   "====================================\n" +
                 ChatColor.RED +     "/features, für eine outdated Liste aller Featuers.\n" +
                 ChatColor.WHITE +   "====================================\n" + " \n"
@@ -98,8 +97,10 @@ public class ListenerClass implements Listener {
         //Check validity
         if (!(playersInventory.contains(clickedItemMaterial))) return;
         if (Objects.requireNonNull(playersInventory.getItem(player.getInventory().first(clickedItemMaterial))).getItemMeta().isUnbreakable()) return;
+        if (!(playersInventory.contains(Material.NETHERITE_INGOT))) return;
         if (Objects.requireNonNull(playersInventory.getItem(playersInventory.first(Material.NETHERITE_INGOT))).getAmount() < 10) return;
         if (!(playersInventory.contains(Material.NETHER_STAR))) return;
+        if (!(playersInventory.contains(Material.OBSIDIAN))) return;
         if (Objects.requireNonNull(playersInventory.getItem(playersInventory.first(Material.OBSIDIAN))).getAmount() < 32) return;
         if (playersInventory.firstEmpty() == -1) return;
 
@@ -188,46 +189,41 @@ public class ListenerClass implements Listener {
         FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
         Player player = event.getPlayer();
 
-        if (!(c.getBoolean("Player." + player.getName() + ".Freecam.state"))) return;
-
-        ArmorStand as = (ArmorStand) Bukkit.getEntity(UUID.fromString(Objects.requireNonNull(c.getString("Player." + player.getName() + ".Freecam.Placeholder"))));
-        assert as != null;
-        FreecamCommand.backportPlayer(c, player, configFile, as);
-        player.removePotionEffect(PotionEffectType.INVISIBILITY);
+        if (c.getBoolean("Player." + player.getName() + ".Freecam.state")) FreecamCommand.backportPlayer(c, player, configFile);
     }
 
     @EventHandler
-    public void onPlayerAFK(PlayerKickEvent event) throws IOException {
-        event.setCancelled(true);
-        FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
-        Player player = event.getPlayer();
-        if (c.getBoolean("Player." + player.getName() + ".Freecam.state")) {
-            ArmorStand as = (ArmorStand) Bukkit.getEntity(UUID.fromString(Objects.requireNonNull(c.getString("Player." + player.getName() + ".Freecam.Placeholder"))));
-            assert as != null;
-            FreecamCommand.backportPlayer(c, player, configFile, as);
-            player.removePotionEffect(PotionEffectType.INVISIBILITY);
-        }
+    public void onPlayerKick(PlayerKickEvent event) throws IOException {
         if (event.reason().toString().contains("multiplayer.disconnect.idling")) {
+            event.setCancelled(true);
+
+            FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
+            Player player = event.getPlayer();
+
             if (c.getBoolean("Player." + player.getName() + ".afk")) return;
+
             c.set("Player." + player.getName() + ".afk", true);
             c.save(configFile);
             player.setInvulnerable(true);
             player.playerListName(Component.text(player.getName() + " [" + ChatColor.RED + "AFK" + ChatColor.WHITE + " - " + ChatColor.GREEN + Calendar.getInstance().getTime() + ChatColor.WHITE + "]"));
-            player.sendMessage("Du bist jetzt AFK");
+            player.sendMessage("You're now afk");
         } else {
             event.setCancelled(false);
         }
     }
 
     @EventHandler
-    public void onPlayerDeAFK(PlayerMoveEvent event) throws IOException {
+    public void onPlayerMove(PlayerMoveEvent event) throws IOException {
         FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
+
         if (!c.getBoolean("Player." + event.getPlayer().getName() + ".afk")) return;
+
         Player player = event.getPlayer();
+
         c.set("Player." + player.getName() + ".afk", false);
         c.save(configFile);
         player.setInvulnerable(false);
-        player.playerListName(Component.text(player.getName()));
+        player.playerListName(null);
         player.sendMessage("Du bist nicht mehr AFK");
     }
 
