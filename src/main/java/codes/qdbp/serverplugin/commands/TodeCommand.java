@@ -1,5 +1,6 @@
 package codes.qdbp.serverplugin.commands;
 
+import codes.qdbp.serverplugin.inventories.DeathsInventory;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,15 +20,9 @@ public class TodeCommand implements CommandExecutor {
         File configFile = new File("plugins/Serverplugin", "config.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
-        Player player = (Player) sender;
+        if (!(sender instanceof Player player)) return false;
 
-        if (args.length == 0) {
-            player.sendMessage("Tode von " + player.getName() + ": " + config.getInt("Player." + player.getName()+".tode"));
-        }
-
-        if (args.length == 1) {
-            player.sendMessage("Tode von " + args[0] + ": " + config.getInt("Player." + args[0]+".tode"));
-        }
+        player.openInventory(new DeathsInventory(player, config).getDeathsInventory());
 
         return true;
     }

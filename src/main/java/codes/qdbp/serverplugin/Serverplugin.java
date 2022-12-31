@@ -23,6 +23,7 @@ public class Serverplugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
         plugin = this;
         upgradeMenuInventory = new UpgradeMenuInventory().getUpgradeMenuInventory();
         unbreakableUpgradeMenuInventory = new UnbreakableUpgradeMenuInventory().getUnbreakableUpgradeMenuInventory();
@@ -33,16 +34,16 @@ public class Serverplugin extends JavaPlugin {
          */
         getServer().getPluginManager().registerEvents(new ListenerClass(), this);
         Objects.requireNonNull(this.getCommand("tode")).setExecutor(new TodeCommand());
-        Objects.requireNonNull(this.getCommand("features")).setExecutor(new InfoMessageCommand());
+        Objects.requireNonNull(this.getCommand("features")).setExecutor(new FeaturesCommand());
         Objects.requireNonNull(this.getCommand("backpack")).setExecutor(new BackpackCommand());
         Objects.requireNonNull(this.getCommand("afk")).setExecutor(new AFKCommand());
         Objects.requireNonNull(this.getCommand("freecam")).setExecutor(new FreecamCommand());
         Objects.requireNonNull(this.getCommand("switchworld")).setExecutor(new SwitchWorldCommand());
         Objects.requireNonNull(this.getCommand("enderchest")).setExecutor(new EnderChestCommand());
         Objects.requireNonNull(this.getCommand("upgrade")).setExecutor(new OpenUpgradeMenuCommand());
-        Objects.requireNonNull(this.getCommand("skipNight")).setExecutor(new SkipNightCommand());
+        Objects.requireNonNull(this.getCommand("skipnight")).setExecutor(new SkipNightCommand());
         Objects.requireNonNull(this.getCommand("craft")).setExecutor(new CraftCommand());
-
+        Objects.requireNonNull(this.getCommand("info")).setExecutor(new InfoCommand());
         /*
         Recipes
          */
@@ -65,6 +66,7 @@ public class Serverplugin extends JavaPlugin {
     public static Inventory getEfficiencyUpgradeMenuInventory() {
         return efficiencyUpgradeMenuInventory;
     }
+
 
     public static Plugin getPlugin() {
         return plugin;

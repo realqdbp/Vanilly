@@ -23,8 +23,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.Duration;
 import java.util.*;
 
@@ -33,21 +32,26 @@ public class ListenerClass implements Listener {
     FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
     HashMap<Material, List<Float>> foodMap = FoodMap.getFoodMap();
 
-
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) throws IOException {
         Player player = event.getPlayer();
-        player.showTitle(Title.title(Component.text(ChatColor.DARK_PURPLE + "Viel ßaaß"),Component.text(ChatColor.GREEN + "News sind Outdated!"),Title.Times.times(Duration.ofSeconds(2),Duration.ofSeconds(8),Duration.ofSeconds(2))));
+        player.showTitle(Title.title(Component.text(ChatColor.DARK_PURPLE + "ψ(｀∇´)ψ"),Component.text(ChatColor.GREEN + "Viel Spaß aufm Server!"),Title.Times.times(Duration.ofSeconds(2),Duration.ofSeconds(8),Duration.ofSeconds(2))));
+
+        FileConfiguration c = YamlConfiguration.loadConfiguration(configFile);
+
+        //maybe in future turn this with pom, didn't bring it to work rn
+        double currentPluginVersion = 1.7;
+        if (c.getDouble("Player." + player.getName() + ".pluginVersion") == currentPluginVersion) return;
+
         player.sendMessage(
-                ChatColor.WHITE +   "====================================\n" +
-                ChatColor.DARK_PURPLE +    "Currently: Rewrite of Plugin\n" +
-                ChatColor.DARK_RED +    "Hopefully fixed AFK and Freecam issue...\n" +
-                ChatColor.AQUA +    "ADDED CRAFT COMMAND\n" +
-                ChatColor.AQUA +    "RECIPE FOR 'LIGHT'. 8 Torches and a Diamond :)\n" +
-                ChatColor.WHITE +   "====================================\n" +
-                ChatColor.RED +     "/features, für eine outdated Liste aller Featuers.\n" +
-                ChatColor.WHITE +   "====================================\n" + " \n"
+                """
+                /Features zeigt jetzt alle Features!
+                \n
+                """
         );
+
+        c.set("Player." + player.getName() + ".pluginVersion", currentPluginVersion);
+        c.save(configFile);
     }
 
 
@@ -74,7 +78,10 @@ public class ListenerClass implements Listener {
         } else if (inventoryTitle.equals(Component.text("Choice Upgrade Tier"))) {
             event.setCancelled(true);
             handleChoiceUpgradeTierMenu(player, clickedItemMaterial);
+        } else if (inventoryTitle.equals(Component.text("Death Overview"))) {
+            event.setCancelled(true);
         }
+
     }
 
     private void handleMainUpgradeMenu(Player player, Material clickedItemMaterial) {

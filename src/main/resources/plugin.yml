@@ -4,46 +4,60 @@ main: codes.qdbp.serverplugin.Serverplugin
 api-version: 1.19
 authors: [ qdbp ]
 description: Just my plugin for our server
-website: https://qdbp.codes
+website: https://qdbp.codes/
 commands:
-  tode:
-    description: Zeigt tode aller spieler
-    usage: /tode <nameVonAnderenSpieler>
+
   features:
-    description: Zeigt Infomessage an
+    description: Liste aller Features des Plugins
     usage: /features
+
+  info:
+    description: Informationen über die Features im Plugin
+    usage: /info <feature name>
+
+  tode:
+    description: /info tode
+    usage: /tode
+
   backpack:
-    description: opens a backpack
-    usage: </backpack, /bp, /pv> <numberOfBackpack>
+    description: /info backpack
+    usage: /backpack, /bp, /pv
     aliases:
       - pv
       - bp
+
   afk:
-    description: Let's you go afk
-    usage: /afk <ort,grund,...>
+    description: /info afk
+    usage: /afk <nachricht>
+
   freecam:
-    description: lets you use spectator mode
-    usage: </freecam, /fc>
+    description: /info freecam
+    usage: /freecam, /fc
     aliases:
       - fc
+
   switchworld:
-    description: switch worlds in freecam mode
-    usage: </sw, /switchworld> <[overworld, ov, o], [nether, n], [end, e]>
+    description: /info switchworld
+    usage: /switchworld, /sw <[overworld, ov, o], [nether, n], [end, e]>
     aliases:
       - sw
+
   enderchest:
-    description: Opens the players enderchest
+    description: /info enderchest
     usage: </enderchest, /ec>
     aliases:
       - ec
+
   upgrade:
-    description: Opens the upgrade menu
+    description: /info upgrade
     usage: /upgrade
+
   skipNight:
-    description: Skips the night
-    usage: /skipNight
+    description: /info skipnight
+    usage: /skipnight
+
   craft:
-    description: Opens a crafting Menu
+    description: /info craft
     usage: /craft, /c
     aliases:
       - c
