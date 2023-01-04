@@ -1,41 +1,51 @@
 package codes.qdbp.serverplugin.commands;
 
-import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
+import codes.qdbp.serverplugin.Serverplugin;
+import codes.qdbp.serverplugin.misc.AFKPlayerTimeUtility;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 
 public class AFKCommand implements CommandExecutor {
+
+
+    private final Serverplugin plugin;
+
+    public AFKCommand(Serverplugin plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        File configFile = new File("plugins/Serverplugin", "config.yml");
-        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         if (!(sender instanceof Player player)) return false;
-        if (!(args.length >= 1)) return false;
 
-
-        if (config.getBoolean("Player." + player.getName() + ".afk")) {
-            player.sendMessage("Changed Status Message.");
-            player.playerListName(Component.text(player.getName() + " [" + ChatColor.RED + "AFK" + ChatColor.WHITE + " - " + ChatColor.GREEN + Arrays.toString(args) + ChatColor.WHITE + "]"));
-        } else {
-            config.set("Player." + player.getName() + ".afk", true);
-            try {config.save(configFile);} catch (IOException e) {throw new RuntimeException(e);}
+        if (args.length == 0) {
+            if (Serverplugin.afkPlayerList.contains(player.getUniqueId())) return true;
+            Serverplugin.afkPlayerList.add(player.getUniqueId());
             player.setInvulnerable(true);
-
-            player.sendMessage("You're now afk.");
-            player.playerListName(Component.text(player.getName() + " [" + ChatColor.RED + "AFK" + ChatColor.WHITE + " - " + ChatColor.GREEN + Arrays.toString(args) + ChatColor.WHITE + "]"));
+            AFKPlayerTimeUtility.justTime(plugin, player);
+            player.sendMessage("You're now afk");
+        } else {
+            if (Serverplugin.afkPlayerList.contains(player.getUniqueId())) {
+                Bukkit.getScheduler().cancelTask(Serverplugin.afkPlayerRunningTasksMap.get(player.getUniqueId()));
+                Serverplugin.afkPlayerRunningTasksMap.remove(player.getUniqueId());
+                String message = Arrays.toString(args).replaceAll("\\[", "").replaceAll("]", "").replaceAll(",", "");
+                AFKPlayerTimeUtility.textAndTime(plugin, player, message);
+                player.sendMessage("Changed Status Message.");
+            } else {
+                Serverplugin.afkPlayerList.add(player.getUniqueId());
+                player.setInvulnerable(true);
+                String message = Arrays.toString(args).replaceAll("\\[", "").replaceAll("]", "").replaceAll(",", "");
+                AFKPlayerTimeUtility.textAndTime(plugin, player, message);
+                player.sendMessage("You're now afk");
+            }
         }
-
         return true;
     }
 }

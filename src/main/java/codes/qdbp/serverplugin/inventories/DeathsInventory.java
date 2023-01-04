@@ -1,5 +1,6 @@
 package codes.qdbp.serverplugin.inventories;
 
+import codes.qdbp.serverplugin.Serverplugin;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,7 +20,7 @@ public class DeathsInventory {
 
     Inventory deathsInventory;
 
-    public DeathsInventory(Player player, FileConfiguration config) {
+    public DeathsInventory(Player player, Serverplugin plugin) {
 
         this.deathsInventory = Bukkit.createInventory(null, InventoryType.CHEST, Component.text("Death Overview"));
 
@@ -27,7 +28,7 @@ public class DeathsInventory {
         ItemStack headItem = new ItemStack(Material.PLAYER_HEAD, 1);
         SkullMeta commandUserHeadSkullMeta = (SkullMeta) headItem.getItemMeta();
         commandUserHeadSkullMeta.setPlayerProfile(player.getPlayerProfile());
-        commandUserHeadSkullMeta.lore(List.of(Component.text(config.getInt("Player." + player.getName() + ".tode") + " Tode")));
+        commandUserHeadSkullMeta.lore(List.of(Component.text(plugin.getConfig().getInt("Player." + player.getName() + ".tode") + " Tode")));
         headItem.setItemMeta(commandUserHeadSkullMeta);
 
         this.deathsInventory.addItem(headItem);
@@ -38,7 +39,7 @@ public class DeathsInventory {
             if (Objects.equals(offlinePlayer.getName(), player.getName())) continue;
             SkullMeta merta = (SkullMeta) headItem.getItemMeta();
             merta.setOwningPlayer(offlinePlayer);
-            merta.lore(List.of(Component.text(config.getInt("Player." + offlinePlayer.getName() + ".tode") + " Tode")));
+            merta.lore(List.of(Component.text(plugin.getConfig().getInt("Player." + offlinePlayer.getName() + ".tode") + " Tode")));
             headItem.setItemMeta(merta);
             this.deathsInventory.addItem(headItem);
         }

@@ -1,49 +1,72 @@
 package codes.qdbp.serverplugin;
 
+import codes.qdbp.serverplugin.listeners.*;
 import codes.qdbp.serverplugin.commands.*;
 import codes.qdbp.serverplugin.inventories.EfficiencyUpgradeMenuInventory;
 import codes.qdbp.serverplugin.inventories.UnbreakableUpgradeMenuInventory;
 import codes.qdbp.serverplugin.inventories.UpgradeMenuInventory;
+import codes.qdbp.serverplugin.misc.FoodMap;
 import codes.qdbp.serverplugin.recipes.LightRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
 public class Serverplugin extends JavaPlugin {
 
-    private static Plugin plugin;
+
     private static Inventory upgradeMenuInventory;
     private static Inventory unbreakableUpgradeMenuInventory;
     private static Inventory efficiencyUpgradeMenuInventory;
 
+    public static HashMap<UUID, ArmorStand> freecamPlayerMap;
+
+    public static ArrayList<UUID> afkPlayerList;
+
+    public static HashMap<UUID, Integer> afkPlayerRunningTasksMap;
 
     @Override
     public void onEnable() {
 
-        plugin = this;
         upgradeMenuInventory = new UpgradeMenuInventory().getUpgradeMenuInventory();
         unbreakableUpgradeMenuInventory = new UnbreakableUpgradeMenuInventory().getUnbreakableUpgradeMenuInventory();
         efficiencyUpgradeMenuInventory = new EfficiencyUpgradeMenuInventory().getEfficiencyUpgradeMenuInventory();
+        freecamPlayerMap = new HashMap<>();
+        afkPlayerList = new ArrayList<>();
+        afkPlayerRunningTasksMap = new HashMap<>();
 
         /*
         Commands
          */
-        getServer().getPluginManager().registerEvents(new ListenerClass(), this);
-        Objects.requireNonNull(this.getCommand("tode")).setExecutor(new TodeCommand());
-        Objects.requireNonNull(this.getCommand("features")).setExecutor(new FeaturesCommand());
-        Objects.requireNonNull(this.getCommand("backpack")).setExecutor(new BackpackCommand());
-        Objects.requireNonNull(this.getCommand("afk")).setExecutor(new AFKCommand());
-        Objects.requireNonNull(this.getCommand("freecam")).setExecutor(new FreecamCommand());
-        Objects.requireNonNull(this.getCommand("switchworld")).setExecutor(new SwitchWorldCommand());
-        Objects.requireNonNull(this.getCommand("enderchest")).setExecutor(new EnderChestCommand());
-        Objects.requireNonNull(this.getCommand("upgrade")).setExecutor(new OpenUpgradeMenuCommand());
-        Objects.requireNonNull(this.getCommand("skipnight")).setExecutor(new SkipNightCommand());
-        Objects.requireNonNull(this.getCommand("craft")).setExecutor(new CraftCommand());
-        Objects.requireNonNull(this.getCommand("info")).setExecutor(new InfoCommand());
+        Objects.requireNonNull(getCommand("tode")).setExecutor(new TodeCommand(this));
+        Objects.requireNonNull(getCommand("features")).setExecutor(new FeaturesCommand());
+        Objects.requireNonNull(getCommand("backpack")).setExecutor(new BackpackCommand(this));
+        Objects.requireNonNull(getCommand("afk")).setExecutor(new AFKCommand(this));
+        Objects.requireNonNull(getCommand("freecam")).setExecutor(new FreecamCommand(this));
+        Objects.requireNonNull(getCommand("switchworld")).setExecutor(new SwitchWorldCommand());
+        Objects.requireNonNull(getCommand("enderchest")).setExecutor(new EnderChestCommand());
+        Objects.requireNonNull(getCommand("upgrade")).setExecutor(new OpenUpgradeMenuCommand());
+        Objects.requireNonNull(getCommand("skipnight")).setExecutor(new SkipNightCommand(this));
+        Objects.requireNonNull(getCommand("craft")).setExecutor(new CraftCommand());
+        Objects.requireNonNull(getCommand("info")).setExecutor(new InfoCommand());
+
+        /*
+        Listeners
+         */
+        getServer().getPluginManager().registerEvents(new InventoryCloseListener(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerItemConsumeListener(FoodMap.getFoodMap()), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerKickListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
+
         /*
         Recipes
          */
@@ -52,7 +75,8 @@ public class Serverplugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        System.out.println("Disabling Plugin");
+
+        freecamPlayerMap.forEach((key, value) -> FreecamCommand.backportPlayer(this, Objects.requireNonNull(Bukkit.getPlayer(key)), true));
     }
 
     public static Inventory getUpgradeMenuInventory() {
@@ -68,7 +92,4 @@ public class Serverplugin extends JavaPlugin {
     }
 
 
-    public static Plugin getPlugin() {
-        return plugin;
-    }
 }
