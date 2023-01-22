@@ -60,7 +60,7 @@ public class Serverplugin extends JavaPlugin {
         Listeners
          */
         getServer().getPluginManager().registerEvents(new InventoryCloseListener(this), this);
-        getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerItemConsumeListener(FoodMap.getFoodMap()), this);

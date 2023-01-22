@@ -26,12 +26,12 @@ public class PlayerJoinListener implements Listener {
 
 
         //maybe in future turn this with pom, didn't bring it to work rn
-        double currentPluginVersion = 1.9;
+        double currentPluginVersion = 2.0;
         if (plugin.getConfig().getDouble("Player." + player.getName() + ".pluginVersion") == currentPluginVersion) return;
 
         player.sendMessage(
                 """
-                Hoffentlich Freecam und AFK gefixed :)
+                'Tode' verbessert! Probiers doch mit /tode aus :)
                 \n
                 """
         );

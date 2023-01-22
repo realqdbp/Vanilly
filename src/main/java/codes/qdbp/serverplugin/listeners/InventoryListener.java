@@ -3,6 +3,7 @@ package codes.qdbp.serverplugin.listeners;
 import codes.qdbp.serverplugin.Serverplugin;
 import codes.qdbp.serverplugin.inventories.ConfirmInventory;
 import codes.qdbp.serverplugin.inventories.ItemTierUpgradeChoiceMenuInventory;
+import codes.qdbp.serverplugin.inventories.PlayerDeathInventory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,10 +13,18 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.Objects;
 
 public class InventoryListener implements Listener {
+
+    private final Serverplugin plugin;
+
+
+    public InventoryListener(Serverplugin plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -42,8 +51,16 @@ public class InventoryListener implements Listener {
             handleChoiceUpgradeTierMenu(player, clickedItemMaterial);
         } else if (inventoryTitle.equals(Component.text("Death Overview"))) {
             event.setCancelled(true);
+            handleDeathInventory(player, event.getCurrentItem());
+        } else if (inventoryTitle.contains(Component.text(" deaths"))) {
+            event.setCancelled(true);
         }
+    }
 
+
+    private void handleDeathInventory(Player player, ItemStack clickedItem) {
+        player.closeInventory();
+        player.openInventory(new PlayerDeathInventory(clickedItem, plugin).getPlayerDeathInventory());
     }
 
     private void handleMainUpgradeMenu(Player player, Material clickedItemMaterial) {
