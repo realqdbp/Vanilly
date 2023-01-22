@@ -7,6 +7,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Map;
+import java.util.UUID;
 
 
 public class AFKPlayerTimeUtility {
@@ -28,6 +30,7 @@ public class AFKPlayerTimeUtility {
                 seconds = time % 60;
                 timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 
+                Serverplugin.afkPlayerTimes.put(player.getUniqueId(), timeString);
                 player.playerListName(
                         Component.text(player.getName() + " [" + ChatColor.RED + "AFK" + ChatColor.WHITE + " - " + ChatColor.GREEN
                         + timeString.replace(" ", "")
@@ -53,6 +56,7 @@ public class AFKPlayerTimeUtility {
                 seconds = time % 60;
                 timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 
+                Serverplugin.afkPlayerTimes.put(player.getUniqueId(), timeString);
                 player.playerListName(
                         Component.text(player.getName() + " [" + ChatColor.RED + "AFK" + ChatColor.WHITE + " - " + ChatColor.GREEN
                         + timeString + " "

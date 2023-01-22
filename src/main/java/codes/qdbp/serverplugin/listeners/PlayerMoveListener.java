@@ -14,7 +14,9 @@ public class PlayerMoveListener implements Listener {
         Player player = event.getPlayer();
         if (Serverplugin.afkPlayerList.contains(player.getUniqueId())) {
             player.setInvulnerable(false);
-            player.sendMessage("Du bist nicht mehr AFK");
+            player.sendMessage("Du warst " + Serverplugin.afkPlayerTimes.get(player.getUniqueId()) + " AFK.");
+
+            Serverplugin.afkPlayerTimes.remove(player.getUniqueId());
             Serverplugin.afkPlayerList.remove(player.getUniqueId());
             Bukkit.getScheduler().cancelTask(Serverplugin.afkPlayerRunningTasksMap.get(player.getUniqueId()));
             Serverplugin.afkPlayerRunningTasksMap.remove(player.getUniqueId());

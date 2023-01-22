@@ -30,10 +30,11 @@ public class BackpackCommand implements CommandExecutor {
 
         Inventory bpInv = Bukkit.createInventory(player, 54, Component.text(player.getName() + "'s Backpack"));
 
-        if (plugin.getConfig().getList("Player." + player.getName() + ".backpackInventory") != null) {
-            @SuppressWarnings("unchecked")
-            List<ItemStack> items = (List<ItemStack>) plugin.getConfig().getList("Player." + player.getName() + ".backpackInventory");
-            assert items != null;
+
+        @SuppressWarnings("unchecked")
+        List<ItemStack> items = (List<ItemStack>) plugin.getConfig().getList("Player." + player.getName() + ".backpackInventory");
+
+        if (items != null) {
             bpInv.setContents(items.toArray(new ItemStack[0]));
         }
         player.openInventory(bpInv);

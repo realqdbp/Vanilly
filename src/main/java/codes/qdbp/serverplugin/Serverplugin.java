@@ -28,6 +28,8 @@ public class Serverplugin extends JavaPlugin {
 
     public static HashMap<UUID, Integer> afkPlayerRunningTasksMap;
 
+    public static HashMap<UUID, String> afkPlayerTimes;
+
     @Override
     public void onEnable() {
 
@@ -37,6 +39,7 @@ public class Serverplugin extends JavaPlugin {
         freecamPlayerMap = new HashMap<>();
         afkPlayerList = new ArrayList<>();
         afkPlayerRunningTasksMap = new HashMap<>();
+        afkPlayerTimes = new HashMap<>();
 
         /*
         Commands

@@ -6,6 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 public class InventoryCloseListener implements Listener{
@@ -22,7 +26,9 @@ public class InventoryCloseListener implements Listener{
         Player player = (Player) event.getPlayer();
 
         if (event.getView().title().equals(Component.text(player.getName() + "'s Backpack"))) {
-            plugin.getConfig().set("Player." + player.getName() + ".backpackInventory", player.getOpenInventory().getTopInventory().getContents());
+
+            List<ItemStack> list = Arrays.asList(player.getOpenInventory().getTopInventory().getContents());
+            plugin.getConfig().set("Player." + player.getName() + ".backpackInventory", list);
             plugin.saveConfig();
         }
     }

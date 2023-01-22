@@ -4,8 +4,6 @@ import codes.qdbp.serverplugin.Serverplugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,12 +26,12 @@ public class PlayerJoinListener implements Listener {
 
 
         //maybe in future turn this with pom, didn't bring it to work rn
-        double currentPluginVersion = 1.7;
+        double currentPluginVersion = 1.9;
         if (plugin.getConfig().getDouble("Player." + player.getName() + ".pluginVersion") == currentPluginVersion) return;
 
         player.sendMessage(
                 """
-                /Features zeigt jetzt alle Features!
+                Hoffentlich Freecam und AFK gefixed :)
                 \n
                 """
         );
