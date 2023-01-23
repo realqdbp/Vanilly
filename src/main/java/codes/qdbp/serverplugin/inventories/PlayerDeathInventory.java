@@ -36,7 +36,7 @@ public class PlayerDeathInventory {
 
             deathIcon.setItemMeta(meta);
             playerDeathInventory.addItem(deathIcon);
-            ++i;
+            --i;
         }
     }
 
