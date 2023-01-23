@@ -23,7 +23,7 @@ public class PlayerDeathInventory {
 
         ItemStack deathIcon = new ItemStack(Material.SKELETON_SKULL);
 
-        int i = 1;
+        int i = plugin.getConfig().getInt("Player." + playername + ".tode");
         while (plugin.getConfig().get("Player." + playername + ".todes." + i + ".cause") != null) {
             ItemMeta meta = deathIcon.getItemMeta();
             meta.lore(List.of(
