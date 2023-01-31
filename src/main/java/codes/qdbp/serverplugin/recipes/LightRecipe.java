@@ -16,11 +16,11 @@ public class LightRecipe {
 
         this.lightRecipe.shape(
                 "ttt",
-                "tdt",
+                "tit",
                 "ttt"
         );
         this.lightRecipe.setIngredient('t', Material.TORCH);
-        this.lightRecipe.setIngredient('d', Material.DIAMOND);
+        this.lightRecipe.setIngredient('i', Material.IRON_BLOCK);
     }
 
     public ShapedRecipe getLightRecipe() {
