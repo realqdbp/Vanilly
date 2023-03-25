@@ -25,6 +25,7 @@ public class InfoCommand implements CommandExecutor {
             case "eating" -> sendEatingInfo(player);
             case "sleep" -> sendSleepInfo(player);
             case "elytrachange" -> sendElytrachangeInfo(player);
+            case "lightrecipe" -> sendLightRecipeInfo(player);
         }
 
         return true;
@@ -172,6 +173,17 @@ public class InfoCommand implements CommandExecutor {
                 diese mit einem Rechtsklick
                 ausgetauscht.
                 
+                
+                """
+        );
+    }
+
+    private void sendLightRecipeInfo(Player player) {
+        player.sendMessage(
+                """
+                
+                Das Item 'Light' kann nun gecrafted werden.
+                Das Rezept ist: Fackeln und in der Mitte ein Eisenblock.
                 
                 """
         );

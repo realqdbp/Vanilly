@@ -39,7 +39,7 @@ public class PlayerDeathListener implements Listener {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
 
-        String positions = "X: " + player.getLocation().getBlockX() + "| Y: " + player.getLocation().getBlockY() + "| Z: " + player.getLocation().getBlockZ();
+        String positions = "X: " + player.getLocation().getBlockX() + " | Y: " + player.getLocation().getBlockY() + " | Z: " + player.getLocation().getBlockZ();
 
 
         plugin.getConfig().set("Player." + player.getName() + ".tode", deaths);
