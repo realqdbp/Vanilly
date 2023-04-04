@@ -5,22 +5,23 @@ import codes.qdbp.serverplugin.commands.*;
 import codes.qdbp.serverplugin.misc.FoodMap;
 import codes.qdbp.serverplugin.recipes.LightRecipe;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
 public class Serverplugin extends JavaPlugin {
 
-
-    public static HashMap<UUID, ArmorStand> freecamPlayerMap;
+    private static final double currentPluginVersion = 2.3;
 
     public static ArrayList<UUID> afkPlayerList;
 
     public static HashMap<UUID, Integer> afkPlayerRunningTasksMap;
 
     public static HashMap<UUID, String> afkPlayerTimes;
+
+    public static HashMap<UUID, Location> freecamPlayerLocation;
 
 
     @Override
@@ -42,6 +43,7 @@ public class Serverplugin extends JavaPlugin {
         getConfig().addDefault("Feature-Toggles.useSleep", true);
         getConfig().addDefault("Feature-Toggles.useElytrachange", true);
         getConfig().addDefault("Feature-Toggles.useLightRecipe", true);
+        getConfig().addDefault("Feature-Toggles.useDoubleOpenDoors", true);
         getConfig().options().copyDefaults(true);
         saveConfig();
 
@@ -62,9 +64,9 @@ public class Serverplugin extends JavaPlugin {
         boolean useSleep = getConfig().getBoolean("Feature-Toggles.useSleep");
         boolean useElytrachange = getConfig().getBoolean("Feature-Toggles.useElytrachange");
         boolean useLightRecipe = getConfig().getBoolean("Feature-Toggles.useLightRecipe");
+        boolean useDoubleOpenDoors = getConfig().getBoolean("Feature-Toggles.useDoubleOpenDoors");
 
-
-        freecamPlayerMap = new HashMap<>();
+        freecamPlayerLocation = new HashMap<>();
         afkPlayerList = new ArrayList<>();
         afkPlayerRunningTasksMap = new HashMap<>();
         afkPlayerTimes = new HashMap<>();
@@ -78,7 +80,7 @@ public class Serverplugin extends JavaPlugin {
         if (useBackpack) Objects.requireNonNull(getCommand("backpack")).setExecutor(new BackpackCommand(this));
         if (useCraft) Objects.requireNonNull(getCommand("craft")).setExecutor(new CraftCommand());
         if (useEnderchest) Objects.requireNonNull(getCommand("enderchest")).setExecutor(new EnderChestCommand());
-        if (useFreecam) Objects.requireNonNull(getCommand("freecam")).setExecutor(new FreecamCommand(this));
+        if (useFreecam) Objects.requireNonNull(getCommand("freecam")).setExecutor(new FreecamCommand());
 //        if (useUpgrade) Objects.requireNonNull(getCommand("upgrade")).setExecutor(new OpenUpgradeMenuCommand());
         if (useSkipnight) Objects.requireNonNull(getCommand("skipnight")).setExecutor(new SkipNightCommand(this));
         if (useSwitchworld) Objects.requireNonNull(getCommand("switchworld")).setExecutor(new SwitchWorldCommand());
@@ -97,7 +99,8 @@ public class Serverplugin extends JavaPlugin {
         if (useAFK) getServer().getPluginManager().registerEvents(new PlayerKickListener(this), this);
         if (useSleep) getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         if (useAFK) getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
-        if (useAFK || useFreecam) getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
+        if (useAFK || useFreecam) getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
+        if (useDoubleOpenDoors) getServer().getPluginManager().registerEvents(new PlayerDoorInteractListener(), this);
 
 
         /*
@@ -108,7 +111,10 @@ public class Serverplugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        freecamPlayerLocation.forEach((key, value) -> FreecamCommand.backportPlayer(Objects.requireNonNull(Bukkit.getPlayer(key))));
+    }
 
-        freecamPlayerMap.forEach((key, value) -> FreecamCommand.backportPlayer(this, Objects.requireNonNull(Bukkit.getPlayer(key)), true));
+    public static double getCurrentPluginVersion() {
+        return currentPluginVersion;
     }
 }

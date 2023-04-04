@@ -11,18 +11,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerQuitListener implements Listener {
 
-    private final Serverplugin plugin;
-
-    public PlayerQuitListener(Serverplugin plugin) {
-        this.plugin = plugin;
-    }
-
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        if (Serverplugin.freecamPlayerMap.containsKey(player.getUniqueId())) {
-            FreecamCommand.backportPlayer(plugin, player, true);
+        if (Serverplugin.freecamPlayerLocation.containsKey(player.getUniqueId())) {
+            FreecamCommand.backportPlayer(player);
         } else if (Serverplugin.afkPlayerList.contains(player.getUniqueId())) {
             player.setInvulnerable(false);
             Serverplugin.afkPlayerList.remove(player.getUniqueId());

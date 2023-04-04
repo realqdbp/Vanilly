@@ -26,8 +26,7 @@ public class PlayerJoinListener implements Listener {
 
 
         //maybe in future turn this with pom, didn't bring it to work rn
-        double currentPluginVersion = 2.2;
-        if (plugin.getConfig().getDouble("Player." + player.getName() + ".pluginVersion") == currentPluginVersion) return;
+        if (plugin.getConfig().getDouble("Player." + player.getName() + ".pluginVersion") == Serverplugin.getCurrentPluginVersion()) return;
 
         player.sendMessage(
                 """
@@ -36,7 +35,7 @@ public class PlayerJoinListener implements Listener {
                 """
         );
 
-        plugin.getConfig().set("Player." + player.getName() + ".pluginVersion", currentPluginVersion);
+        plugin.getConfig().set("Player." + player.getName() + ".pluginVersion", Serverplugin.getCurrentPluginVersion());
         plugin.saveConfig();
 
     }

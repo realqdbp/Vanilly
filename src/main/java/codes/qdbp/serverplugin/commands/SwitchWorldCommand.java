@@ -19,7 +19,7 @@ public class SwitchWorldCommand implements CommandExecutor {
 
         if (sender instanceof Player player) {
 
-            if (Serverplugin.freecamPlayerMap.containsKey(player.getUniqueId())) {
+            if (Serverplugin.freecamPlayerLocation.containsKey(player.getUniqueId())) {
                 if (args.length == 1) {
                     if (args[0].equalsIgnoreCase("ov") || args[0].equalsIgnoreCase("overworld") || args[0].equalsIgnoreCase("o")) {
                         if (player.getBedSpawnLocation() != null) {

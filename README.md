@@ -2,8 +2,17 @@
 A Plugin that was made to run on my private server in the first place.
 It has multiple features, each can be switched on or off.
 
+## Things Needed
+ - Papermc
+ - Minecraft Server 1.19.x
+ - For AFK to work without commands (server.properties -> player-idle-timeout)
+ - For Deaths to work, a whitelist needs to be active, as only whitelisted players will be shown other than yourself
+ - For Toggling, start the server with plugin once. In the config file, change values to true / false. Restart Server or ingame /reload confirm
+
 ## Features
  - Ingame explanaitions with /features
+ - Info
+   - "/info featurename" lists the explanaition for the specified feature
  - AFK
    - Instead of getting kicked from the Server, you're set into "AFK Mode", making you invulnerable.
    - Alternatively set yourself into AFK mode with "/afk optionalReason".
@@ -46,6 +55,8 @@ It has multiple features, each can be switched on or off.
  - LightRecipe
    - Allows the "Light" Item/Block to be crafted.
    - Current recipe is: Torches and in the middle Iron Block
+ - DoubleOpenDoors
+   - Opens the aligning door next to the one you clicked automatically with it
 
 ## Future
  - This project shows all the features that will some day be implemented.
