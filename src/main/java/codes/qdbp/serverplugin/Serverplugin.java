@@ -3,17 +3,22 @@ package codes.qdbp.serverplugin;
 import codes.qdbp.serverplugin.listeners.*;
 import codes.qdbp.serverplugin.commands.*;
 import codes.qdbp.serverplugin.misc.FoodMap;
+import codes.qdbp.serverplugin.misc.UpdateChecker;
 import codes.qdbp.serverplugin.recipes.LightRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class Serverplugin extends JavaPlugin {
 
-    private static final double currentPluginVersion = 2.3;
+    private static final double currentPluginVersion = 2.4;
+
+    private static final String pluginTagName = "v" + currentPluginVersion;
 
     public static ArrayList<UUID> afkPlayerList;
 
@@ -26,6 +31,16 @@ public class Serverplugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        /*
+        Update Checker
+         */
+        try {
+            new UpdateChecker();
+        } catch (IOException | InterruptedException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
 
         /*
         Add feature toggles to Config
@@ -116,5 +131,9 @@ public class Serverplugin extends JavaPlugin {
 
     public static double getCurrentPluginVersion() {
         return currentPluginVersion;
+    }
+
+    public static String getPluginTagName() {
+        return pluginTagName;
     }
 }
