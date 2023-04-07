@@ -15,9 +15,9 @@ commands:
     description: Informationen über die Features im Plugin
     usage: /info <feature name>
 
-  tode:
-    description: /info tode
-    usage: /tode
+  deaths:
+    description: /info deaths
+    usage: /deaths
 
   backpack:
     description: /info backpack
@@ -61,3 +61,8 @@ commands:
     usage: /craft, /c
     aliases:
       - c
+  mapimage:
+    description: /info mapimage
+    usage: /mapimage <urlToImage>, /mi <urlToImage>
+    aliases:
+      - mi

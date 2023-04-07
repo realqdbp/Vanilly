@@ -20,6 +20,8 @@ public class Serverplugin extends JavaPlugin {
 
     private static final String pluginTagName = "v" + currentPluginVersion;
 
+    private static boolean pluginUpToDate = true;
+
     public static ArrayList<UUID> afkPlayerList;
 
     public static HashMap<UUID, Integer> afkPlayerRunningTasksMap;
@@ -59,6 +61,7 @@ public class Serverplugin extends JavaPlugin {
         getConfig().addDefault("Feature-Toggles.useElytrachange", true);
         getConfig().addDefault("Feature-Toggles.useLightRecipe", true);
         getConfig().addDefault("Feature-Toggles.useDoubleOpenDoors", true);
+        getConfig().addDefault("Feature-Toggles.useCustomMapImages", true);
         getConfig().options().copyDefaults(true);
         saveConfig();
 
@@ -80,6 +83,7 @@ public class Serverplugin extends JavaPlugin {
         boolean useElytrachange = getConfig().getBoolean("Feature-Toggles.useElytrachange");
         boolean useLightRecipe = getConfig().getBoolean("Feature-Toggles.useLightRecipe");
         boolean useDoubleOpenDoors = getConfig().getBoolean("Feature-Toggles.useDoubleOpenDoors");
+        boolean useCustomMapImages = getConfig().getBoolean("Feature-Toggles.useCustomMapImages");
 
         freecamPlayerLocation = new HashMap<>();
         afkPlayerList = new ArrayList<>();
@@ -99,7 +103,8 @@ public class Serverplugin extends JavaPlugin {
 //        if (useUpgrade) Objects.requireNonNull(getCommand("upgrade")).setExecutor(new OpenUpgradeMenuCommand());
         if (useSkipnight) Objects.requireNonNull(getCommand("skipnight")).setExecutor(new SkipNightCommand(this));
         if (useSwitchworld) Objects.requireNonNull(getCommand("switchworld")).setExecutor(new SwitchWorldCommand());
-        if (useDeaths) Objects.requireNonNull(getCommand("tode")).setExecutor(new TodeCommand(this));
+        if (useDeaths) Objects.requireNonNull(getCommand("deaths")).setExecutor(new DeathsCommand(this));
+        if (useCustomMapImages) Objects.requireNonNull(getCommand("mapimage")).setExecutor(new ImageMapCommand());
 
 
         /*
@@ -135,5 +140,13 @@ public class Serverplugin extends JavaPlugin {
 
     public static String getPluginTagName() {
         return pluginTagName;
+    }
+
+    public static boolean getPluginUpToDate() {
+        return pluginUpToDate;
+    }
+
+    public static void setPluginUpToDate(boolean pluginUpToDate) {
+        Serverplugin.pluginUpToDate = pluginUpToDate;
     }
 }

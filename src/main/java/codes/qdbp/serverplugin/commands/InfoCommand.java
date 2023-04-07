@@ -26,6 +26,8 @@ public class InfoCommand implements CommandExecutor {
             case "sleep" -> sendSleepInfo(player);
             case "elytrachange" -> sendElytrachangeInfo(player);
             case "lightrecipe" -> sendLightRecipeInfo(player);
+            case "doubledooropening" -> sendDoubleDoorOpeningInfo(player);
+            case "mapimage" -> sendCustomMapImageInfo(player);
         }
 
         return true;
@@ -184,6 +186,27 @@ public class InfoCommand implements CommandExecutor {
                 
                 Das Item 'Light' kann nun gecrafted werden.
                 Das Rezept ist: Fackeln und in der Mitte ein Eisenblock.
+                
+                """
+        );
+    }
+
+    private void sendDoubleDoorOpeningInfo(Player player) {
+        player.sendMessage(
+                """
+                
+                Öffnet die Anliegende Tür direkt mit.
+                
+                """
+        );
+    }
+
+    private void sendCustomMapImageInfo(Player player) {
+        player.sendMessage(
+                """
+                
+                Erstelle eine Minecraft Map mit einem Custom Bild aus dem Internet.
+                Achte auf eine gerade pixel anzahl und darauf dass höhe und breite gleich sind!
                 
                 """
         );

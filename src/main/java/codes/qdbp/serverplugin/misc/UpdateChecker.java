@@ -32,12 +32,11 @@ public class UpdateChecker {
 
         transcript = gson.fromJson(getResponse.body(), Transcript.class);
 
-
-        if (transcript.getTagName().equals(Serverplugin.getPluginTagName())) {
+        if (transcript.tag_name.equals(Serverplugin.getPluginTagName())) {
             Bukkit.getLogger().log(Level.INFO, "ServerPlugin up to date :)");
         } else {
             Bukkit.getLogger().log(Level.WARNING, "There is a new Plugin version available here: https://github.com/realqdbp/ServerPlugin/releases/latest");
+            Serverplugin.setPluginUpToDate(false);
         }
-
     }
 }

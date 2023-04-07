@@ -8,11 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class TodeCommand implements CommandExecutor {
+public class DeathsCommand implements CommandExecutor {
 
     private final Serverplugin plugin;
 
-    public TodeCommand(Serverplugin plugin) {
+    public DeathsCommand(Serverplugin plugin) {
         this.plugin = plugin;
     }
 

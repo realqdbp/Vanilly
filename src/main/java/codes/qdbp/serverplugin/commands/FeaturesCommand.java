@@ -28,6 +28,7 @@ public class FeaturesCommand implements CommandExecutor {
                 - Improved Sleep (/info sleep)
                 - Elytra Change (/info elytrachange)
                 - LightRecipe (/info lightrecipe)
+                - DoubleDoorOpening (/info doubledooropening)
                 """
         );
 
