@@ -1,5 +1,6 @@
 package codes.qdbp.serverplugin.commands;
 
+import codes.qdbp.serverplugin.Serverplugin;
 import codes.qdbp.serverplugin.misc.CustomMapRenderer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -21,6 +22,7 @@ public class ImageMapCommand implements CommandExecutor {
 
         if (!(sender instanceof Player player)) return false;
         if (args.length != 1) return false;
+        if (!(player.getInventory().getItemInMainHand().getType().toString().contains("MAP"))) return false;
 
         ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
         MapMeta mapMeta = (MapMeta) mapItem.getItemMeta();
@@ -37,8 +39,10 @@ public class ImageMapCommand implements CommandExecutor {
         mapMeta.setMapView(mapView);
         mapItem.setItemMeta(mapMeta);
 
+        player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
         player.getInventory().addItem(mapItem);
 
+        Serverplugin.customImageMaps.put(mapView.getId(), args[0]);
         return true;
     }
 }
