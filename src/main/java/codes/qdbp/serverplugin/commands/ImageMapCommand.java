@@ -29,7 +29,6 @@ public class ImageMapCommand implements CommandExecutor {
 
 
         CustomMapRenderer customMapRenderer = new CustomMapRenderer(args[0]);
-        mapView.getRenderers().clear();
         while (mapView.getRenderers().iterator().hasNext()) {
             mapView.removeRenderer(mapView.getRenderers().iterator().next());
         }

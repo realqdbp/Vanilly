@@ -16,7 +16,7 @@ import java.util.*;
 
 public class Serverplugin extends JavaPlugin {
 
-    private static final double currentPluginVersion = 2.4;
+    private static final double currentPluginVersion = 2.5;
 
     private static final String pluginTagName = "v" + currentPluginVersion;
 
