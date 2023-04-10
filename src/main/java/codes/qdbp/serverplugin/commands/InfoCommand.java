@@ -206,7 +206,9 @@ public class InfoCommand implements CommandExecutor {
                 """
                 
                 Erstelle eine Minecraft Map mit einem Custom Bild aus dem Internet.
-                Achte auf eine gerade pixel anzahl und darauf dass höhe und breite gleich sind!
+                'shrink' setzt die größe des Bildes auf eine Map.
+                'resize' gibt dir eine Auswahl an verschiedenen übergreifenden größen des Bildes.
+                Btw, musst du so viele Maps in der Hand halten wie gebraucht werden.
                 
                 """
         );

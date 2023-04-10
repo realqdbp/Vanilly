@@ -63,6 +63,6 @@ commands:
       - c
   mapimage:
     description: /info mapimage
-    usage: /mapimage <urlToImage>, /mi <urlToImage>
+    usage: /mapimage <urlToImage> <"shrink" / "resize">, /mi <urlToImage> <"shrink" / "resize">
     aliases:
       - mi

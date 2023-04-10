@@ -9,6 +9,7 @@ import codes.qdbp.serverplugin.recipes.LightRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ import java.util.*;
 
 public class Serverplugin extends JavaPlugin {
 
-    private static final double currentPluginVersion = 2.6;
+    private static final double currentPluginVersion = 2.7;
 
     private static final String pluginTagName = "v" + currentPluginVersion;
 
@@ -31,7 +32,7 @@ public class Serverplugin extends JavaPlugin {
 
     public static HashMap<UUID, Location> freecamPlayerLocation;
 
-    public static HashMap<Integer, String> customImageMaps;
+    public static HashMap<Integer, CustomMapRenderer> customImageMaps;
 
 
     @Override
@@ -133,29 +134,37 @@ public class Serverplugin extends JavaPlugin {
         if (useLightRecipe) Bukkit.addRecipe(new LightRecipe(new NamespacedKey(this, "light")).getLightRecipe());
 
 
+        /*
+        Registers
+         */
+        ConfigurationSerialization.registerClass(CustomMapRenderer.class, "CustomMapRenderer");
 
-        List<HashMap<Integer, String>> savedImageMaps = (List<HashMap<Integer, String>>) getConfig().getList("CustomImageMaps");
+        List<HashMap<Integer, CustomMapRenderer>> savedImageMaps = (List<HashMap<Integer, CustomMapRenderer>>) getConfig().getList("CustomImageMaps");
         if (savedImageMaps == null) return;
         savedImageMaps.get(0).forEach((key, value) -> {
             while (Bukkit.getMap(key).getRenderers().iterator().hasNext()) {
                 Bukkit.getMap(key).removeRenderer(Bukkit.getMap(key).getRenderers().iterator().next());
             }
-            Bukkit.getMap(key).addRenderer(new CustomMapRenderer(value));
+
+            Bukkit.getMap(key).addRenderer(value);
         });
     }
 
     @Override
     public void onDisable() {
-        freecamPlayerLocation.forEach((key, value) -> FreecamCommand.backportPlayer(Objects.requireNonNull(Bukkit.getPlayer(key))));
+        if (!freecamPlayerLocation.isEmpty()) {
+            freecamPlayerLocation.forEach((key, value) -> FreecamCommand.backportPlayer(Objects.requireNonNull(Bukkit.getPlayer(key))));
+        }
+
 
         if (!customImageMaps.isEmpty()) {
 
-            List<HashMap<Integer, String>> alreadyUsedImageMaps = (List<HashMap<Integer, String>>) getConfig().getList("CustomImageMaps");
+            List<HashMap<Integer, CustomMapRenderer>> alreadyUsedImageMaps = (List<HashMap<Integer, CustomMapRenderer>>) getConfig().getList("CustomImageMaps");
             if (alreadyUsedImageMaps != null) {
                 customImageMaps.putAll(alreadyUsedImageMaps.get(0));
             }
 
-            List<HashMap<Integer, String>> savedImageMapy = List.of(customImageMaps);
+            List<HashMap<Integer, CustomMapRenderer>> savedImageMapy = List.of(customImageMaps);
             getConfig().set("CustomImageMaps", savedImageMapy);
             saveConfig();
         }
