@@ -48,16 +48,13 @@ It has multiple features, each can be switched on or off.
  - Sleep
    - If you're laying in bed, instead of instantly skipping to day, the same thing as with skipnight happens.
    - With this only one player needs to sleep. Not everyone in the overworld.
- - Elytrachange
-   - This one will get obsolete in 1.20, as this will be a feature in vanilla mc then.
-   - Right-clicking into the air while holding an elytra changes it with your actively wearing chestplate.
-   - Also works vise-versa.
  - LightRecipe
    - Allows the "Light" Item/Block to be crafted.
    - Current recipe is: Torches and in the middle Iron Block
  - DoubleOpenDoors
    - Opens the aligning door next to the one you clicked automatically with it
-
+ - MapImage
+   - Get yourself some image and a picture frame and add the picture into Minecraft.
 ## Future
  - This project shows all the features that will some day be implemented.
  - https://github.com/users/realqdbp/projects/4

@@ -18,7 +18,7 @@ import java.util.*;
 
 public class Serverplugin extends JavaPlugin {
 
-    private static final double currentPluginVersion = 2.7;
+    private static final double currentPluginVersion = 2.8;
 
     private static final String pluginTagName = "v" + currentPluginVersion;
 
@@ -38,6 +38,7 @@ public class Serverplugin extends JavaPlugin {
     @Override
     public void onEnable() {
 
+
         /*
         Update Checker
          */
@@ -46,7 +47,6 @@ public class Serverplugin extends JavaPlugin {
         } catch (IOException | InterruptedException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
-
 
         /*
         Add feature toggles to Config
@@ -62,7 +62,6 @@ public class Serverplugin extends JavaPlugin {
         getConfig().addDefault("Feature-Toggles.useDeaths", true);
         getConfig().addDefault("Feature-Toggles.useEating", true);
         getConfig().addDefault("Feature-Toggles.useSleep", true);
-        getConfig().addDefault("Feature-Toggles.useElytrachange", true);
         getConfig().addDefault("Feature-Toggles.useLightRecipe", true);
         getConfig().addDefault("Feature-Toggles.useDoubleOpenDoors", true);
         getConfig().addDefault("Feature-Toggles.useCustomMapImages", true);
@@ -118,7 +117,6 @@ public class Serverplugin extends JavaPlugin {
         if (useBackpack) getServer().getPluginManager().registerEvents(new InventoryCloseListener(this), this);
         if (useDeaths) getServer().getPluginManager().registerEvents(new InventoryListener(this), this);
         if (useDeaths) getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
-        if (useElytrachange) getServer().getPluginManager().registerEvents(new PlayerInteractListener(), this);
         if (useEating) getServer().getPluginManager().registerEvents(new PlayerItemConsumeListener(FoodMap.getFoodMap()), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         if (useAFK) getServer().getPluginManager().registerEvents(new PlayerKickListener(this), this);
