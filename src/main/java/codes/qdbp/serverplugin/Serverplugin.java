@@ -4,6 +4,7 @@ import codes.qdbp.serverplugin.listeners.*;
 import codes.qdbp.serverplugin.commands.*;
 import codes.qdbp.serverplugin.misc.CustomMapRenderer;
 import codes.qdbp.serverplugin.misc.FoodMap;
+import codes.qdbp.serverplugin.misc.UpgradeMenuUtility;
 import codes.qdbp.serverplugin.misc.UpdateChecker;
 import codes.qdbp.serverplugin.recipes.LightRecipe;
 import org.bukkit.Bukkit;
@@ -18,7 +19,7 @@ import java.util.*;
 
 public class Serverplugin extends JavaPlugin {
 
-    private static final double currentPluginVersion = 2.8;
+    private static final double currentPluginVersion = 2.9;
 
     private static final String pluginTagName = "v" + currentPluginVersion;
 
@@ -34,8 +35,11 @@ public class Serverplugin extends JavaPlugin {
 
     public static HashMap<Integer, CustomMapRenderer> customImageMaps;
 
+    public static HashMap<UUID, UpgradeMenuUtility> menuUtilityMap;
+
 
     @Override
+
     public void onEnable() {
 
 
@@ -77,7 +81,7 @@ public class Serverplugin extends JavaPlugin {
         boolean useCraft = getConfig().getBoolean("Feature-Toggles.useCraft");
         boolean useEnderchest = getConfig().getBoolean("Feature-Toggles.useEnderchest");
         boolean useFreecam = getConfig().getBoolean("Feature-Toggles.useFreecam");
-//        boolean useUpgrade = getConfig().getBoolean("Feature-Toggles.useUpgrade");
+        boolean useUpgrade = getConfig().getBoolean("Feature-Toggles.useUpgrade");
         boolean useSkipnight = getConfig().getBoolean("Feature-Toggles.useSkipnight");
         boolean useSwitchworld = getConfig().getBoolean("Feature-Toggles.useSwitchworld");
         boolean useDeaths = getConfig().getBoolean("Feature-Toggles.useDeaths");
@@ -93,6 +97,7 @@ public class Serverplugin extends JavaPlugin {
         afkPlayerRunningTasksMap = new HashMap<>();
         afkPlayerTimes = new HashMap<>();
         customImageMaps = new HashMap<>();
+        menuUtilityMap = new HashMap<>();
 
         /*
         Commands
@@ -104,7 +109,7 @@ public class Serverplugin extends JavaPlugin {
         if (useCraft) Objects.requireNonNull(getCommand("craft")).setExecutor(new CraftCommand());
         if (useEnderchest) Objects.requireNonNull(getCommand("enderchest")).setExecutor(new EnderChestCommand());
         if (useFreecam) Objects.requireNonNull(getCommand("freecam")).setExecutor(new FreecamCommand());
-//        if (useUpgrade) Objects.requireNonNull(getCommand("upgrade")).setExecutor(new OpenUpgradeMenuCommand());
+        if (useUpgrade) Objects.requireNonNull(getCommand("upgrade")).setExecutor(new UpgradeCommand());
         if (useSkipnight) Objects.requireNonNull(getCommand("skipnight")).setExecutor(new SkipNightCommand(this));
         if (useSwitchworld) Objects.requireNonNull(getCommand("switchworld")).setExecutor(new SwitchWorldCommand());
         if (useDeaths) Objects.requireNonNull(getCommand("deaths")).setExecutor(new DeathsCommand(this));
@@ -124,6 +129,7 @@ public class Serverplugin extends JavaPlugin {
         if (useAFK) getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         if (useAFK || useFreecam) getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
         if (useDoubleOpenDoors) getServer().getPluginManager().registerEvents(new PlayerDoorInteractListener(), this);
+        if (useUpgrade) getServer().getPluginManager().registerEvents(new UpgradeMenuUtility(), this);
 
 
         /*

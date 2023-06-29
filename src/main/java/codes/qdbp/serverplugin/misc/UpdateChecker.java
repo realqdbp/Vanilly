@@ -34,6 +34,7 @@ public class UpdateChecker {
 
         if (transcript.tag_name.equals(Serverplugin.getPluginTagName())) {
             Bukkit.getLogger().log(Level.INFO, "ServerPlugin up to date :)");
+            Serverplugin.setPluginUpToDate(true);
         } else {
             Bukkit.getLogger().log(Level.WARNING, "There is a new Plugin version available here: https://github.com/realqdbp/ServerPlugin/releases/latest");
             Serverplugin.setPluginUpToDate(false);

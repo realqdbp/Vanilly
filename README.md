@@ -4,7 +4,7 @@ It has multiple features, each can be switched on or off.
 
 ## Things Needed
  - Papermc
- - Minecraft Server 1.19.x
+ - Minecraft Server 1.20.1
  - For AFK to work without commands (server.properties -> player-idle-timeout)
  - For Deaths to work, a whitelist needs to be active, as only whitelisted players will be shown other than yourself
  - For Toggling, start the server with plugin once. In the config file, change values to true / false. Restart Server or ingame /reload confirm

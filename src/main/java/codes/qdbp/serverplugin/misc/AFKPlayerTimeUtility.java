@@ -3,7 +3,7 @@ package codes.qdbp.serverplugin.misc;
 
 import codes.qdbp.serverplugin.Serverplugin;
 import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -30,9 +30,9 @@ public class AFKPlayerTimeUtility {
 
                 Serverplugin.afkPlayerTimes.put(player.getUniqueId(), timeString);
                 player.playerListName(
-                        Component.text(player.getName() + " [" + ChatColor.RED + "AFK" + ChatColor.WHITE + " - " + ChatColor.GREEN
+                        Component.text(player.getName() + " [" + NamedTextColor.RED + "AFK" + NamedTextColor.WHITE + " - " + NamedTextColor.GREEN
                         + timeString.replace(" ", "")
-                        + ChatColor.WHITE + "]"));
+                        + NamedTextColor.WHITE + "]"));
             }
         };
         runnable.runTaskTimer(plugin, 0, 20);
@@ -56,9 +56,9 @@ public class AFKPlayerTimeUtility {
 
                 Serverplugin.afkPlayerTimes.put(player.getUniqueId(), timeString);
                 player.playerListName(
-                        Component.text(player.getName() + " [" + ChatColor.RED + "AFK" + ChatColor.WHITE + " - " + ChatColor.GREEN
+                        Component.text(player.getName() + " [" + NamedTextColor.RED + "AFK" + NamedTextColor.WHITE + " - " + NamedTextColor.GREEN
                         + timeString + " "
-                        + message + ChatColor.WHITE + "]"));
+                        + message + NamedTextColor.WHITE + "]"));
             }
         };
         runnable.runTaskTimer(plugin, 0, 20);

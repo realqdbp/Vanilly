@@ -14,6 +14,7 @@ public class SleepForward extends BukkitRunnable{
 
     //for SkipNight command
     private final boolean wasCommand;
+    private boolean firstRun = true;
 
 
     public SleepForward(Player player, boolean wasCommand) {
@@ -33,14 +34,12 @@ public class SleepForward extends BukkitRunnable{
         if (!(13000 < player.getWorld().getTime())) {
             player.setStatistic(Statistic.TIME_SINCE_REST, 0);
             if (!(player.getWorld().isClearWeather())) player.getWorld().setClearWeatherDuration(1);
-            player.sendPlainMessage("Skipped the night");
             cancel();
             return;
         } else if (player.getWorld().isThundering()) {
             if (player.getWorld().getTime() > 23800) {
                 player.setStatistic(Statistic.TIME_SINCE_REST, 0);
                 if (!(player.getWorld().isClearWeather())) player.getWorld().setClearWeatherDuration(1);
-                player.sendPlainMessage("Skipped the night");
                 cancel();
                 return;
             }
@@ -48,9 +47,7 @@ public class SleepForward extends BukkitRunnable{
             cancel();
             return;
         }
-        if (player.getWorld().getTime() < 23940) {
-            player.getWorld().setTime(player.getWorld().getTime() + 50);
-        } else player.sendPlainMessage("Es ist noch zu früh :)");
+        if (player.getWorld().getTime() < 23940) player.getWorld().setTime(player.getWorld().getTime() + 50);
     }
 }
 

@@ -42,9 +42,12 @@ public class PlayerJoinListener implements Listener {
         //maybe in future turn this with pom, didn't bring it to work rn
         if (plugin.getConfig().getDouble("Player." + player.getName() + ".pluginVersion") == Serverplugin.getCurrentPluginVersion()) return;
 
-        player.sendMessage(
+        player.sendPlainMessage(
                 """
-                'Tode' verbessert! Probiers doch mit /tode aus :)
+                - Unbreakable Upgrades sind wieder da.
+                - Doppeltür gleichzeitig öffnen.
+                - MapImages sind da, aber anscheinend nur mit 'Shrink' fähigkeit. 'Resize' mache ich noch...!
+                - Bugfixes lol.
                 \n
                 """
         );
