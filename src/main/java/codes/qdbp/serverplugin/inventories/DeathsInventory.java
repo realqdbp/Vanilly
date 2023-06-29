@@ -21,7 +21,7 @@ public class DeathsInventory {
 
     public DeathsInventory(Player player, Serverplugin plugin) {
 
-        this.deathsInventory = Bukkit.createInventory(null, InventoryType.CHEST, Component.text("Death Overview"));
+        this.deathsInventory = Bukkit.createInventory(null, InventoryType.CHEST, Component.text("--- Death Overview"));
 
         //Command sender is first Item Head
         ItemStack headItem = new ItemStack(Material.PLAYER_HEAD, 1);

@@ -19,7 +19,7 @@ public class PlayerDeathInventory {
         PlainTextComponentSerializer serializer = PlainTextComponentSerializer.plainText();
         String headName = serializer.serialize(clickedItem.displayName());
         String playername = headName.substring(1, headName.indexOf("'"));
-        this.playerDeathInventory = Bukkit.createInventory(null, 54, Component.text(playername + " deaths"));
+        this.playerDeathInventory = Bukkit.createInventory(null, 54, Component.text("--- " + playername + " deaths"));
 
         ItemStack deathIcon = new ItemStack(Material.SKELETON_SKULL);
 
