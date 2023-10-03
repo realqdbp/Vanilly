@@ -1,60 +1,120 @@
 # ServerPlugin
-A Plugin that was made to run on my private server in the first place.
-It has multiple features, each can be switched on or off.
+A plugin primarily designed to be used on my private server.
+It's features are listed below and can all be toggled on or off in the config after the first server start
 
-## Things Needed
- - Papermc
- - Minecraft Server 1.20.1
- - For AFK to work without commands (server.properties -> player-idle-timeout)
- - For Deaths to work, a whitelist needs to be active, as only whitelisted players will be shown other than yourself
- - For Toggling, start the server with plugin once. In the config file, change values to true / false. Restart Server or ingame /reload confirm
+
+## Requirements
+   - PaperMC 1.20.2 (soon to be PurpurMC)
+   - ### For AFK (without command)
+     - In server.properties "player-idle-timeout" must be set to the desired time
+   - ### For Deaths
+     - A whitelist must be active
+
 
 ## Features
- - Ingame explanaitions with /features
- - Info
-   - "/info featurename" lists the explanaition for the specified feature
- - AFK
-   - Instead of getting kicked from the Server, you're set into "AFK Mode", making you invulnerable.
-   - Alternatively set yourself into AFK mode with "/afk optionalReason".
-   - Moving in any way disables AFK mode.
- - Backpack
-   - Your personal persistent backpack, as large as a double chest.
- - Craft
-   - Opens the crafting menu anywhere you are, so that you dont need to have a crafting table with you all the time.
- - Enderchest
-   - Opens your personal enderchest
- - Freecam
-   - Sets yourself into freecam mode
-   - This enables you to fly around in spectator mode
-   - Switchworld can now be used
-   - This is normally used to inspect buildings you're working on, so that you don't need to run around all the time.
-   - Disabling freecam puts you into the spot where you enabled it.
- - Upgrade
-   - Opens a menu with different ultra late game upgrade such as Efficiency upgrade to Efficiency X, faster running, unbreakable upgrades for tools and so on.
-   - These upgrade cost a price tho.
- - Skipnight
-   - If it's night, accelerate the time with this command.
-   - The player using this command also gets the phantom flag removed.
- - Switchworld
-   - While in freecam, switch between the worlds with this command.
-   - The position is relative to yours (in some cases, i don't remember exactly).
-   - n/nether for nether, e/end for end, o/overworld for normal world
- - Tode
-   - Opens a menu with all the whitelisted players on the server and their death count.
-   - Clicking on a player opens their personal death menu, allowing you to see each individual deaths description like Reason, Time, Position...
- - Eating
-   - This makes you only needing to eat once instead of 5 times to completely fill your hunger bar and uses the correct amount of items.
-   - Only works with "good" food items, so e.g. rotten flesh is not included
- - Sleep
-   - If you're laying in bed, instead of instantly skipping to day, the same thing as with skipnight happens.
-   - With this only one player needs to sleep. Not everyone in the overworld.
- - LightRecipe
-   - Allows the "Light" Item/Block to be crafted.
-   - Current recipe is: Torches and in the middle Iron Block
- - DoubleOpenDoors
-   - Opens the aligning door next to the one you clicked automatically with it
- - MapImage
-   - Get yourself some image and a picture frame and add the picture into Minecraft.
-## Future
- - This project shows all the features that will some day be implemented.
- - https://github.com/users/realqdbp/projects/4
+All features can be enabled or disabled after the first plugin start in the config (true -> enabled, false -> disabled).
+
+All command aliases are listed at the bottom.
+
+   - Ingame explanations are available with **/features**
+   - **Info**
+     - `/info featurename` explains the feature ingame
+   - **AFK**
+     - `/afk <optional reason>` Sets yourself in afk mode
+     - Players name changes to display the afk time and optionally the reason why
+     - Players can also be set afk if they are afk for too long
+     - While being afk, the player:
+       - Is Invulnerable
+       - Has no collision
+     - Moving in any way kicks you out of AFK
+   - **Backpack**
+     - `/backpack` opens a players personal backpack
+     - size equal to a double chest
+     - items are persistent (no loss on death)
+   - **Craft**
+     - `/craft` opens the crafting menu
+   - **Enderchest**
+     - `/enderchest` opens your personal enderchest
+   - **Freecam**
+     - `/freecam` sets the player into freecam mode
+     - While in freecam:
+       - the player is in spectator mode
+       - the player can use `/switchworld`
+     - Disabling freecam sets you back to you initiation position
+   - **Switchworld**
+     - `/switchworld` is used in freecam to switch between world
+   - **Upgrade**
+     - `/upgrade` opens a menu with different late game upgrades
+     - **WIP**
+   - **SkipNight**
+     - `/skipnight` can be used to accelerate through the night
+     - the player using this command gets the phantom spawn flag removed
+   - **Deaths**
+     - `/deahts` opens a menu with all whitelisted players and their death count
+     - Clicking on a player opens their specific deaths info
+   - **Enhanced Eating**
+     - Players only need to eat to completely fill their hunger bar
+     - The correct amount of food will be consumed
+     - Only food that's edible works with this feature (a list is below)
+   - **Enhanced Sleep**
+     - Only one player needs to be in bed
+     - The time doesn't skip, but instead accelerates just like `/skipnight` does
+   - **Light**
+     - Allows for the "Light" Block to be crafted
+     - Recipe is: 8 Torches and an Iron block in the Middle
+   - **DoubleDoor Opening**
+     - Opens the aligning door next to the clicked one automatically as well
+   - **MapImages**
+     - `/mapimage <image_url> <shrink / resize>`
+     - While holding an empty map the player can use this command to import a picture onto the map (or multiple)
+     - Explanation WIP
+
+## Command Aliases
+   - `/backpack`
+     - `/bp` , `/pv`
+   - `/freecam`
+     - `/fc`
+   - `/switchworld`
+     - `/sw`
+     - Overworld:
+       - `o`, `ov`, `overworld`
+     - Nether
+       - `n`, `nether`
+     - End
+       - `e`, `end`
+   - `/enderchest`
+     - `/ec`
+   - `/skipnight`
+     - `sn`
+   - `/craft`
+     - `/c`
+   - `/mapimage`
+     - `mi`
+
+## Edible Food Map
+   - Apple
+   - Baked Potato
+   - Beetroot
+   - Beetroot Soup
+   - Bread
+   - Carrot
+   - Cooked Chicken
+   - Cooked Cod
+   - Cooked Mutton
+   - Cooked Porkchop
+   - Cooked Rabbit
+   - Cooked Salmon
+   - Cookie
+   - Dried Kelp
+   - Glow Berries
+   - Melon Slice
+   - Mushroom Stew
+   - Pumpkin Pie
+   - Rabbit Stew
+   - Cooked Beef
+   - Sweet Berries
+   - Golden Carrot
+
+## WIP
+   - Some feature will be edited or new ones created
+   - This Project shows what's going on currently: [Project](https://github.com/users/realqdbp/projects/4)

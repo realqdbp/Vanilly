@@ -55,6 +55,8 @@ commands:
   skipNight:
     description: /info skipnight
     usage: /skipnight
+    aliases:
+      - sn
 
   craft:
     description: /info craft
