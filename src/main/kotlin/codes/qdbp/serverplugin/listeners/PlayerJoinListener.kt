@@ -4,7 +4,6 @@ import codes.qdbp.serverplugin.Serverplugin
 import codes.qdbp.serverplugin.misc.checkPluginUpToDate
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
-import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.title.Title

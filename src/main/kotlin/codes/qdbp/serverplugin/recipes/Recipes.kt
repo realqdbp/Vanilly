@@ -2,14 +2,11 @@ package codes.qdbp.serverplugin.recipes
 
 import codes.qdbp.serverplugin.Serverplugin
 import codes.qdbp.serverplugin.misc.createInvisTaggedFrame
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.TextComponent
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
 import org.bukkit.inventory.ShapelessRecipe
-import org.bukkit.persistence.PersistentDataType
 
 
 data class Recipes(val plugin: Serverplugin){
