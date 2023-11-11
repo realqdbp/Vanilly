@@ -1,30 +1,32 @@
 package codes.qdbp.serverplugin.commands
 
+import codes.qdbp.serverplugin.Serverplugin
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import java.net.URL
+import javax.imageio.ImageIO
 
-class MapImageCmd : CommandExecutor {
+class MapImageCmd(val plugin: Serverplugin) : CommandExecutor {
     override fun onCommand(sender: CommandSender, cmd: Command, label: String, args: Array<out String>?): Boolean {
-        TODO("Not yet implemented")
+
+
+        if (sender !is  Player) return false
+
+        sender.sendMessage(
+            sender.inventory.itemInMainHand.itemMeta.persistentDataContainer.has(plugin.invisItemFrameNSK).toString()
+        )
+
+
+        //val bufferedImage = ImageIO.read(URL(args?.get(0)))
+        return true
     }
 
 
     /*
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-
-
-        if (!(sender instanceof Player player)) return false;
-        if (args.length < 2) return false;
-
-
-        try {
-            URL url = new URL(args[0]);
-            BufferedImage bufferedImage = ImageIO.read(url);
-
-            if (bufferedImage == null) return false;
-
 
 
             if (args[1].equals("shrink") && args.length == 2) {

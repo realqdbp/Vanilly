@@ -3,12 +3,9 @@ package codes.qdbp.serverplugin
 import codes.qdbp.serverplugin.commands.*
 import codes.qdbp.serverplugin.listeners.*
 import codes.qdbp.serverplugin.misc.*
-import codes.qdbp.serverplugin.recipes.LightRecipe
+import codes.qdbp.serverplugin.recipes.Recipes
 import org.bukkit.Bukkit
-import org.bukkit.configuration.file.FileConfiguration
-import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.configuration.serialization.ConfigurationSerializable
-import org.bukkit.configuration.serialization.ConfigurationSerialization
+import org.bukkit.NamespacedKey
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
 import java.util.logging.Level
@@ -23,6 +20,13 @@ class Serverplugin : JavaPlugin() {
      */
     val backpackStorage = DataStorage(File(dataFolder, "backpackStorage.yml"))
     val deathStorage = DataStorage(File(dataFolder, "deathStorage.yml"))
+    val mapImageStorage = DataStorage(File(dataFolder, "mapImageStorage.yml"))
+
+
+    /**
+     * Namespaced Keys
+     */
+    val invisItemFrameNSK = NamespacedKey(this, "invisible")
 
     override fun onEnable() {
 
@@ -49,6 +53,7 @@ class Serverplugin : JavaPlugin() {
         config.addDefault("Features.useDoubleOpenDoors", true)
         config.addDefault("Features.useCustomMapImages", true)
         config.addDefault("Features.useUpgrade", true)
+        config.addDefault("Features.useInvisibleItemFrames", true)
         config.options().copyDefaults(true)
         saveConfig()
 
@@ -69,7 +74,7 @@ class Serverplugin : JavaPlugin() {
         val useDoubleOpenDoors = config.getBoolean("Features.useDoubleOpenDoors")
         val useCustomMapImages = config.getBoolean("Features.useCustomMapImages")
         val useUpgrade = config.getBoolean("Features.useUpgrade")
-
+        val useInvisibleItemFrames = config.getBoolean("Features.useInvisibleItemFrames")
 
         /**
          * Commands
@@ -85,7 +90,7 @@ class Serverplugin : JavaPlugin() {
         if (useDeaths) getCommand("deaths")?.setExecutor(DeathsCmd(this))
         if (useSkipNight) getCommand("skipnight")?.setExecutor(SkipNightCmd(this))
 
-//        if (useCustomMapImages) Objects.requireNonNull(getCommand("mapimage")).setExecutor(new ImageMapCommand());
+        if (useCustomMapImages) getCommand("mapimage")?.setExecutor(MapImageCmd(this))
 
 
         /**
@@ -103,31 +108,26 @@ class Serverplugin : JavaPlugin() {
         if (useAFK) server.pluginManager.registerEvents(PlayerMoveListener(), this)
         if (useAFK || useFreecam) server.pluginManager.registerEvents(PlayerQuitListener(this), this) //TODO dont know about this one
         if (useDoubleOpenDoors) server.pluginManager.registerEvents(PlayerDoorInteractListener(), this) //TODO fix sneaking
+        if (useInvisibleItemFrames) server.pluginManager.registerEvents(PlayerItemFrameChange(this), this)
 
 
+        server.pluginManager.registerEvents(HangingPlaceEvent(this), this)
+        server.pluginManager.registerEvents(BreakThisListenern(this), this)
         /**
          * Recipes
          */
-        if (useLightRecipe) Bukkit.addRecipe(LightRecipe(this).lightRecipe)
+        if (useLightRecipe) Bukkit.addRecipe(Recipes(this).lightRecipe)
+        if (useInvisibleItemFrames) Bukkit.addRecipe(Recipes(this).invisItemFrameRecipe)
 
 
-        /**
-         * Registers
-         */
-//        ConfigurationSerialization.registerClass(CustomMapRenderer::class.java, "CustomMapRenderer")
-
-        /*
-
-        List<HashMap<Integer, CustomMapRenderer>> savedImageMaps = (List<HashMap<Integer, CustomMapRenderer>>) getConfig().getList("CustomImageMaps");
-        if (savedImageMaps == null) return;
-        savedImageMaps.get(0).forEach((key, value) -> {
-            while (Bukkit.getMap(key).getRenderers().iterator().hasNext()) {
-                Bukkit.getMap(key).removeRenderer(Bukkit.getMap(key).getRenderers().iterator().next());
+        //Reload MapImages
+        mapImageStorage.storage.getIntegerList("mapIDs").forEach {
+            val map = Bukkit.getMap(it)
+            while (map?.renderers?.iterator()?.hasNext() ?: return) {
+                map.removeRenderer(map.renderers.iterator().next())
             }
-
-            Bukkit.getMap(key).addRenderer(value);
-        });
-         */
+            MapImage(this, map)
+        }
     }
 
     override fun onDisable() {
@@ -140,27 +140,5 @@ class Serverplugin : JavaPlugin() {
                 freecamPlayers[it.key]!!.player.endFreecam()
             }
         }
-
-        /**
-         * Save MapImages
-         */
-        /*
-        if (!customImageMaps.isEmpty()) {
-            List<HashMap<Integer, CustomMapRenderer>> alreadyUsedImageMaps = (List<HashMap<Integer, CustomMapRenderer>>) getConfig().getList("CustomImageMaps");
-            if (alreadyUsedImageMaps != null) {
-                customImageMaps.putAll(alreadyUsedImageMaps.get(0));
-            }
-
-            List<HashMap<Integer, CustomMapRenderer>> savedImageMapy = List.of(customImageMaps);
-            getConfig().set("CustomImageMaps", savedImageMapy);
-            saveConfig();
-        }
-         */
     }
 }
-
-/*
-public class Serverplugin extends JavaPlugin {
-    public static HashMap<Integer, CustomMapRenderer> customImageMaps;
-}
- */

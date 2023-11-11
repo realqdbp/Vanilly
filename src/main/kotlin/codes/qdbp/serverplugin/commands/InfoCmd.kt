@@ -22,6 +22,7 @@ class InfoCmd : CommandExecutor{
             "light" -> sender.sendPlainMessage(lightInfo)
             "doubledooropening" -> sender.sendPlainMessage(doubleDoorOpeningInfo)
             "mapimage" -> sender.sendPlainMessage(mapImageInfo)
+            "invisitemframes" -> sender.sendPlainMessage(invisItemFrameInfo)
         }
         return true
     }
@@ -109,5 +110,10 @@ class InfoCmd : CommandExecutor{
         'shrink' setzt die größe des Bildes auf eine Map.
         'resize' gibt dir eine Auswahl an verschiedenen übergreifenden größen des Bildes.
         Btw, musst du so viele Maps in der Hand halten wie gebraucht werden.
+    """.trimIndent()
+
+    private val invisItemFrameInfo = """
+        Das Item 'Invisible Item Frame' kann nun gecraftet werden.
+        Das Rezept ist: Item Frame und Glass Pane.
     """.trimIndent()
 }

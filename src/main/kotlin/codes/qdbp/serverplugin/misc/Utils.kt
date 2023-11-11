@@ -4,11 +4,14 @@ package codes.qdbp.serverplugin.misc
 
 import codes.qdbp.serverplugin.Serverplugin
 import com.google.gson.Gson
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
-import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -63,6 +66,14 @@ fun Player.endFreecam() {
     this.gameMode = GameMode.SURVIVAL
 }
 
+fun createInvisTaggedFrame(plugin: Serverplugin): ItemStack {
+    val item = ItemStack(Material.ITEM_FRAME)
+    val itemMeta = item.itemMeta
+    itemMeta.displayName(Component.text("Invisible Item Frame", TextColor.color(0x2a9d8f)))
+    itemMeta.persistentDataContainer.set(plugin.invisItemFrameNSK, PersistentDataType.BYTE, 1)
+    item.setItemMeta(itemMeta)
+    return item
+}
 
 
 // https://minecraft.fandom.com/wiki/Food#Foods ("food points", "saturation restored")
@@ -90,6 +101,7 @@ val foodMap = hashMapOf(
     Material.SWEET_BERRIES to listOf(2, 0.4f),
     Material.GOLDEN_CARROT to listOf(6, 14.4f)
 )
+
 
 /*
 object Utils {
