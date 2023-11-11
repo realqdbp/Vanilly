@@ -15,12 +15,12 @@ class AfkCmd(val plugin: Serverplugin) : CommandExecutor {
 
         //Not already AFK
         if (!afkPlayers.containsKey(sender.uniqueId)) {
-            sender.setAfk(args?.joinToString(separator = ",", prefix = " ") ?: "", plugin)
+            sender.setAfk(args?.joinToString(separator = " ", prefix = " ") ?: "", plugin)
             return true
         }
 
         //Already afk
-        sender.changeAfkMessage(args?.joinToString(separator = ",", prefix = " ") ?: "")
+        sender.changeAfkMessage(args?.joinToString(separator = " ", prefix = " ") ?: "")
 
         return true
     }

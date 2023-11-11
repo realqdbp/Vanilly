@@ -68,6 +68,9 @@ All command aliases are listed at the bottom.
      - `/mapimage <image_url> <shrink / resize>`
      - While holding an empty map the player can use this command to import a picture onto the map (or multiple)
      - Explanation WIP
+   - **InvisibleItemFrames**
+     - Allows for the "Invisible Item Frame" Item to be crafted
+     - Recipe is: Item Frame and Glass Pane
 
 ## Command Aliases
    - `/backpack`

@@ -4,20 +4,12 @@ import codes.qdbp.serverplugin.Serverplugin
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 
 class MapImageCmd(val plugin: Serverplugin) : CommandExecutor {
     override fun onCommand(sender: CommandSender, cmd: Command, label: String, args: Array<out String>?): Boolean {
 
 
-        if (sender !is  Player) return false
 
-        sender.sendMessage(
-            sender.inventory.itemInMainHand.itemMeta.persistentDataContainer.has(plugin.invisItemFrameNSK).toString()
-        )
-
-
-        //val bufferedImage = ImageIO.read(URL(args?.get(0)))
         return true
     }
 

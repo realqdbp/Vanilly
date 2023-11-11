@@ -101,17 +101,3 @@ val foodMap = hashMapOf(
     Material.SWEET_BERRIES to listOf(2, 0.4f),
     Material.GOLDEN_CARROT to listOf(6, 14.4f)
 )
-
-
-/*
-object Utils {
-    fun createItem(material: Material?, displayName: String?, vararg lore: Component): ItemStack {
-        val item = ItemStack(material!!)
-        val itemMeta = item.itemMeta
-        itemMeta.displayName(Component.text(displayName!!))
-        if (lore.size >= 1) itemMeta.lore(Arrays.stream(lore).toList())
-        item.setItemMeta(itemMeta)
-        return item
-    }
-}
-*/
