@@ -17,8 +17,7 @@ class InventoryCloseListener(val plugin: Serverplugin) : Listener {
 
         if (event.view.title() != Component.text("${player.name}'s Backpack")) return
 
-        val items = event.inventory.contents
-        storage.set(player.name, items)
+        storage.set(player.name, event.inventory.contents.asList())
         plugin.backpackStorage.save()
     }
 }
