@@ -1,5 +1,3 @@
-package codes.qdbp.serverplugin.listeners;
-
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;

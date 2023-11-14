@@ -6,7 +6,7 @@
 
     <groupId>codes.qdbp</groupId>
     <artifactId>serverplugin</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
 
     <name>Serverplugin</name>

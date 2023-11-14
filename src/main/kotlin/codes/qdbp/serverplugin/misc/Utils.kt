@@ -33,7 +33,6 @@ fun checkPluginUpToDate(plugin: Serverplugin): Boolean {
 }
 
 
-
 var afkPlayers = mutableMapOf<UUID, AfkPlayer>()
 
 fun Player.endAfk() {
