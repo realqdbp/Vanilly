@@ -1,5 +1,6 @@
 package codes.qdbp.serverplugin
 
+import PlayerDoorInteractListener
 import codes.qdbp.serverplugin.commands.*
 import codes.qdbp.serverplugin.listeners.*
 import codes.qdbp.serverplugin.misc.*
