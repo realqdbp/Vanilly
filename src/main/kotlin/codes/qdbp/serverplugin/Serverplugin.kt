@@ -11,9 +11,7 @@ import java.io.File
 import java.util.logging.Level
 
 class Serverplugin : JavaPlugin() {
-
     private val logger = Bukkit.getLogger()
-
 
     /**
      * Create DataStorages
@@ -21,7 +19,6 @@ class Serverplugin : JavaPlugin() {
     val backpackStorage = DataStorage(File(dataFolder, "backpackStorage.yml"))
     val deathStorage = DataStorage(File(dataFolder, "deathStorage.yml"))
     val mapImageStorage = DataStorage(File(dataFolder, "mapImageStorage.yml"))
-
 
     /**
      * Namespaced Keys
@@ -89,9 +86,8 @@ class Serverplugin : JavaPlugin() {
         if (useSwitchWorld) getCommand("switchworld")?.setExecutor(SwitchWorldCmd())
         if (useDeaths) getCommand("deaths")?.setExecutor(DeathsCmd(this))
         if (useSkipNight) getCommand("skipnight")?.setExecutor(SkipNightCmd(this))
-
         if (useCustomMapImages) getCommand("mapimage")?.setExecutor(MapImageCmd(this))
-
+        if (useUpgrade) getCommand("upgrade")?.setExecutor(UpgradeCmd(this))
 
         /**
          * Listeners
@@ -110,7 +106,6 @@ class Serverplugin : JavaPlugin() {
         if (useDoubleOpenDoors) server.pluginManager.registerEvents(PlayerDoorInteractListener(), this) //TODO fix sneaking
         if (useInvisibleItemFrames) server.pluginManager.registerEvents(PlayerItemFrameChange(this), this)
 
-
         server.pluginManager.registerEvents(HangingPlaceEvent(this), this)
         server.pluginManager.registerEvents(BreakThisListenern(this), this)
         /**
@@ -118,7 +113,6 @@ class Serverplugin : JavaPlugin() {
          */
         if (useLightRecipe) Bukkit.addRecipe(Recipes(this).lightRecipe)
         if (useInvisibleItemFrames) Bukkit.addRecipe(Recipes(this).invisItemFrameRecipe)
-
 
         //Reload MapImages
         mapImageStorage.storage.getIntegerList("mapIDs").forEach {

@@ -10,6 +10,9 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.event.Listener
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import java.net.URI
@@ -100,3 +103,83 @@ val foodMap = hashMapOf(
     Material.SWEET_BERRIES to listOf(2, 0.4f),
     Material.GOLDEN_CARROT to listOf(6, 14.4f)
 )
+
+val upgradeMenuHandlers = mutableMapOf<UUID,Listener>()
+
+fun createItem(material: Material, title: String, vararg lores: String): ItemStack {
+    val item = ItemStack(material)
+    val meta = item.itemMeta
+    meta.displayName(Component.text(title))
+    meta.lore(lores.map { Component.text(it) })
+    item.itemMeta = meta
+    return item
+}
+
+
+/**
+ * @param items Itemstack, row, yOffset
+ */
+fun createInventory(holder: InventoryHolder?, title: String, vararg items: Triple<ItemStack, Int, Int>): Inventory {
+    if (items.isEmpty()) return Bukkit.createInventory(null, 9, Component.text("FAILED TO BUILD INVENTORY"))
+    if (items.any { it.third !in -4..4 }) return Bukkit.createInventory(null, 9, Component.text("FAILED TO BUILD INVENTORY"))
+    if (items.any { it.second == 0 }) return Bukkit.createInventory(null, 9, Component.text("FAILED TO BUILD INVENTORY"))
+
+
+    val inventory = Bukkit.createInventory(holder, items.maxBy{ it.second }.second*9, Component.text(title))
+    items.forEach { inventory.setItem((4 + ((it.second - 1) * 9)) + it.third, it.first) }
+    return inventory
+}
+
+fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack> {
+    return when (type) {
+        "UNBREAKABLE" -> {
+            arrayOf(
+                clazz,
+                ItemStack(Material.NETHERITE_INGOT, 10),
+                createItem(Material.OAK_SIGN, "Upgrade Information", "Upgrade to UNBREAKABLE", "Click your items to use them!"),
+                ItemStack(Material.NETHER_STAR, 1),
+                ItemStack(Material.OBSIDIAN, 32)
+            )
+        }
+        else -> emptyArray()
+    }
+}
+
+
+fun returnItemsOnFail(player: Player) {
+    val inventory = player.openInventory.topInventory
+    for (i in 9..<inventory.size) {
+        player.inventory.addItem(inventory.getItem(i) ?: continue)
+    }
+}
+
+fun createConfirmInventory(items: Array<ItemStack>): Inventory {
+    val start = items.size/2
+    return createInventory(
+        null,
+        "Confirm Upgrade",
+        *items.mapIndexed { index, itemStack -> Triple(itemStack, 1, -start+index) }.toTypedArray(),
+        Triple(ItemStack(Material.AIR), 2, 0)
+    )
+}
+
+fun checkConfirmItemsCorrect(confirmInv: Inventory): Boolean {
+    val itemsNeeded = confirmInv.filterIndexed { index, itemStack -> index <= 9  && itemStack?.type != Material.OAK_SIGN}.filterNotNull().toMutableList()
+    val itemsOwned = confirmInv.filterIndexed { index, _ -> index in 9..17}.filterNotNull().toMutableList()
+
+    if (itemsNeeded.first().type == itemsOwned.first().type) {
+        itemsNeeded.remove(itemsNeeded.first())
+        itemsOwned.remove(itemsOwned.first())
+
+        if (itemsNeeded == itemsOwned) return true
+    }
+    return false
+}
+
+fun giveUpgradedItem(confirmInv: Inventory): ItemStack {
+    val item = confirmInv.filterIndexed { index, _ -> index in 9..17}.filterNotNull().toMutableList().first()
+    val meta = item.itemMeta
+    meta.isUnbreakable = true
+    item.itemMeta = meta
+    return item
+}

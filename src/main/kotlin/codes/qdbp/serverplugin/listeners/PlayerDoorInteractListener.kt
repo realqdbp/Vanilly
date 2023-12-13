@@ -12,6 +12,7 @@ class PlayerDoorInteractListener : Listener {
 
     @EventHandler
     fun onPlayerDoorInteract(event: PlayerInteractEvent) {
+
         if (!(event.action.isRightClick)) return
         val clickedBlock: Block = event.clickedBlock ?: return
         if (!(clickedBlock.type.toString().contains("DOOR"))) return
@@ -20,6 +21,7 @@ class PlayerDoorInteractListener : Listener {
         val clickedDoor = clickedBlock.blockData as Door
         var relativeBlock: Block
         val relativeDoor: Door
+
         when (clickedDoor.facing) {
             NORTH, SOUTH -> {
                 relativeBlock = clickedBlock.getRelative(-1, 0, 0)
@@ -54,16 +56,18 @@ class PlayerDoorInteractListener : Listener {
             else -> return
         }
 
-        val relativeDoorOpenable = relativeBlock.state.blockData as Openable
+        val relativeBlockState = relativeBlock.state
+        val relativeDoorOpenable = relativeBlockState.blockData as Openable
         val clickedDoorOpenable = clickedBlock.blockData as Openable
+
         if (clickedDoorOpenable.isOpen) {
             relativeDoorOpenable.isOpen = false
-            relativeBlock.state.blockData = relativeDoorOpenable
-            relativeBlock.state.update()
+            relativeBlockState.blockData = relativeDoorOpenable
+            relativeBlockState.update()
         } else {
             relativeDoorOpenable.isOpen = true
-            relativeBlock.state.blockData = relativeDoorOpenable
-            relativeBlock.state.update()
+            relativeBlockState.blockData = relativeDoorOpenable
+            relativeBlockState.update()
         }
     }
 }
