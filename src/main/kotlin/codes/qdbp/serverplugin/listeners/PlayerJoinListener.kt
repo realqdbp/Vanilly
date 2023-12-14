@@ -47,11 +47,9 @@ class PlayerJoinListener(val plugin: Serverplugin) : Listener {
             player.sendMessage(
                 Component.text("""
                     PLUGIN VERSION CATCH-UP:
-                    - Upgrades gehen nicht.
-                    - MapImage geht nicht.
-                    - Invisible Item Frames hinzugefügt.
-                    - Plugin rewrite, hoffentlich weniger bugs unso.
-                    - Cooked Cod gibt jetzt richtige Saturation.
+                    - Upgrades gehen wieder.
+                    - Unbreakable Upgrades Verfügbar.
+                    - Efficiency Upgrades Verfügbar.
                 """.trimIndent(), TextColor.color(0xcdb4db))
             )
             plugin.config.set("Player.${player.name}.pluginVersion", plugin.pluginMeta.version)

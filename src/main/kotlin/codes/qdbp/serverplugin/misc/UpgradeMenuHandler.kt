@@ -5,6 +5,7 @@ import codes.qdbp.serverplugin.inventories.*
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Material
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -21,37 +22,27 @@ data class UpgradeMenuHandler(
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
-        if (event.currentItem == null) return
+        val currentItem = event.currentItem ?: return
         val invTitle = event.view.title().compact()
         when (invTitle) {
             Component.text("Choose Upgrade") -> {
                 event.isCancelled = true
                 if (event.view.bottomInventory == event.clickedInventory) return
-                when (event.currentItem) {
-                    ItemStack(Material.AIR) -> {}
-                    else -> {
-                        upgradeType = PlainTextComponentSerializer.plainText().serialize(event.currentItem?.displayName() ?: Component.text("")).removeSurrounding("[", "]")
-                    }
-                }
+                if (currentItem != ItemStack(Material.AIR)) upgradeType = PlainTextComponentSerializer.plainText().serialize(currentItem.displayName()).removeSurrounding("[", "]")
             }
 
             Component.text("Choose Tool to Upgrade") -> {
                 event.isCancelled = true
                 if (event.view.bottomInventory == event.clickedInventory) return
-                when (event.currentItem) {
-                    ItemStack(Material.AIR) -> {}
-                    else -> {
-                        upgradeClass = event.currentItem
-                    }
-                }
+                if (currentItem != ItemStack(Material.AIR)) upgradeClass = currentItem
             }
 
             Component.text("Choose Tier") -> {
                 event.isCancelled = true
-                when (event.currentItem) {
+                when (currentItem) {
                     ItemStack(Material.AIR) -> {}
                     else -> {
-                        upgradeTier = PlainTextComponentSerializer.plainText().serialize(event.currentItem?.displayName() ?: Component.text("")).removeSurrounding("[", "]").toIntOrNull() ?: 0
+                        upgradeTier = PlainTextComponentSerializer.plainText().serialize(currentItem.displayName()).removeSurrounding("[", "]").toIntOrNull() ?: 0
                     }
                 }
             }
@@ -59,22 +50,34 @@ data class UpgradeMenuHandler(
             Component.text("Confirm Upgrade") -> {
                 event.isCancelled = true
                 if (event.rawSlot <= 17) return
-                val clickedItemStack = event.currentItem ?: return
-                if (clickedItemStack.itemMeta.isUnbreakable) return
-                val itemsNeeded = calcItemsNeeded(upgradeType!!, upgradeClass!!, upgradeTier ?: 0)
-                var foundItem = itemsNeeded.find { it.type == clickedItemStack.type } ?: return
+                if (upgradeType == "UNBREAKABLE" && currentItem.itemMeta.isUnbreakable) return
 
-                if (clickedItemStack.amount - foundItem.amount < 0) return
+
+                if (upgradeType == "EFFICIENCY") {
+                    val item = event.view.topInventory.filterIndexed { index, _ -> index <= 8}.filterNotNull().toMutableList().first()
+                    if (currentItem.type == item.type) {
+                        player?.sendPlainMessage(currentItem.getEnchantmentLevel(Enchantment.DIG_SPEED).toString())
+                        player?.sendPlainMessage((upgradeTier?.plus(4).toString()))
+                        if (currentItem.getEnchantmentLevel(Enchantment.DIG_SPEED) != (upgradeTier?.plus(4) ?: return)) {
+                            return
+                        }
+                    }
+                }
+
+                val itemsNeeded = calcItemsNeeded(upgradeType!!, upgradeClass!!, upgradeTier ?: 0)
+                var foundItem = itemsNeeded.find { it.type == currentItem.type } ?: return
+
+                if (currentItem.amount - foundItem.amount < 0) return
 
                 //set items to below the requested ones
                 val slotFromFoundItem = event.inventory.indexOfFirst { it == foundItem } //should always be the first ones found
                 if (event.inventory.getItem(slotFromFoundItem + 9) == null) {
 
                     if (slotFromFoundItem == event.inventory.indexOfFirst { it != null }) {
-                        foundItem = clickedItemStack
+                        foundItem = currentItem
                     }
-                    event.inventory.setItem(slotFromFoundItem+9, foundItem)
-                    clickedItemStack.subtract(foundItem.amount)
+                    event.inventory.setItem(slotFromFoundItem + 9, foundItem)
+                    currentItem.subtract(foundItem.amount)
                 }
                 return // because of global handle() after when, and we want to avoid that shit
             }
@@ -91,24 +94,42 @@ data class UpgradeMenuHandler(
             2
         } else 3
 
+
         when (stage) {
             0 -> player?.openInventory(UpgradeTypeMenu.inventory)
             1 -> {
-                if (upgradeType == "UNBREAKABLE") player?.openInventory(UpgradeClassMenu.inventory)
-                else player?.openInventory(createInventory(null, "WIP"))
+                when (upgradeType) {
+                    "UNBREAKABLE" -> {
+                        player?.openInventory(UpgradeClassMenu.unbreakableInventory)
+                    }
+                    "EFFICIENCY" -> {
+                        player?.openInventory(UpgradeClassMenu.efficiencyInventory)
+                    }
+                    else -> player?.openInventory(createInventory(null, "WIP"))
+                }
+
             }
             2 -> {
-                if (upgradeType == "UNBREAKABLE") {
-                    val items = calcItemsNeeded(upgradeType!!, upgradeClass!!, 0)
-                    player?.openInventory(createConfirmInventory(items))
+                when (upgradeType) {
+                    "UNBREAKABLE" -> {
+                        val items = calcItemsNeeded(upgradeType!!, upgradeClass!!, 0)
+                        player?.openInventory(createConfirmInventory(items))
+                    }
+                    "EFFICIENCY" -> {
+                        player?.openInventory(UpgradeTierMenu.inventory)
+                    }
+                    else -> player?.openInventory(createInventory(null, "WIP"))
                 }
-                else player?.openInventory(createInventory(null, "WIP"))
             }
-            3 -> player?.openInventory(createInventory(
-                null,
-                "Confirm Upgrade",
-
-            ))
+            3 -> {
+                when (upgradeType) {
+                    "EFFICIENCY" -> {
+                        val items = calcItemsNeeded(upgradeType!!, upgradeClass!!, upgradeTier ?: 0)
+                        player?.openInventory(createConfirmInventory(items))
+                    }
+                    else -> player?.openInventory(createInventory(null, "WIP"))
+                }
+            }
         }
     }
 

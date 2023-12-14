@@ -6,15 +6,19 @@ import codes.qdbp.serverplugin.Serverplugin
 import com.google.gson.Gson
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.Material
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.Listener
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.potion.PotionType
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -115,6 +119,11 @@ fun createItem(material: Material, title: String, vararg lores: String): ItemSta
     return item
 }
 
+fun createItem(item: ItemStack, vararg lores: String): ItemStack {
+    item.editMeta { meta -> meta.lore(lores.map { Component.text(it) }) }
+    return item
+}
+
 
 /**
  * @param items Itemstack, row, yOffset
@@ -136,10 +145,97 @@ fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack>
             arrayOf(
                 clazz,
                 ItemStack(Material.NETHERITE_INGOT, 10),
-                createItem(Material.OAK_SIGN, "Upgrade Information", "Upgrade to UNBREAKABLE", "Click your items to use them!"),
+                createItem(
+                    Material.OAK_SIGN,
+                    "Upgrade Information",
+                    "Upgrade to",
+                    "UNBREAKABLE",
+                    "Click your items to use them!",
+                ),
                 ItemStack(Material.NETHER_STAR, 1),
                 ItemStack(Material.OBSIDIAN, 32)
             )
+        }
+        "EFFICIENCY" -> {
+            val speedPotion = ItemStack(Material.POTION)
+            val sign = createItem(
+                Material.OAK_SIGN,
+                "Upgrade Information",
+                "Upgrade",
+                "EFFICIENCY",
+                "to ${tier+5}",
+                "Click your items to use them!",
+            )
+            val item = createItem(clazz, "With Efficiency", "level ${tier+4}")
+            when (tier) {
+                1 -> {
+                    speedPotion.editMeta { meta -> meta as PotionMeta
+                        meta.basePotionType = PotionType.SPEED
+                    }
+                    arrayOf(
+                        item,
+                        ItemStack(Material.NETHERITE_INGOT, 1),
+                        sign,
+                        ItemStack(Material.FEATHER, 4),
+                        speedPotion
+                    )
+                }
+                2 -> {
+                    speedPotion.editMeta { meta -> meta as PotionMeta
+                        meta.basePotionType = PotionType.LONG_SWIFTNESS
+                    }
+                    arrayOf(
+                        item,
+                        ItemStack(Material.NETHERITE_INGOT, 1),
+                        sign,
+                        ItemStack(Material.FEATHER, 8),
+                        speedPotion
+                    )
+                }
+                3 -> {
+                    speedPotion.editMeta { meta -> meta as PotionMeta
+                        meta.basePotionType = PotionType.LONG_SWIFTNESS
+                    }
+                    arrayOf(
+                        item,
+                        ItemStack(Material.NETHERITE_INGOT, 1),
+                        ItemStack(Material.FEATHER, 16),
+                        sign,
+                        speedPotion,
+                        ItemStack(Material.HONEY_BOTTLE, 4)
+                    )
+                }
+                4 -> {
+                    speedPotion.editMeta { meta -> meta as PotionMeta
+                        meta.basePotionType = PotionType.STRONG_SWIFTNESS
+                    }
+                    arrayOf(
+                        item,
+                        ItemStack(Material.NETHERITE_INGOT, 1),
+                        ItemStack(Material.FEATHER, 32),
+                        sign,
+                        speedPotion,
+                        ItemStack(Material.HONEY_BOTTLE, 8),
+                        ItemStack(Material.END_CRYSTAL, 1)
+                    )
+                }
+                5 -> {
+                    speedPotion.editMeta { meta -> meta as PotionMeta
+                        meta.basePotionType = PotionType.STRONG_SWIFTNESS
+                    }
+                    arrayOf(
+                        item,
+                        ItemStack(Material.NETHERITE_INGOT, 1),
+                        ItemStack(Material.FEATHER, 64),
+                        speedPotion,
+                        sign,
+                        ItemStack(Material.HONEY_BOTTLE, 16),
+                        ItemStack(Material.END_CRYSTAL, 3),
+                        ItemStack(Material.NETHER_STAR, 1)
+                    )
+                }
+                else -> emptyArray()
+            }
         }
         else -> emptyArray()
     }
@@ -153,6 +249,9 @@ fun returnItemsOnFail(player: Player) {
     }
 }
 
+/**
+ * Important: Sign needs to be at: odd - middle, even - middle + 1
+ */
 fun createConfirmInventory(items: Array<ItemStack>): Inventory {
     val start = items.size/2
     return createInventory(
@@ -164,8 +263,10 @@ fun createConfirmInventory(items: Array<ItemStack>): Inventory {
 }
 
 fun checkConfirmItemsCorrect(confirmInv: Inventory): Boolean {
-    val itemsNeeded = confirmInv.filterIndexed { index, itemStack -> index <= 9  && itemStack?.type != Material.OAK_SIGN}.filterNotNull().toMutableList()
+    val itemsNeeded = confirmInv.filterIndexed { index, itemStack -> index <= 8  && itemStack?.type != Material.OAK_SIGN}.filterNotNull().toMutableList()
     val itemsOwned = confirmInv.filterIndexed { index, _ -> index in 9..17}.filterNotNull().toMutableList()
+
+    if (itemsNeeded.isEmpty() || itemsOwned.isEmpty()) return false
 
     if (itemsNeeded.first().type == itemsOwned.first().type) {
         itemsNeeded.remove(itemsNeeded.first())
@@ -177,9 +278,20 @@ fun checkConfirmItemsCorrect(confirmInv: Inventory): Boolean {
 }
 
 fun giveUpgradedItem(confirmInv: Inventory): ItemStack {
+    val upgrade = confirmInv.filterIndexed { index, itemStack -> index <= 8 && itemStack?.type == Material.OAK_SIGN}.firstOrNull()?.lore()?.get(1)
+        ?.let { PlainTextComponentSerializer.plainText().serialize(it).removeSurrounding("[", "]") } ?: return ItemStack(Material.AIR)
     val item = confirmInv.filterIndexed { index, _ -> index in 9..17}.filterNotNull().toMutableList().first()
-    val meta = item.itemMeta
-    meta.isUnbreakable = true
-    item.itemMeta = meta
-    return item
+    return when (upgrade) {
+        "UNBREAKABLE" -> {
+            item.editMeta { meta -> meta.isUnbreakable = true }
+            item
+        }
+        "EFFICIENCY" -> {
+            item.editMeta { meta -> meta.addEnchant(Enchantment.DIG_SPEED, item.getEnchantmentLevel(Enchantment.DIG_SPEED) + 1, true) }
+            item
+        }
+        else -> {
+            ItemStack(Material.AIR)
+        }
+    }
 }

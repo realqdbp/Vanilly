@@ -33,7 +33,6 @@ data class AfkPlayer(
     init {
         player.isInvulnerable = true
         player.isCollidable = false
-        player.sendMessage(player.collidableExemptions.toString())
         afkTask.runTaskTimer(plugin, 0, 20)
         player.sendPlainMessage("Du bist jetzt AFK!")
     }
