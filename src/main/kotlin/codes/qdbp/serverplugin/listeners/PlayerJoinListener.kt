@@ -47,9 +47,8 @@ class PlayerJoinListener(val plugin: Serverplugin) : Listener {
             player.sendMessage(
                 Component.text("""
                     PLUGIN VERSION CATCH-UP:
-                    - Upgrades gehen wieder.
-                    - Unbreakable Upgrades Verfügbar.
-                    - Efficiency Upgrades Verfügbar.
+                    - Change Upgrade Level mit /changeUpgrade
+                    - Öffentlicher Backpack mit /backpack all
                 """.trimIndent(), TextColor.color(0xcdb4db))
             )
             plugin.config.set("Player.${player.name}.pluginVersion", plugin.pluginMeta.version)

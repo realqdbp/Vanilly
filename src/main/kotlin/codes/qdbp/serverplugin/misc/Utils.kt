@@ -112,10 +112,10 @@ val upgradeMenuHandlers = mutableMapOf<UUID,Listener>()
 
 fun createItem(material: Material, title: String, vararg lores: String): ItemStack {
     val item = ItemStack(material)
-    val meta = item.itemMeta
-    meta.displayName(Component.text(title))
-    meta.lore(lores.map { Component.text(it) })
-    item.itemMeta = meta
+    item.editMeta { meta ->
+        meta.displayName(Component.text(title))
+        meta.lore(lores.map { Component.text(it) })
+    }
     return item
 }
 
@@ -133,10 +133,18 @@ fun createInventory(holder: InventoryHolder?, title: String, vararg items: Tripl
     if (items.any { it.third !in -4..4 }) return Bukkit.createInventory(null, 9, Component.text("FAILED TO BUILD INVENTORY"))
     if (items.any { it.second == 0 }) return Bukkit.createInventory(null, 9, Component.text("FAILED TO BUILD INVENTORY"))
 
-
     val inventory = Bukkit.createInventory(holder, items.maxBy{ it.second }.second*9, Component.text(title))
     items.forEach { inventory.setItem((4 + ((it.second - 1) * 9)) + it.third, it.first) }
     return inventory
+}
+
+fun createInventory(title: String, items: Array<ItemStack>): Inventory {
+    val start = items.size/2
+    return createInventory(
+        null,
+        title,
+        *items.mapIndexed { index, itemStack -> Triple(itemStack, 1, -start+index) }.toTypedArray(),
+    )
 }
 
 fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack> {
@@ -156,6 +164,7 @@ fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack>
                 ItemStack(Material.OBSIDIAN, 32)
             )
         }
+
         "EFFICIENCY" -> {
             val speedPotion = ItemStack(Material.POTION)
             val sign = createItem(
@@ -163,13 +172,14 @@ fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack>
                 "Upgrade Information",
                 "Upgrade",
                 "EFFICIENCY",
-                "to ${tier+5}",
+                "to ${tier + 5}",
                 "Click your items to use them!",
             )
-            val item = createItem(clazz, "With Efficiency", "level ${tier+4}")
+            val item = createItem(clazz, "With Efficiency", "level ${tier + 4}")
             when (tier) {
                 1 -> {
-                    speedPotion.editMeta { meta -> meta as PotionMeta
+                    speedPotion.editMeta { meta ->
+                        meta as PotionMeta
                         meta.basePotionType = PotionType.SPEED
                     }
                     arrayOf(
@@ -180,8 +190,10 @@ fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack>
                         speedPotion
                     )
                 }
+
                 2 -> {
-                    speedPotion.editMeta { meta -> meta as PotionMeta
+                    speedPotion.editMeta { meta ->
+                        meta as PotionMeta
                         meta.basePotionType = PotionType.LONG_SWIFTNESS
                     }
                     arrayOf(
@@ -192,8 +204,10 @@ fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack>
                         speedPotion
                     )
                 }
+
                 3 -> {
-                    speedPotion.editMeta { meta -> meta as PotionMeta
+                    speedPotion.editMeta { meta ->
+                        meta as PotionMeta
                         meta.basePotionType = PotionType.LONG_SWIFTNESS
                     }
                     arrayOf(
@@ -205,8 +219,10 @@ fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack>
                         ItemStack(Material.HONEY_BOTTLE, 4)
                     )
                 }
+
                 4 -> {
-                    speedPotion.editMeta { meta -> meta as PotionMeta
+                    speedPotion.editMeta { meta ->
+                        meta as PotionMeta
                         meta.basePotionType = PotionType.STRONG_SWIFTNESS
                     }
                     arrayOf(
@@ -219,8 +235,10 @@ fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack>
                         ItemStack(Material.END_CRYSTAL, 1)
                     )
                 }
+
                 5 -> {
-                    speedPotion.editMeta { meta -> meta as PotionMeta
+                    speedPotion.editMeta { meta ->
+                        meta as PotionMeta
                         meta.basePotionType = PotionType.STRONG_SWIFTNESS
                     }
                     arrayOf(
@@ -234,8 +252,24 @@ fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack>
                         ItemStack(Material.NETHER_STAR, 1)
                     )
                 }
+
                 else -> emptyArray()
             }
+        }
+        "MOVEMENTSPEED" -> {
+
+            //TODO items needed
+            arrayOf(
+                ItemStack(Material.OAK_LOG, 1),
+                createItem(
+                    Material.OAK_SIGN,
+                    "Upgrade Information",
+                    "Upgrade",
+                    "MOVEMENTSPEED",
+                    "Click your items to use them!",
+                ),
+                ItemStack(Material.DIRT, 1)
+            )
         }
         else -> emptyArray()
     }
@@ -268,6 +302,7 @@ fun checkConfirmItemsCorrect(confirmInv: Inventory): Boolean {
 
     if (itemsNeeded.isEmpty() || itemsOwned.isEmpty()) return false
 
+    // A bit weird at movementspeed but should still work
     if (itemsNeeded.first().type == itemsOwned.first().type) {
         itemsNeeded.remove(itemsNeeded.first())
         itemsOwned.remove(itemsOwned.first())
@@ -277,7 +312,7 @@ fun checkConfirmItemsCorrect(confirmInv: Inventory): Boolean {
     return false
 }
 
-fun giveUpgradedItem(confirmInv: Inventory): ItemStack {
+fun giveUpgrade(confirmInv: Inventory, plugin: Serverplugin): ItemStack {
     val upgrade = confirmInv.filterIndexed { index, itemStack -> index <= 8 && itemStack?.type == Material.OAK_SIGN}.firstOrNull()?.lore()?.get(1)
         ?.let { PlainTextComponentSerializer.plainText().serialize(it).removeSurrounding("[", "]") } ?: return ItemStack(Material.AIR)
     val item = confirmInv.filterIndexed { index, _ -> index in 9..17}.filterNotNull().toMutableList().first()
@@ -287,7 +322,10 @@ fun giveUpgradedItem(confirmInv: Inventory): ItemStack {
             item
         }
         "EFFICIENCY" -> {
-            item.editMeta { meta -> meta.addEnchant(Enchantment.DIG_SPEED, item.getEnchantmentLevel(Enchantment.DIG_SPEED) + 1, true) }
+            item.editMeta { meta ->
+                meta.persistentDataContainer.set(plugin.efficiencyUpgradeNSK, PersistentDataType.INTEGER, item.getEnchantmentLevel(Enchantment.DIG_SPEED) + 1)
+                meta.addEnchant(Enchantment.DIG_SPEED, item.getEnchantmentLevel(Enchantment.DIG_SPEED) + 1, true)
+            }
             item
         }
         else -> {

@@ -37,9 +37,9 @@ class InfoCmd : CommandExecutor{
 
 
     private val backpackInfo = """
-        Du hast mit /backpack
-        einen Persönlichen backpack.
-        Items in diesem bleiben gespeichert.
+        Du hast mit /backpack einen Persönlichen backpack.
+        Mit /backpack all einen Öffentlichen.
+        Items in diesen bleiben gespeichert.
     """.trimIndent()
 
     private val craftInfo = """

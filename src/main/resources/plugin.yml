@@ -7,6 +7,10 @@ description: Just my plugin for our server
 website: https://qdbp.codes/
 commands:
 
+  changeUpgrade:
+    description: Temporary way to change efficiency on tools
+    usage: /changeUpgrade
+
   features:
     description: Liste aller Features des Plugins
     usage: /features

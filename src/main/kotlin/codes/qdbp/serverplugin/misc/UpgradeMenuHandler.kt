@@ -49,22 +49,20 @@ data class UpgradeMenuHandler(
 
             Component.text("Confirm Upgrade") -> {
                 event.isCancelled = true
-                if (event.rawSlot <= 17) return
+                if (event.rawSlot <= 17) return // Only works if topInventory is always 2 rows
                 if (upgradeType == "UNBREAKABLE" && currentItem.itemMeta.isUnbreakable) return
 
 
                 if (upgradeType == "EFFICIENCY") {
                     val item = event.view.topInventory.filterIndexed { index, _ -> index <= 8}.filterNotNull().toMutableList().first()
                     if (currentItem.type == item.type) {
-                        player?.sendPlainMessage(currentItem.getEnchantmentLevel(Enchantment.DIG_SPEED).toString())
-                        player?.sendPlainMessage((upgradeTier?.plus(4).toString()))
                         if (currentItem.getEnchantmentLevel(Enchantment.DIG_SPEED) != (upgradeTier?.plus(4) ?: return)) {
                             return
                         }
                     }
                 }
 
-                val itemsNeeded = calcItemsNeeded(upgradeType!!, upgradeClass!!, upgradeTier ?: 0)
+                val itemsNeeded = calcItemsNeeded(upgradeType!!, upgradeClass ?: ItemStack(Material.AIR), upgradeTier ?: 0)
                 var foundItem = itemsNeeded.find { it.type == currentItem.type } ?: return
 
                 if (currentItem.amount - foundItem.amount < 0) return
@@ -107,7 +105,6 @@ data class UpgradeMenuHandler(
                     }
                     else -> player?.openInventory(createInventory(null, "WIP"))
                 }
-
             }
             2 -> {
                 when (upgradeType) {

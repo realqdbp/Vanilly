@@ -24,6 +24,7 @@ class Serverplugin : JavaPlugin() {
      * Namespaced Keys
      */
     val invisItemFrameNSK = NamespacedKey(this, "invisible")
+    val efficiencyUpgradeNSK = NamespacedKey(this, "efficiency")
 
     override fun onEnable() {
 
@@ -51,6 +52,7 @@ class Serverplugin : JavaPlugin() {
         config.addDefault("Features.useCustomMapImages", true)
         config.addDefault("Features.useUpgrade", true)
         config.addDefault("Features.useInvisibleItemFrames", true)
+        config.addDefault("Features.useChangeUpgrade", true)
         config.options().copyDefaults(true)
         saveConfig()
 
@@ -72,6 +74,7 @@ class Serverplugin : JavaPlugin() {
         val useCustomMapImages = config.getBoolean("Features.useCustomMapImages")
         val useUpgrade = config.getBoolean("Features.useUpgrade")
         val useInvisibleItemFrames = config.getBoolean("Features.useInvisibleItemFrames")
+        val useChangeUpgrade = config.getBoolean("Features.useChangeUpgrade")
 
         /**
          * Commands
@@ -88,6 +91,7 @@ class Serverplugin : JavaPlugin() {
         if (useSkipNight) getCommand("skipnight")?.setExecutor(SkipNightCmd(this))
         if (useCustomMapImages) getCommand("mapimage")?.setExecutor(MapImageCmd(this))
         if (useUpgrade) getCommand("upgrade")?.setExecutor(UpgradeCmd(this))
+        if (useChangeUpgrade) getCommand("changeUpgrade")?.setExecutor(EditUpgradesCmd(this))
 
         /**
          * Listeners

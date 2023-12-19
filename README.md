@@ -4,7 +4,7 @@ It's features are listed below and can all be toggled on or off in the config af
 
 
 ## Requirements
-   - PaperMC 1.20.2 (soon to be PurpurMC)
+   - PaperMC 1.20.2
    - ### For AFK (without command)
      - In server.properties "player-idle-timeout" must be set to the desired time
    - ### For Deaths
@@ -16,9 +16,10 @@ All features can be enabled or disabled after the first plugin start in the conf
 
 All command aliases are listed at the bottom.
 
-   - Ingame explanations are available with **/features**
+   - Ingame explanations are available with `/features`
    - **Info**
      - `/info featurename` explains the feature ingame
+     - Or click on the feature in `/features`
    - **AFK**
      - `/afk <optional reason>` Sets yourself in afk mode
      - Players name changes to display the afk time and optionally the reason why
@@ -29,10 +30,14 @@ All command aliases are listed at the bottom.
      - Moving in any way kicks you out of AFK
    - **Backpack**
      - `/backpack` opens a players personal backpack
+     - `/backpack all` opens a public backpack
      - size equal to a double chest
      - items are persistent (no loss on death)
    - **Craft**
      - `/craft` opens the crafting menu
+   - **ChangeUpgrade**
+     - `/changeUpgrade`
+     - Temporary way to change the efficiency upgrade level
    - **Enderchest**
      - `/enderchest` opens your personal enderchest
    - **Freecam**

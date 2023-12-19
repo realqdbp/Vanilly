@@ -2,7 +2,7 @@ package codes.qdbp.serverplugin.listeners
 
 import codes.qdbp.serverplugin.Serverplugin
 import codes.qdbp.serverplugin.misc.checkConfirmItemsCorrect
-import codes.qdbp.serverplugin.misc.giveUpgradedItem
+import codes.qdbp.serverplugin.misc.giveUpgrade
 import codes.qdbp.serverplugin.misc.returnItemsOnFail
 import codes.qdbp.serverplugin.misc.upgradeMenuHandlers
 import net.kyori.adventure.text.Component
@@ -15,8 +15,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryCloseEvent.Reason
 
 class InventoryCloseListener(val plugin: Serverplugin) : Listener {
-    private val storage = plugin.backpackStorage.storage
 
+    private val storage = plugin.backpackStorage.storage
 
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
@@ -25,6 +25,9 @@ class InventoryCloseListener(val plugin: Serverplugin) : Listener {
 
         if (event.view.title() == Component.text("${player.name}'s Backpack")) {
             storage.set(player.name, event.inventory.contents.asList())
+            plugin.backpackStorage.save()
+        } else if (event.view.title() == Component.text("Öffentlicher Backpack")) {
+            storage.set("P-U-B-L-I-C", event.inventory.contents.asList())
             plugin.backpackStorage.save()
         } else if (title.contains("Choose")) {
             if (event.reason == Reason.PLAYER || event.reason == Reason.DISCONNECT) {
@@ -36,7 +39,7 @@ class InventoryCloseListener(val plugin: Serverplugin) : Listener {
                 if (event.reason != Reason.PLAYER) returnItemsOnFail(player)
 
                 if (checkConfirmItemsCorrect(event.inventory)) {
-                    player.inventory.addItem(giveUpgradedItem(event.inventory))
+                    player.inventory.addItem(giveUpgrade(event.inventory, plugin))
                 } else {
                     returnItemsOnFail(player)
                 }
