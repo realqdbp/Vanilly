@@ -1,7 +1,9 @@
 package codes.qdbp.serverplugin.listeners
 
 import codes.qdbp.serverplugin.Serverplugin
+import codes.qdbp.serverplugin.misc.afkPlayers
 import codes.qdbp.serverplugin.misc.checkPluginUpToDate
+import codes.qdbp.serverplugin.misc.endAfk
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextColor
@@ -38,7 +40,6 @@ class PlayerJoinListener(val plugin: Serverplugin) : Listener {
             )
         )
 
-
         /**
          * Set individual Players plugin version
          */
@@ -47,12 +48,14 @@ class PlayerJoinListener(val plugin: Serverplugin) : Listener {
             player.sendMessage(
                 Component.text("""
                     PLUGIN VERSION CATCH-UP:
-                    - Change Upgrade Level mit /changeUpgrade
-                    - Öffentlicher Backpack mit /backpack all
+                    - Shulker öffnen ohne zu plazieren
+                    - Fixed freecam /sw text
                 """.trimIndent(), TextColor.color(0xcdb4db))
             )
             plugin.config.set("Player.${player.name}.pluginVersion", plugin.pluginMeta.version)
             plugin.saveConfig()
         }
+
+        if (afkPlayers.contains(player.uniqueId)) player.endAfk()
     }
 }

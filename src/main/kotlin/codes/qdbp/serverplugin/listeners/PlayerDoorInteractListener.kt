@@ -1,17 +1,33 @@
 package codes.qdbp.serverplugin.listeners
 
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
 import org.bukkit.block.Block
 import org.bukkit.block.data.type.Door
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.block.BlockFace.*
+import org.bukkit.block.ShulkerBox
 import org.bukkit.block.data.Openable
+import org.bukkit.event.inventory.InventoryType
+import org.bukkit.inventory.meta.BlockStateMeta
 
 class PlayerDoorInteractListener : Listener {
 
     @EventHandler
     fun onPlayerDoorInteract(event: PlayerInteractEvent) {
+
+        if (event.player.inventory.itemInMainHand.type.toString().contains("SHULKER_BOX")) {
+
+            if (event.action.isRightClick && event.clickedBlock?.type == null) {
+                val shulkerMeta = event.player.inventory.itemInMainHand.itemMeta as BlockStateMeta
+                val shulker = shulkerMeta.blockState as ShulkerBox
+                val inventory = Bukkit.createInventory(event.player, InventoryType.SHULKER_BOX, Component.text("Shulker Manual"))
+                inventory.contents = shulker.inventory.contents
+                event.player.openInventory(inventory)
+            }
+        }
 
         if (!(event.action.isRightClick)) return
         val clickedBlock: Block = event.clickedBlock ?: return
@@ -69,5 +85,6 @@ class PlayerDoorInteractListener : Listener {
             relativeBlockState.blockData = relativeDoorOpenable
             relativeBlockState.update()
         }
+
     }
 }

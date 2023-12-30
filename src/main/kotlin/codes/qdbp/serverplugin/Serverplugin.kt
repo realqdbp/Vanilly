@@ -33,7 +33,6 @@ class Serverplugin : JavaPlugin() {
          */
         if (!checkPluginUpToDate(this)) logger.log(Level.WARNING, "There is a newer plugin version available!")
 
-
         /**
          * Config Defaults
          */
@@ -112,6 +111,7 @@ class Serverplugin : JavaPlugin() {
 
         server.pluginManager.registerEvents(HangingPlaceEvent(this), this)
         server.pluginManager.registerEvents(BreakThisListenern(this), this)
+
         /**
          * Recipes
          */

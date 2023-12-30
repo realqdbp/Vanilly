@@ -13,12 +13,7 @@ class PlayerQuitListener(val plugin: Serverplugin) : Listener {
     fun onPlayerQuit(event: PlayerQuitEvent) {
         val player = event.player
 
-        if (freecamPlayers.containsKey(player.uniqueId)) {
-            player.endFreecam()
-        }
-
-        if (afkPlayers.containsKey(player.uniqueId)) {
-            player.endAfk()
-        }
+        if (freecamPlayers.containsKey(player.uniqueId)) player.endFreecam()
+        if (afkPlayers.containsKey(player.uniqueId)) player.endAfk()
     }
 }

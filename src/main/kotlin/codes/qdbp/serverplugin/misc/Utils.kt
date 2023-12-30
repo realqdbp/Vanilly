@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionType
+import org.bukkit.util.Vector
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -46,7 +47,6 @@ fun Player.endAfk() {
     Bukkit.getScheduler().cancelTask(afkPlayers[this.uniqueId]?.afkTask?.taskId ?: return)
     afkPlayers.remove(this.uniqueId)
     this.isInvulnerable = false
-    this.isCollidable = true
     this.playerListName(null)
 }
 
@@ -252,24 +252,8 @@ fun calcItemsNeeded(type: String, clazz: ItemStack, tier: Int): Array<ItemStack>
                         ItemStack(Material.NETHER_STAR, 1)
                     )
                 }
-
                 else -> emptyArray()
             }
-        }
-        "MOVEMENTSPEED" -> {
-
-            //TODO items needed
-            arrayOf(
-                ItemStack(Material.OAK_LOG, 1),
-                createItem(
-                    Material.OAK_SIGN,
-                    "Upgrade Information",
-                    "Upgrade",
-                    "MOVEMENTSPEED",
-                    "Click your items to use them!",
-                ),
-                ItemStack(Material.DIRT, 1)
-            )
         }
         else -> emptyArray()
     }

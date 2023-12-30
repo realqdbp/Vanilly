@@ -1,6 +1,7 @@
 package codes.qdbp.serverplugin.misc
 
-import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.Component.text
+import net.kyori.adventure.text.format.TextColor.color
 import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.entity.Player
@@ -11,6 +12,6 @@ data class FreecamPlayer(
 ){
     init {
         player.gameMode = GameMode.SPECTATOR
-        player.sendMessage("Du kannst mit ${NamedTextColor.AQUA}/sw ${NamedTextColor.WHITE}zwischen den Welten wechseln")
+        player.sendMessage(text("Du kannst mit ").append(text("/sw ", color(0x2a9d8f))).append(text("zwischen den Welten wechseln")))
     }
 }
