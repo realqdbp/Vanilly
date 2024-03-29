@@ -5,7 +5,6 @@ import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.TextColor.color
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
-import org.bukkit.util.Vector
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
@@ -33,8 +32,7 @@ data class AfkPlayer(
 
     init {
         player.isInvulnerable = true
-        player.isCollidable = false
-
+        player.isCollidable = true // fixme just for once so the players get collidable again
         afkTask.runTaskTimer(plugin, 0, 20)
         player.sendPlainMessage("Du bist jetzt AFK!")
     }

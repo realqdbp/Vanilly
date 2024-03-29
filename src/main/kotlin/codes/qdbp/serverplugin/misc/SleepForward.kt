@@ -8,12 +8,11 @@ import org.bukkit.scheduler.BukkitRunnable
 
 fun Player.sleepForward(plugin: Serverplugin, byCommand: Boolean) {
 
-    val sleepingPlayers = this.world.players.filter { it.pose == Pose.SLEEPING }
-
     object : BukkitRunnable() {
         val player = this@sleepForward
 
         override fun run() {
+            val sleepingPlayers = player.world.players.filter { it.pose == Pose.SLEEPING }
             if (13000 >= player.world.time) {
                 player.setStatistic(Statistic.TIME_SINCE_REST, 0)
                 if (!(player.world.isClearWeather)) player.world.clearWeatherDuration = 1

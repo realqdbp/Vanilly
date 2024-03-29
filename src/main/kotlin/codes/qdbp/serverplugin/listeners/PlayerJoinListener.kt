@@ -4,6 +4,7 @@ import codes.qdbp.serverplugin.Serverplugin
 import codes.qdbp.serverplugin.misc.afkPlayers
 import codes.qdbp.serverplugin.misc.checkPluginUpToDate
 import codes.qdbp.serverplugin.misc.endAfk
+import codes.qdbp.serverplugin.misc.getReleaseAdditions
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.format.TextColor
@@ -46,16 +47,12 @@ class PlayerJoinListener(val plugin: Serverplugin) : Listener {
         @Suppress("UnstableApiUsage")
         if (plugin.config.getString("Player.${player.name}.pluginVersion") != plugin.pluginMeta.version) {
             player.sendMessage(
-                Component.text("""
-                    PLUGIN VERSION CATCH-UP:
-                    - Shulker öffnen ohne zu plazieren
-                    - Fixed freecam /sw text
-                """.trimIndent(), TextColor.color(0xcdb4db))
+                Component.text(getReleaseAdditions(plugin), TextColor.color(0xcdb4db))
             )
             plugin.config.set("Player.${player.name}.pluginVersion", plugin.pluginMeta.version)
             plugin.saveConfig()
         }
 
-        if (afkPlayers.contains(player.uniqueId)) player.endAfk()
+        if (afkPlayers.contains(player.uniqueId)) player.endAfk() //todo ?
     }
 }

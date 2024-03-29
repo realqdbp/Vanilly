@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionType
-import org.bukkit.util.Vector
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -28,16 +27,22 @@ import java.util.*
 
 
 @Suppress("PropertyName")
-class T (val tag_name: String? = null)
+class T (val tag_name: String? = null, val body: String = "")
+
+val request: HttpRequest = HttpRequest.newBuilder(URI("https://api.github.com/repos/realqdbp/Serverplugin/releases/latest")).build()
+val httpClient: HttpClient = HttpClient.newHttpClient()
 
 fun checkPluginUpToDate(plugin: Serverplugin): Boolean {
-
-    val request = HttpRequest.newBuilder(URI("https://api.github.com/repos/realqdbp/Serverplugin/releases/latest")).build()
-    val httpClient = HttpClient.newHttpClient()
     val response = httpClient.sendAsync(request, BodyHandlers.ofString()).get()
 
     @Suppress("UnstableApiUsage")
     return Gson().fromJson(response.body(), T::class.java).tag_name == "v${plugin.pluginMeta.version}"
+}
+
+fun getReleaseAdditions(plugin: Serverplugin): String {
+    val response = httpClient.sendAsync(request, BodyHandlers.ofString()).get()
+
+    return Gson().fromJson(response.body(), T::class.java).body
 }
 
 

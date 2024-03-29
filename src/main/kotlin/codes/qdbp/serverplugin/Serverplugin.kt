@@ -78,6 +78,7 @@ class Serverplugin : JavaPlugin() {
         /**
          * Commands
          */
+        getCommand("use")?.setExecutor(UseCmd(this))
         getCommand("features")?.setExecutor(FeaturesCmd())
         getCommand("info")?.setExecutor(InfoCmd())
         if (useAFK) getCommand("afk")?.setExecutor(AfkCmd(this))
@@ -108,9 +109,8 @@ class Serverplugin : JavaPlugin() {
         if (useAFK || useFreecam) server.pluginManager.registerEvents(PlayerQuitListener(this), this) //TODO dont know about this one
         if (useDoubleOpenDoors) server.pluginManager.registerEvents(PlayerDoorInteractListener(), this) //TODO fix sneaking
         if (useInvisibleItemFrames) server.pluginManager.registerEvents(PlayerItemFrameChange(this), this)
-
-        server.pluginManager.registerEvents(HangingPlaceEvent(this), this)
-        server.pluginManager.registerEvents(BreakThisListenern(this), this)
+        if (useInvisibleItemFrames) server.pluginManager.registerEvents(HangingPlaceEvent(this), this)
+        if (useInvisibleItemFrames) server.pluginManager.registerEvents(BreakThisListenern(this), this)
 
         /**
          * Recipes

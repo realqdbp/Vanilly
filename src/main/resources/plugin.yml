@@ -7,6 +7,10 @@ description: Just my plugin for our server
 website: https://qdbp.codes/
 commands:
 
+  use:
+    description: Change Usage of Features ingame
+    usage: /use <feature>
+
   changeUpgrade:
     description: Temporary way to change efficiency on tools
     usage: /changeUpgrade

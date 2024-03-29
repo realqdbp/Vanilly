@@ -18,6 +18,7 @@ class PlayerDoorInteractListener : Listener {
     @EventHandler
     fun onPlayerDoorInteract(event: PlayerInteractEvent) {
 
+
         if (event.player.inventory.itemInMainHand.type.toString().contains("SHULKER_BOX")) {
 
             if (event.action.isRightClick && event.clickedBlock?.type == null) {
@@ -32,6 +33,7 @@ class PlayerDoorInteractListener : Listener {
         if (!(event.action.isRightClick)) return
         val clickedBlock: Block = event.clickedBlock ?: return
         if (!(clickedBlock.type.toString().contains("DOOR"))) return
+        if (clickedBlock.type.toString().contains("TRAP")) return
         if (clickedBlock.type.toString().contains("IRON")) return
 
         val clickedDoor = clickedBlock.blockData as Door

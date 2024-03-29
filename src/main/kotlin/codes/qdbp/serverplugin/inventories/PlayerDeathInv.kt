@@ -15,7 +15,7 @@ fun Player.openPlayerDeathsInventory(plugin: Serverplugin, clickedItem: ItemStac
     val headName = PlainTextComponentSerializer.plainText().serialize(clickedItem.displayName())
     val playerName = headName.substring(1, headName.indexOf("'"))
 
-    val inventory = Bukkit.createInventory(null, 54, Component.text("$playerName deaths"))
+    val inventory = Bukkit.createInventory(null, 54, Component.text("$playerName's Deaths"))
 
     val deathIcon = ItemStack(Material.SKELETON_SKULL)
 
