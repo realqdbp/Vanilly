@@ -9,9 +9,10 @@ import org.bukkit.entity.Player
 
 class UseCmd(val plugin: Serverplugin) : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+        if (args.isNullOrEmpty()) return false
         if (sender !is Player) return false
         if (!sender.isOp) return false
-        if (args == null) return false
+
 
         when (args[0]) {
             "afk" -> plugin.config.set("Features.useAFK", !plugin.config.getBoolean("Features.useAFK"))

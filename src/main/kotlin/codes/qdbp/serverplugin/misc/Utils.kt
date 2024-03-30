@@ -39,7 +39,7 @@ fun checkPluginUpToDate(plugin: Serverplugin): Boolean {
     return Gson().fromJson(response.body(), T::class.java).tag_name == "v${plugin.pluginMeta.version}"
 }
 
-fun getReleaseAdditions(plugin: Serverplugin): String {
+fun getReleaseAdditions(): String {
     val response = httpClient.sendAsync(request, BodyHandlers.ofString()).get()
 
     return Gson().fromJson(response.body(), T::class.java).body

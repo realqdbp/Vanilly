@@ -4,7 +4,7 @@ It's features are listed below and can all be toggled on or off in the config af
 
 
 ## Requirements
-   - PaperMC 1.20.2
+   - PaperMC 1.20.4
    - ### For AFK (without command)
      - In server.properties "player-idle-timeout" must be set to the desired time
    - ### For Deaths
@@ -20,6 +20,8 @@ All command aliases are listed at the bottom.
    - **Info**
      - `/info featurename` explains the feature ingame
      - Or click on the feature in `/features`
+   - **Use**
+     - `/use <feature>` toggles features ingame
    - **AFK**
      - `/afk <optional reason>` Sets yourself in afk mode
      - Players name changes to display the afk time and optionally the reason why

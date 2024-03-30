@@ -47,7 +47,7 @@ class PlayerJoinListener(val plugin: Serverplugin) : Listener {
         @Suppress("UnstableApiUsage")
         if (plugin.config.getString("Player.${player.name}.pluginVersion") != plugin.pluginMeta.version) {
             player.sendMessage(
-                Component.text(getReleaseAdditions(plugin), TextColor.color(0xcdb4db))
+                Component.text(getReleaseAdditions().trimIndent(), TextColor.color(0xcdb4db))
             )
             plugin.config.set("Player.${player.name}.pluginVersion", plugin.pluginMeta.version)
             plugin.saveConfig()

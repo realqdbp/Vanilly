@@ -24,5 +24,4 @@ class AfkCmd(val plugin: Serverplugin) : CommandExecutor {
 
         return true
     }
-
 }
