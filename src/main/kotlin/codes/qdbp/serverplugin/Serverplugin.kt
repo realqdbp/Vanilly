@@ -52,7 +52,8 @@ class Serverplugin : JavaPlugin() {
         config.addDefault("Features.useUpgrade", true)
         config.addDefault("Features.useInvisibleItemFrames", true)
         config.addDefault("Features.useChangeUpgrade", true)
-        config.addDefault("Features.useFastLeavesDecay", true)
+        config.addDefault("Features.useTotems", true)
+        config.addDefault("Features.useFastLeafDecay", true)
         config.options().copyDefaults(true)
         saveConfig()
 
@@ -75,7 +76,8 @@ class Serverplugin : JavaPlugin() {
         val useUpgrade = config.getBoolean("Features.useUpgrade")
         val useInvisibleItemFrames = config.getBoolean("Features.useInvisibleItemFrames")
         val useChangeUpgrade = config.getBoolean("Features.useChangeUpgrade")
-        val useFastLeavesDecay = config.getBoolean("Features.useFastLeavesDecay")
+        val useFastLeavesDecay = config.getBoolean("Features.useFastLeafDecay")
+        val useTotems = config.getBoolean("Features.useTotems")
 
         /**
          * Commands
@@ -83,6 +85,9 @@ class Serverplugin : JavaPlugin() {
         getCommand("use")?.setExecutor(UseCmd(this))
         getCommand("features")?.setExecutor(FeaturesCmd())
         getCommand("info")?.setExecutor(InfoCmd())
+
+        getCommand("test")?.setExecutor(TestCmd())
+
         if (useAFK) getCommand("afk")?.setExecutor(AfkCmd(this))
         if (useBackpack) getCommand("backpack")?.setExecutor(BackpackCmd(this))
         if (useCraft) getCommand("craft")?.setExecutor(CraftCmd())
@@ -114,6 +119,8 @@ class Serverplugin : JavaPlugin() {
         if (useInvisibleItemFrames) server.pluginManager.registerEvents(HangingPlaceEvent(this), this)
         if (useInvisibleItemFrames) server.pluginManager.registerEvents(BreakThisListenern(this), this)
         if (useFastLeavesDecay) server.pluginManager.registerEvents(LeavesDecayListener(), this)
+
+        server.pluginManager.registerEvents(MenuListener(), this)
 
         /**
          * Recipes

@@ -2,9 +2,14 @@ package codes.qdbp.serverplugin.listeners
 
 import codes.qdbp.serverplugin.Serverplugin
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.EntityEffect
+import org.bukkit.Material
+import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.inventory.ItemStack
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -13,7 +18,19 @@ class PlayerDeathListener(val plugin: Serverplugin) : Listener {
 
     @EventHandler
     fun onPlayerDeath(event: PlayerDeathEvent) {
+
         val player = event.player
+
+
+        // USING TOTEM FROM INV
+        if (player.inventory.contains(Material.TOTEM_OF_UNDYING)) {
+            event.isCancelled = true
+            player.inventory.setItem(player.inventory.first(Material.TOTEM_OF_UNDYING), ItemStack(Material.AIR))
+            player.playSound(player.location, Sound.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1f, 1f)
+            player.playEffect(EntityEffect.TOTEM_RESURRECT)
+            return
+        }
+
         val storage = plugin.deathStorage.storage
 
         val deaths = storage.getInt("${player.name}.deaths") + 1
@@ -32,5 +49,7 @@ class PlayerDeathListener(val plugin: Serverplugin) : Listener {
         storage.set("$info.position", position)
 
         plugin.deathStorage.save()
+
+
     }
 }

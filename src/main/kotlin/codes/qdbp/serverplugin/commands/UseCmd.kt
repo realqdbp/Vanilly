@@ -3,11 +3,32 @@ package codes.qdbp.serverplugin.commands
 import codes.qdbp.serverplugin.Serverplugin
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
-import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabExecutor
 import org.bukkit.entity.Player
 
-class UseCmd(val plugin: Serverplugin) : CommandExecutor {
+class UseCmd(val plugin: Serverplugin) : TabExecutor {
+    override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>?) =
+        if (args?.size == 1) mutableListOf(
+            "afk",
+            "backpack",
+            "craft",
+            "enderchest",
+            "freecam",
+            "upgrade",
+            "skipnight",
+            "switchworld",
+            "deaths",
+            "enhancedEating",
+            "enhancedSleep",
+            "light",
+            "doubleDoorOpening",
+            "mapImage",
+            "invisibleItemFrames",
+            "enhancedTotems",
+            "fastLeafDecay",
+        ) else null
+
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         if (args.isNullOrEmpty()) return false
         if (sender !is Player) return false
@@ -29,8 +50,10 @@ class UseCmd(val plugin: Serverplugin) : CommandExecutor {
             "doubleDoors" -> plugin.config.set("Features.useDoubleOpenDoors", !plugin.config.getBoolean("Features.useDoubleOpenDoors"))
             "customMapImages" -> plugin.config.set("Features.useCustomMapImages", !plugin.config.getBoolean("Features.useCustomMapImages"))
             "upgrade" -> plugin.config.set("Features.useUpgrade", !plugin.config.getBoolean("Features.useUpgrade"))
-            "invisItemFrames" -> plugin.config.set("Features.useInvisibleItemFrames", !plugin.config.getBoolean("Features.useInvisibleItemFrames"))
+            "invisibleItemFrames" -> plugin.config.set("Features.useInvisibleItemFrames", !plugin.config.getBoolean("Features.useInvisibleItemFrames"))
             "changeUpgrade" -> plugin.config.set("Features.useChangeUpgrade", !plugin.config.getBoolean("Features.useChangeUpgrade"))
+            "enhancedTotems" -> plugin.config.set("Features.useTotems", !plugin.config.getBoolean("Features.useTotems"))
+            "fastLeafDecay" -> plugin.config.set("Features.useFastLeafDecay", !plugin.config.getBoolean("Features.useFastLeafDecay"))
             else -> return false
         }
         plugin.saveConfig()

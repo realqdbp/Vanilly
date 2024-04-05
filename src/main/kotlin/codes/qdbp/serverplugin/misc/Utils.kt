@@ -3,6 +3,7 @@
 package codes.qdbp.serverplugin.misc
 
 import codes.qdbp.serverplugin.Serverplugin
+import codes.qdbp.serverplugin.menusystem.PlayerMenuManager
 import com.google.gson.Gson
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
@@ -114,6 +115,7 @@ val foodMap = hashMapOf(
 )
 
 val upgradeMenuHandlers = mutableMapOf<UUID,Listener>()
+
 
 fun createItem(material: Material, title: String, vararg lores: String): ItemStack {
     val item = ItemStack(material)
@@ -321,4 +323,11 @@ fun giveUpgrade(confirmInv: Inventory, plugin: Serverplugin): ItemStack {
             ItemStack(Material.AIR)
         }
     }
+}
+
+val menuManagerMap = mutableMapOf<Player, PlayerMenuManager>()
+
+
+fun Player.menuManager(): PlayerMenuManager { // fixme this needs to be better lol
+    return menuManagerMap[this]?.let { menuManagerMap[this] } ?: run { menuManagerMap[this] = PlayerMenuManager(this); menuManagerMap[this]!! }
 }

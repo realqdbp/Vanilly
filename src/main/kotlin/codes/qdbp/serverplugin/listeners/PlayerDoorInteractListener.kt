@@ -50,6 +50,7 @@ class PlayerDoorInteractListener : Listener {
                     }
                     else -> return
                 }
+                if (relativeBlock.type.toString().contains("TRAP")) return
                 relativeDoor = relativeBlock.blockData as Door
                 if (relativeDoor.facing == WEST || relativeDoor.facing == EAST) return
                 if (relativeDoor.hinge == clickedDoor.hinge) return
@@ -66,6 +67,7 @@ class PlayerDoorInteractListener : Listener {
                     else -> return
                 }
 
+                if (relativeBlock.type.toString().contains("TRAP")) return // fixme not working if the 2 doors are next to trap doors
                 relativeDoor = relativeBlock.blockData as Door
                 if (relativeDoor.facing == NORTH || relativeDoor.facing == SOUTH) return
                 if (relativeDoor.hinge == clickedDoor.hinge) return

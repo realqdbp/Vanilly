@@ -32,7 +32,6 @@ data class AfkPlayer(
 
     init {
         player.isInvulnerable = true
-        player.isCollidable = true // fixme just for once so the players get collidable again
         afkTask.runTaskTimer(plugin, 0, 20)
         player.sendPlainMessage("Du bist jetzt AFK!")
     }

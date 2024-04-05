@@ -1,13 +1,34 @@
 package codes.qdbp.serverplugin.commands
 
 import org.bukkit.command.Command
-import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.command.TabExecutor
 
-class InfoCmd : CommandExecutor{
+class InfoCmd : TabExecutor{
+    override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>?) =
+        if (args?.size == 1) mutableListOf(
+            "afk",
+            "backpack",
+            "craft",
+            "enderchest",
+            "freecam",
+            "upgrade",
+            "skipnight",
+            "switchworld",
+            "deaths",
+            "enhancedEating",
+            "enhancedSleep",
+            "light",
+            "doubleDoorOpening",
+            "mapImage",
+            "invisibleItemFrames",
+            "enhancedTotems",
+            "fastLeafDecay",
+        ) else null
+
     override fun onCommand(sender: CommandSender, cmd: Command, label: String, args: Array<out String>?): Boolean {
 
-        when (args?.get(0)?.lowercase() ?: return false) {
+        when (args?.get(0) ?: return false) {
             "afk" -> sender.sendPlainMessage(afkInfo)
             "backpack" -> sender.sendPlainMessage(backpackInfo)
             "craft" -> sender.sendPlainMessage(craftInfo)
@@ -17,12 +38,14 @@ class InfoCmd : CommandExecutor{
             "skipnight" -> sender.sendPlainMessage(skipNightInfo)
             "switchworld" -> sender.sendPlainMessage(switchWorldInfo)
             "deaths" -> sender.sendPlainMessage(deathInfo)
-            "enhancedeating" -> sender.sendPlainMessage(enhancedEatingInfo)
+            "enhancedEating" -> sender.sendPlainMessage(enhancedEatingInfo)
             "enhancedSleep" -> sender.sendPlainMessage(enhancedSleepInfo)
             "light" -> sender.sendPlainMessage(lightInfo)
-            "doubledooropening" -> sender.sendPlainMessage(doubleDoorOpeningInfo)
-            "mapimage" -> sender.sendPlainMessage(mapImageInfo)
-            "invisitemframes" -> sender.sendPlainMessage(invisItemFrameInfo)
+            "doubleDoorOpening" -> sender.sendPlainMessage(doubleDoorOpeningInfo)
+            "mapImage" -> sender.sendPlainMessage(mapImageInfo)
+            "invisibleItemFrames" -> sender.sendPlainMessage(invisItemFrameInfo)
+            "enhancedTotems" -> sender.sendPlainMessage(enhancedTotemsInfo)
+            "fastLeafDecay" -> sender.sendPlainMessage(fastLeafDecayInfo)
         }
         return true
     }
@@ -57,7 +80,7 @@ class InfoCmd : CommandExecutor{
     """.trimIndent()
 
     private val upgradeInfo = """
-        Öffnet ein Menu in dem
+        Öffnet ein codes.qdbp.serverplugin.menusystem.Menu in dem
         late-game Upgrades zu kaufen sind.
     """.trimIndent()
 
@@ -116,4 +139,15 @@ class InfoCmd : CommandExecutor{
         Das Item 'Invisible Item Frame' kann nun gecraftet werden.
         Das Rezept ist: Item Frame und Glass Pane.
     """.trimIndent()
+
+    private val enhancedTotemsInfo = """
+        Totem müssen nicht in der Hand oder Off-Hand sein um genutzt zu werden,
+        es reicht wenn sie im Inventar sind.
+    """.trimIndent()
+
+    private val fastLeafDecayInfo = """
+        Blätter verschwinden schneller als normal,
+        wenn der Baum abgebaut ist.
+    """.trimIndent()
+
 }
