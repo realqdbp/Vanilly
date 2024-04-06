@@ -1,7 +1,9 @@
 package codes.qdbp.serverplugin.listeners
 
 import codes.qdbp.serverplugin.Serverplugin
-import codes.qdbp.serverplugin.inventories.openPlayerDeathsInventory
+import codes.qdbp.serverplugin.menusystem.menus.PlayersDeathsMenu
+import codes.qdbp.serverplugin.misc.menuManager
+import codes.qdbp.serverplugin.misc.string
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -20,13 +22,6 @@ class InventoryListener(val plugin: Serverplugin) : Listener {
         val inventoryTitle = PlainTextComponentSerializer.plainText().serialize(event.view.title())
 
         when {
-            inventoryTitle == "Players Deaths Overview" -> {
-                event.isCancelled = true
-                if (event.currentItem!!.type != Material.PLAYER_HEAD) return
-                player.closeInventory()
-                player.openPlayerDeathsInventory(plugin, event.currentItem!!)
-            }
-
             inventoryTitle.contains("Deaths") -> {
                 event.isCancelled = true
             }

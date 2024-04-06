@@ -1,8 +1,10 @@
 package codes.qdbp.serverplugin.menusystem
 
+import codes.qdbp.serverplugin.misc.createItem
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
@@ -12,22 +14,26 @@ abstract class Menu(private var playerMenuManager: PlayerMenuManager) : Inventor
 
     protected var inv: Inventory? = null
 
-    protected var fillerGlass: ItemStack = makeItem(Material.GRAY_STAINED_GLASS_PANE, " ")
+    protected var fillerGlass: ItemStack = createItem(Material.GRAY_STAINED_GLASS_PANE, " ")
 
-    abstract val menuName: String?
+    abstract val menuName: String
 
     abstract val slots: Int
 
-    abstract fun handleMenu(e: InventoryClickEvent)
+    abstract fun handleMenu(event: InventoryClickEvent)
 
     abstract fun setMenuItems()
 
     fun open() {
-        inv = Bukkit.createInventory(this, slots, Component.text(menuName!!))
+        inv = Bukkit.createInventory(this, slots, Component.text(menuName))
 
         this.setMenuItems()
 
         playerMenuManager.owner.openInventory(inv!!)
+    }
+
+    fun close() {
+        playerMenuManager.owner.closeInventory()
     }
 
 
@@ -41,16 +47,5 @@ abstract class Menu(private var playerMenuManager: PlayerMenuManager) : Inventor
                 inv!!.setItem(i, fillerGlass)
             }
         }
-    }
-
-    fun makeItem(material: Material?, displayName: String?, vararg lore: String?): ItemStack {
-        val item = ItemStack(material!!)
-        val itemMeta = item.itemMeta
-        itemMeta.setDisplayName(displayName)
-
-        itemMeta.lore = lore.asList()
-        item.setItemMeta(itemMeta)
-
-        return item
     }
 }

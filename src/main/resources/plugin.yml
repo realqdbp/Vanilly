@@ -6,11 +6,6 @@ authors: [ qdbp ]
 description: Just my plugin for our server
 website: https://qdbp.codes/
 commands:
-
-  test:
-    description: t
-    usage: test
-
   use:
     description: Change Usage of Features ingame
     usage: /use <feature>

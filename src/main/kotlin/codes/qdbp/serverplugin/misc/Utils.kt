@@ -131,6 +131,7 @@ fun createItem(item: ItemStack, vararg lores: String): ItemStack {
     return item
 }
 
+fun Component.string() = PlainTextComponentSerializer.plainText().serialize(this).removeSurrounding("[", "]")
 
 /**
  * @param items Itemstack, row, yOffset

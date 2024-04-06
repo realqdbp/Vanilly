@@ -10,21 +10,13 @@ class MenuListener : Listener {
     @EventHandler
     fun onMenuClick(event: InventoryClickEvent) {
 
-        val player = event.whoClicked
-
         val holder = event.clickedInventory?.holder ?: return
         if (event.currentItem == null) return
         if (holder is Menu) {
             event.isCancelled = true
 
-
-
             holder.handleMenu(event)
 
-
-
         }
-
     }
-
 }

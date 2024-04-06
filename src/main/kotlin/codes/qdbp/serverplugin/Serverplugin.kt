@@ -86,7 +86,6 @@ class Serverplugin : JavaPlugin() {
         getCommand("features")?.setExecutor(FeaturesCmd())
         getCommand("info")?.setExecutor(InfoCmd())
 
-        getCommand("test")?.setExecutor(TestCmd())
 
         if (useAFK) getCommand("afk")?.setExecutor(AfkCmd(this))
         if (useBackpack) getCommand("backpack")?.setExecutor(BackpackCmd(this))
