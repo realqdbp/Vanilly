@@ -65,10 +65,10 @@ class DeathsMenu(
         (0..maxItemsPerPage).forEach {
             index = maxItemsPerPage * page + it
 
-            if (index >= whitelistedPlayerHeads.size) return
+            if (index >= whitelistedPlayerHeads.size) return@forEach
             inv?.addItem(whitelistedPlayerHeads[index])
         }
 
-        open()
+        setFillerGlass()
     }
 }

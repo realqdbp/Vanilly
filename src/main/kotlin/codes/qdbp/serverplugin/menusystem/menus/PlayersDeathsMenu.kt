@@ -54,8 +54,7 @@ class PlayersDeathsMenu(
             }
 
             Material.BARRIER -> close()
-            Material.SKELETON_SKULL -> event.whoClicked.sendPlainMessage("Nuggets")
-            else -> {}
+            else -> { }
         }
     }
 
@@ -65,8 +64,10 @@ class PlayersDeathsMenu(
         (0..maxItemsPerPage).forEach {
             index = maxItemsPerPage * page + it
 
-            if (index >= deathList.size) return
+            if (index >= deathList.size) return@forEach
             inv?.addItem(deathList[index])
         }
+
+        setFillerGlass()
     }
 }

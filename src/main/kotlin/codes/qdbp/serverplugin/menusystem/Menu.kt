@@ -4,8 +4,8 @@ import codes.qdbp.serverplugin.misc.createItem
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
@@ -24,10 +24,12 @@ abstract class Menu(private var playerMenuManager: PlayerMenuManager) : Inventor
 
     abstract fun setMenuItems()
 
+    open fun handleCloseMenu(event: InventoryCloseEvent) { }
+
     fun open() {
         inv = Bukkit.createInventory(this, slots, Component.text(menuName))
 
-        this.setMenuItems()
+        setMenuItems()
 
         playerMenuManager.owner.openInventory(inv!!)
     }
@@ -42,10 +44,9 @@ abstract class Menu(private var playerMenuManager: PlayerMenuManager) : Inventor
     }
 
     fun setFillerGlass() {
-        for (i in 0 until slots) {
-            if (inv!!.getItem(i) == null) {
-                inv!!.setItem(i, fillerGlass)
-            }
+        playerMenuManager.owner.sendPlainMessage("${inv!!.getItem(23)}")
+        (0..<slots).forEach {
+            if (inv!!.getItem(it) == null) inv!!.setItem(it, fillerGlass)
         }
     }
 }

@@ -27,13 +27,7 @@ class InventoryCloseListener(val plugin: Serverplugin) : Listener {
         val player = event.player as Player
         val title = PlainTextComponentSerializer.plainText().serialize(event.view.title())
 
-        if (event.view.title() == Component.text("${player.name}'s Backpack")) {
-            storage.set(player.name, event.inventory.contents.asList())
-            plugin.backpackStorage.save()
-        } else if (event.view.title() == Component.text("Öffentlicher Backpack")) {
-            storage.set("P-U-B-L-I-C", event.inventory.contents.asList())
-            plugin.backpackStorage.save()
-        } else if (title.contains("Choose")) {
+        if (title.contains("Choose")) {
             if (event.reason == Reason.PLAYER || event.reason == Reason.DISCONNECT) {
                 InventoryClickEvent.getHandlerList().unregister(upgradeMenuHandlers[player.uniqueId]!!)
             }

@@ -1,8 +1,8 @@
 package codes.qdbp.serverplugin.commands
 
 import codes.qdbp.serverplugin.Serverplugin
-import codes.qdbp.serverplugin.inventories.openBackpack
-import codes.qdbp.serverplugin.inventories.openPublicBackpack
+import codes.qdbp.serverplugin.menusystem.menus.BackpackMenu
+import codes.qdbp.serverplugin.misc.menuManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
@@ -15,8 +15,7 @@ class BackpackCmd(val plugin: Serverplugin) : TabExecutor {
     override fun onCommand(sender: CommandSender, cmd: Command, label: String, args: Array<out String>?): Boolean {
         if (sender !is Player) return false
 
-        if (args != null && args.isNotEmpty() && args[0] == "all") sender.openPublicBackpack(plugin)
-        else sender.openBackpack(plugin)
+        BackpackMenu(plugin, if (args.isNullOrEmpty()) true else args[0] != "all", sender.menuManager()).open()
         return true
     }
 }

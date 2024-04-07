@@ -86,7 +86,6 @@ class Serverplugin : JavaPlugin() {
         getCommand("features")?.setExecutor(FeaturesCmd())
         getCommand("info")?.setExecutor(InfoCmd())
 
-
         if (useAFK) getCommand("afk")?.setExecutor(AfkCmd(this))
         if (useBackpack) getCommand("backpack")?.setExecutor(BackpackCmd(this))
         if (useCraft) getCommand("craft")?.setExecutor(CraftCmd())
@@ -105,7 +104,6 @@ class Serverplugin : JavaPlugin() {
         server.pluginManager.registerEvents(PlayerJoinListener(this), this)
         if (useBackpack) server.pluginManager.registerEvents(InventoryCloseListener(this), this)
         if (useDeaths) {
-            server.pluginManager.registerEvents(InventoryListener(this), this)
             server.pluginManager.registerEvents(PlayerDeathListener(this), this)
         }
         if (useEating) server.pluginManager.registerEvents(PlayerItemConsumeListener(), this)
