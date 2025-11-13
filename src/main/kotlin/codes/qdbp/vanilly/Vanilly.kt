@@ -14,6 +14,8 @@ object Vanilly : ModInitializer {
 		logger.info("Hello Fabric world!")
 
         Commands.register()
+        registerFreecam()
+
 
 	}
 }

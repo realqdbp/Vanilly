@@ -1,5 +1,6 @@
 package codes.qdbp.vanilly
 
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.GameType
@@ -16,5 +17,9 @@ fun ServerPlayer.stopFreecam(){
 
 fun registerFreecam() {
 
+    ServerPlayerEvents.LEAVE.register {
+        
+        Vanilly.logger.info("FUNKTIONIERT")
+    }
 
 }
