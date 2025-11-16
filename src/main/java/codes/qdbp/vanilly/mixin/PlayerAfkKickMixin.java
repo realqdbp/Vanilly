@@ -62,10 +62,9 @@ public abstract class PlayerAfkKickMixin extends ServerCommonPacketListenerImpl 
                     && this.server.playerIdleTimeout() > 0
                     && Util.getMillis() - this.player.getLastActionTime() > TimeUnit.MINUTES.toMillis(this.server.playerIdleTimeout())
                     && !this.player.wonGame) {
-                AFKKt.startAFK(this.player);
-                callbackInfo.cancel();
-                // this.disconnect(Component.translatable("multiplayer.disconnect.idling"));
+                if (!AFKKt.isAFK(this.player)) AFKKt.startAFK(this.player);
             }
         }
+        callbackInfo.cancel();
     }
 }

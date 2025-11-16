@@ -44,16 +44,21 @@ object Commands {
         return 1
     }
 
+    fun afk(context: CommandContext<CommandSourceStack>) = context.source.player?.let { it.startAFK(); 1 } ?: -1
+
 
     val useCraft = true
     val useEnderchest = true
     val useFreecam = true
+    val useAFK = true
     fun register() {
 
         if (useCraft) registerCmd("craft", ::craft, Triple("yay", IntegerArgumentType.integer(0, 10), TestSuggestionProvider))
 
         if (useEnderchest) registerCmd("enderchest", ::enderchest)
         if (useFreecam) registerCmd("freecam", ::freecam)
+
+        if (useAFK) registerCmd("afk", ::afk)
 
 //        CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
 //            codes.qdbp.vanilly.Commands::class.declaredFunctions.forEach { function ->

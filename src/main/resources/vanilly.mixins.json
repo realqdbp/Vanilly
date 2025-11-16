@@ -3,7 +3,9 @@
   "package": "codes.qdbp.vanilly.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "PlayerAfkKickMixin"
+    "LivingEntityMixin",
+    "PlayerAfkKickMixin",
+    "ServerPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

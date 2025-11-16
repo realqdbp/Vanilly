@@ -21,5 +21,4 @@ fun registerFreecam() {
         
         Vanilly.logger.info("FUNKTIONIERT")
     }
-
 }
