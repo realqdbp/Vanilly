@@ -8,8 +8,6 @@ object Vanilly : ModInitializer {
     val logger: Logger = LoggerFactory.getLogger("Vanilly")
 
 	override fun onInitialize() {
-        Commands.register()
-        registerFreecam()
 
         logger.info("initialized successfully")
 	}

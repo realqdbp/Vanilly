@@ -1,15 +1,16 @@
 {
   "schemaVersion": 1,
   "id": "vanilly",
-  "version": "${version}",
+  "version": "$modVersion",
   "name": "Vanilly",
-  "description": "Adding many useful features for vanilly-like gameplay.",
+  "description": "Adding many useful features for Vanilla-like gameplay.",
   "authors": [
     "qdbp"
   ],
   "contact": {
     "homepage": "https://qdbp.codes/",
-    "sources": "https://github.com/todo"
+    "sources": "https://github.com/todo",
+    "issues": "https://github.com/todo"
   },
   "license": "CC0-1.0",
   "icon": "assets/vanilly/icon.png",
@@ -26,10 +27,10 @@
     "vanilly.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.17.3",
-    "minecraft": "~1.21.10",
-    "java": ">=21",
-    "fabric-api": "*",
-    "fabric-language-kotlin": "*"
+    "fabricloader": ">=$fabricLoaderVersion",
+    "minecraft": "$minecraftVersion",
+    "java": ">=25",
+    "fabric-api": ">=$fabricApiVersion",
+    "fabric-language-kotlin": ">=$fabricKotlinVersion"
   }
 }
