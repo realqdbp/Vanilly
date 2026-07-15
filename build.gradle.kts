@@ -22,6 +22,7 @@ dependencies {
 	implementation(libs.fabric.loader)
 	implementation(libs.fabric.api)
     implementation(libs.fabric.kotlin)
+	implementation(libs.logger)
 }
 
 tasks.processResources {

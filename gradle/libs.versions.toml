@@ -5,12 +5,14 @@ fabric-loom = "1.17-SNAPSHOT"
 fabric-kotlin = "1.13.12+kotlin.2.4.0"
 fabric-api = "0.154.2+26.2"
 kotlin = "2.4.0"
+logger = "8.0.4"
 
 [libraries]
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader" }
 fabric-kotlin = { group = "net.fabricmc", name = "fabric-language-kotlin", version.ref = "fabric-kotlin" }
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
+logger = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "logger" }
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "fabric-loom" }

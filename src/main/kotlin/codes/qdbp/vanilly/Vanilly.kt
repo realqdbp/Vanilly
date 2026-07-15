@@ -1,14 +1,19 @@
 package codes.qdbp.vanilly
 
+import codes.qdbp.vanilly.commands.infoCmd
+import io.github.oshai.kotlinlogging.KotlinLogging
 import net.fabricmc.api.ModInitializer
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 
+val logger = KotlinLogging.logger { }
 object Vanilly : ModInitializer {
-    val logger: Logger = LoggerFactory.getLogger("Vanilly")
 
 	override fun onInitialize() {
 
-        logger.info("initialized successfully")
+		CommandRegistrationCallback.EVENT.register { dispatcher , _, _ ->
+			dispatcher.register(infoCmd)
+		}
+
+        logger.info { "Vanilly started!" }
 	}
 }
