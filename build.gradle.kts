@@ -5,7 +5,8 @@ plugins {
 	alias(libs.plugins.kotlin)
 }
 
-version = "0.0.2"
+version = "0.0.3"
+loom.log4jConfigs.from("log4j-dev.xml")
 
 loom {
 	splitEnvironmentSourceSets()
@@ -22,7 +23,6 @@ dependencies {
 	implementation(libs.fabric.loader)
 	implementation(libs.fabric.api)
     implementation(libs.fabric.kotlin)
-	implementation(libs.logger)
 }
 
 tasks.processResources {

@@ -42,34 +42,33 @@ private object InfoCmdSuggestionProvider : SuggestionProvider<CommandSourceStack
     }
 }
 
-val infoCmd: LiteralArgumentBuilder<CommandSourceStack> =
-    Commands.literal("info")
-        .then(
-            Commands.argument("commandName", StringArgumentType.string())
-                .suggests(InfoCmdSuggestionProvider)
-                .executes {
-                    when (StringArgumentType.getString(it, "commandName")) {
-                        // TODO Implement "afk" -> it.source.sendSuccess(afkInfo, false)
-                        // TODO Implement "backpack" -> it.source.sendSuccess(backpackInfo, false)
-                        // TODO Implement "craft" -> it.source.sendSuccess(craftInfo, false)
-                        // TODO Implement "enderchest" -> it.source.sendSuccess(enderchestInfo, false)
-                        // TODO Implement "freecam" -> it.source.sendSuccess(freecamInfo, false)
-                        // TODO Implement "upgrade" -> it.source.sendSuccess(upgradeInfo, false)
-                        // TODO Implement "skipnight" -> it.source.sendSuccess(skipNightInfo, false)
-                        // TODO Implement "switchworld" -> it.source.sendSuccess(switchWorldInfo, false)
-                        // TODO Implement "deaths" -> it.source.sendSuccess(deathInfo, false)
-                        // TODO Implement "enhancedEating" -> it.source.sendSuccess(enhancedEatingInfo, false)
-                        // TODO Implement "enhancedSleep" -> it.source.sendSuccess(enhancedSleepInfo, false)
-                        // TODO Implement "light" -> it.source.sendSuccess(lightInfo, false)
-                        // TODO Implement "doubleDoorOpening" -> it.source.sendSuccess(doubleDoorOpeningInfo, false)
-                        // TODO Implement "mapImage" -> it.source.sendSuccess(mapImageInfo, false)
-                        // TODO Implement "invisibleItemFrames" -> it.source.sendSuccess(invisItemFrameInfo, false)
-                        // TODO Implement "enhancedTotems" -> it.source.sendSuccess(enhancedTotemsInfo, false)
-                        // TODO Implement "fastLeafDecay" -> it.source.sendSuccess(fastLeafDecayInfo, false)
-                    }
-                    Command.SINGLE_SUCCESS
+val infoCmd: LiteralArgumentBuilder<CommandSourceStack> = Commands.literal("info")
+    .then(
+        Commands.argument("commandName", StringArgumentType.string())
+            .suggests(InfoCmdSuggestionProvider)
+            .executes {
+                when (StringArgumentType.getString(it, "commandName")) {
+                    // TODO Implement "afk" -> it.source.sendSuccess(afkInfo, false)
+                    // TODO Implement "backpack" -> it.source.sendSuccess(backpackInfo, false)
+                    // TODO Implement "craft" -> it.source.sendSuccess(craftInfo, false)
+                    // TODO Implement "enderchest" -> it.source.sendSuccess(enderchestInfo, false)
+                    // TODO Implement "freecam" -> it.source.sendSuccess(freecamInfo, false)
+                    // TODO Implement "upgrade" -> it.source.sendSuccess(upgradeInfo, false)
+                    // TODO Implement "skipnight" -> it.source.sendSuccess(skipNightInfo, false)
+                    // TODO Implement "switchworld" -> it.source.sendSuccess(switchWorldInfo, false)
+                    // TODO Implement "deaths" -> it.source.sendSuccess(deathInfo, false)
+                    // TODO Implement "enhancedEating" -> it.source.sendSuccess(enhancedEatingInfo, false)
+                    // TODO Implement "enhancedSleep" -> it.source.sendSuccess(enhancedSleepInfo, false)
+                    // TODO Implement "light" -> it.source.sendSuccess(lightInfo, false)
+                    // TODO Implement "doubleDoorOpening" -> it.source.sendSuccess(doubleDoorOpeningInfo, false)
+                    // TODO Implement "mapImage" -> it.source.sendSuccess(mapImageInfo, false)
+                    // TODO Implement "invisibleItemFrames" -> it.source.sendSuccess(invisItemFrameInfo, false)
+                    // TODO Implement "enhancedTotems" -> it.source.sendSuccess(enhancedTotemsInfo, false)
+                    // TODO Implement "fastLeafDecay" -> it.source.sendSuccess(fastLeafDecayInfo, false)
                 }
-        )
+                Command.SINGLE_SUCCESS
+            }
+    )
 
 
 private val afkInfo = { Component.literal(
