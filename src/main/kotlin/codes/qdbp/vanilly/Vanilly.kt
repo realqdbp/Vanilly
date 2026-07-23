@@ -3,6 +3,7 @@ package codes.qdbp.vanilly
 import codes.qdbp.vanilly.commands.infoCmd
 import codes.qdbp.vanilly.commands.skipNightCmd
 import codes.qdbp.vanilly.components.SkipNight
+import codes.qdbp.vanilly.mixincode.TickAdjacentLeaves
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory
 
 val logger: Logger = LoggerFactory.getLogger("Vanilly")
 object Vanilly : ModInitializer {
-
 	override fun onInitialize() {
 
 		logger.debug("Registering Commands...")
@@ -22,6 +22,7 @@ object Vanilly : ModInitializer {
 
 		logger.debug("Registering ServerTickEvents...")
 		ServerTickEvents.END_SERVER_TICK.register(SkipNight::skipNight)
+		ServerTickEvents.END_SERVER_TICK.register { TickAdjacentLeaves.decayLeaves() }
 
         logger.info("Vanilly started!")
 	}
