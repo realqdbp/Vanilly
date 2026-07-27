@@ -3,6 +3,7 @@
   "package": "codes.qdbp.vanilly.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "ConsumableMixin",
     "LeavesBlockMixin"
   ],
   "injectors": {

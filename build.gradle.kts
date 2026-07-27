@@ -5,7 +5,7 @@ plugins {
 	alias(libs.plugins.kotlin)
 }
 
-version = "0.0.4"
+version = "0.0.5"
 loom.log4jConfigs.from("log4j-dev.xml")
 
 loom {
